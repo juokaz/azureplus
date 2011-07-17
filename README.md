@@ -35,28 +35,30 @@ Deployment time can be reduced also, this is not final yet as how it will behave
 * Deploying via Git/Svn repository   
 Periodicly live instance is updated from the code in the repository
 
-        curl -XPOST http://api.azureplus.com/deployment -d '
-        {"deployment": {
-            "php": "5.2",
-            "name": "myapp",
-            }
-        }'
-        curl -XPUT http://api.azureplus.com/deployment/123 -d '
-        {"configuration": {
-            "repo": "http://github.com/juokaz/sampleapp"
-            }
-        }'
+        // Create the deployment, only required once
+        curl -XPOST http://api.azureplus.com/deployment/myapp -d '
+            {"deployment": {
+                "php": "5.2",
+                "location": "Europe",
+                "repo": "http://github.com/juokaz/sampleapp"
+                }
+            }'
 
 * Deploying via REST API   
 Archive (in any of the supported formats) is created and sent over to the API
 
-        curl -XPOST http://api.azureplus.com/deployment -d '
-        {"deployment": {
-            "php": "5.2",
-            "name": "myapp",
-            }
-        }'
-        curl -XPUT http://api.azureplus.com/deployment/123 -d @package.zip
+        // Create the deployment, only required once
+        curl -XPOST http://api.azureplus.com/deployment/myapp -d '
+            {"deployment": {
+                "php": "5.2",
+                "location": "Europe"
+                }
+            }'
+        // Deploy application code
+        curl -XPUT http://api.azureplus.com/deployment/myapp -d @package.zip
+        // .. do some hacking
+        // Deploy application code again
+        curl -XPUT http://api.azureplus.com/deployment/myapp -d @package.zip
 
 * Deploying via Web Deploy   
 A project can be deployed from WebMatrix for example using the Web Deploy protocol
