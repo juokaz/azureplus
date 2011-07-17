@@ -16,24 +16,24 @@ In conclusion, I believe, no one uses Azure for PHP projects and never will. Thi
 
 ## How these problems can be solved
 
-The proposed service is an abstraction/layer on top of Azure services which makes it a trully platform as a service (PaaS) - very similarly to Orchestra.io, PHPfog etc. You have your app, you upload it and it works. The fact that it runs on Azure is irrelevant from application developer point of view.
+The proposed service is an abstraction/layer on top of Azure services which makes it a truly platform as a service (PaaS) - very similarly to Orchestra.io, PHPfog etc. You have your app, you upload it and it works. The fact that it runs on Azure is irrelevant from application developer point of view.
 
-For this a managing server(-s) exist which serves as an end-point to the service. Website allows to do all the tasks from an user-friendly interface (so a simple website can be deployed by simply uploading a file(-s)), but also an API exists which allows to talk to the service programatically and/or integrate to build scripts.
+For this a managing server(-s) exist which serves as an end-point to the service. Website allows to do all the tasks from an user-friendly interface (so a simple website can be deployed by simply uploading a file(-s)), but also an API exists which allows to talk to the service programmatically and/or integrate to build scripts.
 
 As an example for Symfony2 app, deploying can be simplified to:
 
     ./app/console azure:deploy
     
-This comand pulls the settings for the specific deployment from the configuration file, then packages app as a normal archive and sends to the API. API replies about the status and application is running. 
+This command pulls the settings for the specific deployment from the configuration file, then packages app as a normal archive and sends to the API. API replies about the status and application is running. 
 
-Deployment time can be reduced also, this is not final yet as how it will behave, but the plan is that initial deployment can take as long as 30 mins, but any later updates take as long as a file upload, that is seconds. This achieved by some custom logic.
+Deployment time can be reduced also, this is not final yet as how it will behave, but the plan is that initial deployment can take as long as 30 mins, but any later updates take as long as file upload, that is seconds. This achieved by some custom logic.
 
 ## Functionality supported 
 
 ### Deploying
 
 * Deploying via Git/Svn repository   
-Periodicly live instance is updated from the code in the repository
+Periodically live instance is updated from the code in the repository
 
         // Create the deployment, only required once
         curl -XPOST http://api.azureplus.com/deployment/myapp -d '
