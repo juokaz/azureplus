@@ -2,7 +2,7 @@
 
 This is called Azure+ as a codename, because it extends what Azure currently supports. 
 
-I have worked with Windows and PHP for longer than I probably should had to and I have great ideas how Azure can be leveraged for PHP projects. This is some of those :)
+I have worked with Windows and PHP for longer than I probably should have had to and I have great ideas how Azure can be leveraged for PHP projects. This is some of those :)
 
 Currently this is in development stage and not all the features are present yet, but they should be there quite soon. I'm yet to decide whether I want to invest in this or leave it as a freetime project, this need to happen with a connection to Microsoft anyway. 
 
@@ -10,7 +10,7 @@ Currently this is in development stage and not all the features are present yet,
 
 Two major problems exist: deploying to Windows Azure requires Windows machine for packaging and overall the process is way too complicated and somewhat confusing. From my personal experience I have never seen anyone succeeding without spending a day or so trying to get even a simple app working. There is nothing wrong with Azure itself, it's just too *raw* and hard to use. 
 
-Furthermore deployment time is very long, reaching 20-30 mins. This is not something PHP developers are used for and thus removes the effect of having a scripting language. This is especially frustrating when something goes wrong, because even simple change requires full redeploy.
+Furthermore deployment time is very long, reaching 20-30 mins. This is not something PHP developers are used for and thus removes the effect of having a scripting language. This is especially frustrating when something goes wrong, because even a simple change requires full redeploy.
 
 In conclusion, I believe, no one uses Azure for PHP projects and never will. This project solves that and makes using Azure for PHP projects as easy as any other cloud solution. Dead simple.
 
@@ -26,7 +26,7 @@ As an example for Symfony2 app, deploying can be simplified to:
     
 This comand pulls the settings for the specific deployment from the configuration file, then packages app as a normal archive and sends to the API. API replies about the status and application is running. 
 
-Deployment time can be reduced also, this is not final yet as how it will behave, but the plan is that initial deployment can take as long as 30 mins, but any later updates take as long as file upload. 
+Deployment time can be reduced also, this is not final yet as how it will behave, but the plan is that initial deployment can take as long as 30 mins, but any later updates take as long as a file upload, that is seconds. This achieved by some custom logic.
 
 ## Functionality supported 
 
