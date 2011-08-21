@@ -48,7 +48,6 @@ class Storage
 	{
 		$folder = rtrim($folder, '\\') . '\\';
 		
-		// create object
 		$zip = new ZipArchive();
 
 		// open archive 
@@ -80,7 +79,7 @@ class Storage
 
 	/**
 	 * @command-name retrieve
-	 * @command-description Retreive data from Azure cloud
+	 * @command-description Retrieve data from Azure cloud
 	 * @command-parameter-for $container Microsoft_Console_Command_ParameterSource_Argv --container|-c Required. Container name.
 	 * @command-parameter-for $name Microsoft_Console_Command_ParameterSource_Argv --name|-n Required. Blob name.
 	 * @command-parameter-for $to Microsoft_Console_Command_ParameterSource_Argv --to|-t Required. To filename.
@@ -90,6 +89,35 @@ class Storage
 		$storageClient = new Microsoft_WindowsAzure_Storage_Blob('blob.core.windows.net', self::ACCOUNT, self::KEY);
 
 		$storageClient->getBlob($container, $name, $to);
+	}
+
+	/**
+	 * @command-name retrieve-archive
+	 * @command-description Retrieve archived folder from Azure cloud
+	 * @command-parameter-for $container Microsoft_Console_Command_ParameterSource_Argv --container|-c Required. Container name.
+	 * @command-parameter-for $name Microsoft_Console_Command_ParameterSource_Argv --name|-n Required. Blob name.
+	 * @command-parameter-for $to Microsoft_Console_Command_ParameterSource_Argv --to|-t Required. To folder.
+	 */
+	public function retrieveArchiveCommand($container, $name, $to)
+	{
+		$storageClient = new Microsoft_WindowsAzure_Storage_Blob('blob.core.windows.net', self::ACCOUNT, self::KEY);
+		
+		$temp_file = tempnam(sys_get_temp_dir(), 'Azure');
+
+		$storageClient->getBlob($container, $name, $temp_file);
+		
+		$zip = new ZipArchive();
+		
+		// open archive 
+		if ($zip->open($temp_file) !== TRUE) {
+			die ("Could not open archive");
+		}
+		
+		$zip->extractTo($to);
+		$zip->close();
+
+		// No need for this anymore
+		unlink($temp_file);
 	}
 }
 
