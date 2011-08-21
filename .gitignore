@@ -1,2 +1,3 @@
-hostingapp/Deployment/Websites/*
+hostingapp/Deployment/Websites/Sample/*
 log.txt
+*.cspkg
