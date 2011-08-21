@@ -120,6 +120,57 @@ class Storage
 
 		// No need for this anymore
 		unlink($temp_file);
+		
+		echo 'Stored archive contents in: ' . $to . PHP_EOL;
+	}
+
+	/**
+	 * @command-name update
+	 * @command-description Retrieve archived folder from Azure cloud
+	 * @command-parameter-for $container Microsoft_Console_Command_ParameterSource_Argv --container|-c Required. Container name.
+	 * @command-parameter-for $existing Microsoft_Console_Command_ParameterSource_Argv --existing|-e Required. Existing app.
+	 * @command-parameter-for $name Microsoft_Console_Command_ParameterSource_Argv --name|-n Required. Blob name.
+	 * @command-parameter-for $to Microsoft_Console_Command_ParameterSource_Argv --to|-t Required. To folder.
+	 */
+	public function updateCommand($container, $existing, $name, $to)
+	{
+		$storageClient = new Microsoft_WindowsAzure_Storage_Blob('blob.core.windows.net', self::ACCOUNT, self::KEY);
+		
+		$temp_file = tempnam(sys_get_temp_dir(), 'Azure');
+
+		$storageClient->getBlob($container, $name, $temp_file);
+		
+		// File might not be actualy there
+		if (file_exists($existing)) {
+			$current = file_get_contents($existing);
+		} else {
+			$current = null;
+		}
+		$new = file_get_contents($temp_file);
+		
+		// new file
+		if (sha1($current) != sha1($new)) {
+			echo 'Updating the APP' . PHP_EOL;
+			$zip = new ZipArchive();
+			
+			// open archive 
+			if ($zip->open($temp_file) !== TRUE) {
+				die ("Could not open archive");
+			}
+			
+			$zip->extractTo($to);
+			$zip->close();
+		
+			echo 'Stored archive contents in: ' . $to . PHP_EOL;
+		} else {
+			echo 'Ignoring the APP' . PHP_EOL;
+		}
+		
+		// update current file
+		copy($temp_file, $existing);
+
+		// No need for this anymore
+		unlink($temp_file);
 	}
 }
 
