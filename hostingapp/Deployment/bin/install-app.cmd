@@ -1,6 +1,6 @@
 @echo off
 
-cd %~dp0
+cd /D %~dp0
 
 ECHO "Starting APP installation from storage account" >> log.txt
 
