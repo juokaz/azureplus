@@ -1,4 +1,7 @@
 @echo off
+
+cd %~dp0
+
 ECHO "Starting APP installation from storage account" >> log.txt
 
 php.exe storage.php update -c=apps -e=app.zip -n=sample.zip -t="..\..\sitesroot\0_new" >> log.txt 2>>err.txt

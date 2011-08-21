@@ -3,8 +3,8 @@
 error_reporting(E_ALL);
 ini_set('display_errors','On');
 
-require_once '../Assets/PHPAzure/Microsoft/Console/Command.php';
-require_once '../Assets/PHPAzure/Microsoft/WindowsAzure/Storage/Blob.php';
+require_once dirname(__FILE__) . '/../Assets/PHPAzure/Microsoft/Console/Command.php';
+require_once dirname(__FILE__) . '/../Assets/PHPAzure/Microsoft/WindowsAzure/Storage/Blob.php';
 
 /**
  * Stpre command
