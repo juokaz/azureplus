@@ -10,6 +10,6 @@ reg add "hku\.default\software\microsoft\windows\currentversion\explorer\user sh
 reg add "hku\.default\software\microsoft\windows\currentversion\explorer\user shell folders" /v "Local AppData" /t REG_EXPAND_SZ /d %%USERPROFILE%%\AppData\Local /f
 
 ECHO "Adding PHP to PATH environment variable" >> log.txt
-setx path "%PATH%;%PROGRAMFILES(X86)%\PHP\v5.3\"
+powershell -command [Environment]::SetEnvironmentVariable('Path', [Environment]::GetEnvironmentVariable('Path', 'Machine') + ';%PROGRAMFILES(X86)%\PHP\v5.3\', 'Machine')
 
 ECHO "Completed PHP Installation" >> log.txt
