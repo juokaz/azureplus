@@ -48,10 +48,12 @@ class Storage
 	{
 		$folder = rtrim($folder, '\\') . '\\';
 		
+		$temp_file = tempnam(sys_get_temp_dir(), 'Azure');
+		
 		$zip = new ZipArchive();
 
 		// open archive 
-		if ($zip->open($name, ZIPARCHIVE::CREATE) !== TRUE) {
+		if ($zip->open($temp_file, ZIPARCHIVE::CREATE) !== TRUE) {
 			die ("Could not open archive");
 		}
 
@@ -71,10 +73,10 @@ class Storage
 		$zip->close();
 		
 		// Store file in the storage acccount
-		$this->storeCommand($container, $name, $name);
+		$this->storeCommand($container, $name, $temp_file);
 		
 		// No need for this anymore
-		unlink($name);
+		unlink($temp_file);
 	}
 
 	/**
