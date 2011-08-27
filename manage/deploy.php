@@ -30,7 +30,7 @@ class Deploy extends Microsoft_Console_Command
 		$client = $this->getClient();
 		 
 		try {
-			//$client->createHostedService($app, $app, $app, 'West Europe');
+			$client->createHostedService($app, $app, $app, 'West Europe');
 		} catch (Exception $e) {
 			print 'Error creating hosted service: ' . $e->getMessage() . PHP_EOL;
 			return;
