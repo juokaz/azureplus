@@ -23,7 +23,7 @@ class Deploy extends Microsoft_Console_Command
 	/**
 	 * @command-name create-app
 	 * @command-description Create app
-	 * @command-parameter-for $app Microsoft_Console_Command_ParameterSource_Argv --app|-a App name.
+	 * @command-parameter-for $app Microsoft_Console_Command_ParameterSource_Argv --app|-a Required. App name.
 	 */
 	public function createAppCommand($app)
 	{
@@ -50,7 +50,7 @@ class Deploy extends Microsoft_Console_Command
 		}
 		
 		// Get app URL for future use
-		$app_url = exec(sprintf('php storage.php get-signed-url -a=%s -n=%s -f=%s', $app, $app_file, $identifier));
+		$app_url = exec(sprintf('php storage.php get-signed-url -a=%s -n=%s -i=%s', $app, $app_file, $identifier));
 		
 		// App specific settings
 		$configuration = 'data/ServiceConfiguration.cscfg';
@@ -71,7 +71,7 @@ class Deploy extends Microsoft_Console_Command
 	/**
 	 * @command-name store-base
 	 * @command-description Store base app file
-	 * @command-parameter-for $from Microsoft_Console_Command_ParameterSource_Argv --from|-f From file.
+	 * @command-parameter-for $from Microsoft_Console_Command_ParameterSource_Argv --from|-f Required. From file.
 	 */
 	public function storeBaseCommand($from)
 	{
