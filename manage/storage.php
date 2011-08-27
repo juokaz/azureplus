@@ -40,7 +40,9 @@ class Storage extends Microsoft_Console_Command
 		} catch (Exception $e) {
 			print 'Failed to set ACL' . PHP_EOL;
 			return;
-		}		
+		}
+
+		print 'OK';
 	}
 
 	/**
@@ -103,6 +105,8 @@ class Storage extends Microsoft_Console_Command
 		
 		// No need for this anymore
 		unlink($temp_file);
+
+		print 'OK';
 	}
 		
 	/**
@@ -125,7 +129,7 @@ class Storage extends Microsoft_Console_Command
 		$signed = str_replace('&&', '&', $signed);
 		$signed = str_replace('?&', '?', $signed);
 		
-		print $signed . PHP_EOL;
+		print $signed;
 	}
 	
 	private function getClient()
