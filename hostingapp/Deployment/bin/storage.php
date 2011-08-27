@@ -20,66 +20,6 @@ class Storage
 	const KEY = 'RfdXBwu35jj8oxNJJ1TI+J1RakF6jPr8na2WOMp0NCNJvgZPsx8iGNgUnfWW/1z1tY0EQZ/dfdInRyxwWh4htw==';
 
 	/**
-	 * @command-name store
-	 * @command-description Store data in Azure cloud
-	 * @command-parameter-for $container Microsoft_Console_Command_ParameterSource_Argv --container|-c Required. Container name.
-	 * @command-parameter-for $name Microsoft_Console_Command_ParameterSource_Argv --name|-n Required. Blob name.
-	 * @command-parameter-for $from Microsoft_Console_Command_ParameterSource_Argv --from|-f Required. From filename.
-	 */
-	public function storeCommand($container, $name, $from)
-	{
-		$storageClient = new Microsoft_WindowsAzure_Storage_Blob('blob.core.windows.net', self::ACCOUNT, self::KEY);
-
-		$result = $storageClient->createContainerIfNotExists($container);
-		
-		$result = $storageClient->putBlob($container, $name, $from);
-
-		echo 'Blob name is: ' . $result->Name;
-	}
-	
-	/**
-	 * @command-name store-archive
-	 * @command-description Store archived folder
-	 * @command-parameter-for $container Microsoft_Console_Command_ParameterSource_Argv --container|-c Required. Container name.
-	 * @command-parameter-for $name Microsoft_Console_Command_ParameterSource_Argv --name|-n Required. Blob name.
-	 * @command-parameter-for $folder Microsoft_Console_Command_ParameterSource_Argv --folder|-f Required. From folder.
-	 */
-	public function storeArchiveCommand($container, $name, $folder)
-	{
-		$folder = rtrim($folder, '\\') . '\\';
-		
-		$temp_file = tempnam(sys_get_temp_dir(), 'Azure');
-		
-		$zip = new ZipArchive();
-
-		// open archive 
-		if ($zip->open($temp_file, ZIPARCHIVE::CREATE) !== TRUE) {
-			die ("Could not open archive");
-		}
-
-		// initialize an iterator
-		// pass it the directory to be processed
-		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($folder));
-
-		// iterate over the directory
-		// add each file found to the archive
-		foreach ($iterator as $key=>$value) {
-			// fix file name
-			$name_ = str_replace($folder, '', $key);
-			$zip->addFile(realpath($key), $name_) or die ("ERROR: Could not add file: $key");
-		}
-
-		// close and save archive
-		$zip->close();
-		
-		// Store file in the storage acccount
-		$this->storeCommand($container, $name, $temp_file);
-		
-		// No need for this anymore
-		unlink($temp_file);
-	}
-
-	/**
 	 * @command-name retrieve
 	 * @command-description Retrieve data from Azure cloud
 	 * @command-parameter-for $container Microsoft_Console_Command_ParameterSource_Argv --container|-c Required. Container name.
