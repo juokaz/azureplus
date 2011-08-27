@@ -4,7 +4,7 @@ cd /D %~dp0
 
 ECHO "Starting APP installation from storage account" >> log.txt
 
-SET APP_URL = powershell -ExecutionPolicy Unrestricted .\config.ps1 -name "APP_URL"
+for /f "tokens=*" %%a in ('powershell -ExecutionPolicy Unrestricted .\config.ps1 -name "APP_URL"') do @set APP_URL=%%a
 
 "%PROGRAMFILES(X86)%\PHP\v5.3\php" install.php "%APP_URL%" "app.zip" "..\..\sitesroot\0_new" >> log.txt 2>>err.txt
 

@@ -17,8 +17,8 @@ class Storage extends Microsoft_Console_Command
 	/**
 	 * @command-name create-app-container
 	 * @command-description Create container for an app
-	 * @command-parameter-for $app Microsoft_Console_Command_ParameterSource_Argv --app|-a App name.
-	 * @command-parameter-for $identifier Microsoft_Console_Command_ParameterSource_Argv --identifier|-i Acl identifier.
+	 * @command-parameter-for $app Microsoft_Console_Command_ParameterSource_Argv --app|-a Required. App name.
+	 * @command-parameter-for $identifier Microsoft_Console_Command_ParameterSource_Argv --identifier|-i Required. Acl identifier.
 	 */
 	public function createAppContainerCommand($app, $identifier)
 	{
@@ -40,7 +40,9 @@ class Storage extends Microsoft_Console_Command
 		} catch (Exception $e) {
 			print 'Failed to set ACL' . PHP_EOL;
 			return;
-		}		
+		}
+
+		print 'OK';
 	}
 
 	/**
@@ -65,7 +67,7 @@ class Storage extends Microsoft_Console_Command
 	/**
 	 * @command-name store-archive
 	 * @command-description Store archived folder
-	 * @command-parameter-for $app Microsoft_Console_Command_ParameterSource_Argv --app|-a App name.
+	 * @command-parameter-for $app Microsoft_Console_Command_ParameterSource_Argv --app|-a Required. App name.
 	 * @command-parameter-for $name Microsoft_Console_Command_ParameterSource_Argv --name|-n Required. Blob name.
 	 * @command-parameter-for $folder Microsoft_Console_Command_ParameterSource_Argv --folder|-f Required. From folder.
 	 */
@@ -103,14 +105,16 @@ class Storage extends Microsoft_Console_Command
 		
 		// No need for this anymore
 		unlink($temp_file);
+
+		print 'OK';
 	}
 		
 	/**
 	 * @command-name get-signed-url
 	 * @command-description Get signed URL for a specific blog
-	 * @command-parameter-for $app Microsoft_Console_Command_ParameterSource_Argv --app|-a App name.
+	 * @command-parameter-for $app Microsoft_Console_Command_ParameterSource_Argv --app|-a Required. App name.
 	 * @command-parameter-for $name Microsoft_Console_Command_ParameterSource_Argv --name|-n Required. Blob name.
-	 * @command-parameter-for $identifier Microsoft_Console_Command_ParameterSource_Argv --identifier|-i Acl identifier.
+	 * @command-parameter-for $identifier Microsoft_Console_Command_ParameterSource_Argv --identifier|-i Required. Acl identifier.
 	 */
 	public function getSignedUrl($app, $name, $identifier)
 	{
@@ -125,7 +129,7 @@ class Storage extends Microsoft_Console_Command
 		$signed = str_replace('&&', '&', $signed);
 		$signed = str_replace('?&', '?', $signed);
 		
-		print $signed . PHP_EOL;
+		print $signed;
 	}
 	
 	private function getClient()
