@@ -19,5 +19,8 @@
         				</Bindings>
       			</Site>
 		</Sites>
+		<ConfigurationSettings>
+			<Setting name="APP_URL" />
+		</ConfigurationSettings>
 	</WebRole>
 </ServiceDefinition>
