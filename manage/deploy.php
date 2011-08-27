@@ -30,7 +30,7 @@ class Deploy extends Microsoft_Console_Command
 		$client = $this->getClient();
 		 
 		try {
-			$client->createHostedService($app, $app, $app, 'West Europe');
+			//$client->createHostedService($app, $app, $app, 'West Europe');
 		} catch (Exception $e) {
 			print 'Error creating hosted service: ' . $e->getMessage() . PHP_EOL;
 			return;
@@ -38,14 +38,14 @@ class Deploy extends Microsoft_Console_Command
 		
 		// Create app container
 		$identifier = 'testings'; // @todo fix this
-		if ('OK' !== exec(sprintf('php storage.php create-app-container -a=%s -i=%s', $app, $identifier))) {
+		if ('OK' !== ($putput = exec(sprintf('php storage.php create-app-container -a=%s -i=%s', $app, $identifier)))) {
 			die ('Failed to create app container');
 		}
 		
 		// Upload initial application
 		$app_file = 'app.zip';
 		$from = 'data/initial-app'; // @todo fix this
-		if ('OK' !== exec(sprintf('php storage.php store-archive -a=%s -n=%s -f=%s', $app, $app_file, $from))) {
+		if ('OK' !== ($putput = exec(sprintf('php storage.php store-archive -a=%s -n=%s -f=%s', $app, $app_file, $from)))) {
 			die ('Failed to store initial app archive');
 		}
 		
