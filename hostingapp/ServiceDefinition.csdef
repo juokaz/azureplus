@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ServiceDefinition name="Azurepp" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
-	<WebRole name="Deployment" vmsize="ExtraSmall" enableNativeCodeExecution="true">
+	<WebRole name="Deployment" vmsize="Small" enableNativeCodeExecution="true">
 		<Startup>
 			<Task commandLine="install-php.cmd" executionContext="elevated" taskType="background" />
 			<Task commandLine="install-schedule.cmd" executionContext="elevated" taskType="background" />
@@ -19,5 +19,8 @@
         				</Bindings>
       			</Site>
 		</Sites>
+		<ConfigurationSettings>
+			<Setting name="APP_URL" />
+		</ConfigurationSettings>
 	</WebRole>
 </ServiceDefinition>
