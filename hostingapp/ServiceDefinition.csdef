@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceDefinition name="Azurep" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
+	<WebRole name="Deployment" vmsize="Small" enableNativeCodeExecution="true">
+		<Startup>
+			<Task commandLine="install-php.cmd" executionContext="elevated" taskType="background" />
+			<Task commandLine="install-schedule.cmd" executionContext="elevated" taskType="background" />
+		</Startup>
+		<Endpoints>
+			<InputEndpoint name="defaultHttpEndpoint" protocol="http" port="80"/>
+		</Endpoints>
+		<Imports />
+		<Sites>
+			<Site name="PHPApp" physicalDirectory=".\Deployment\Websites\Sample">
+				<Bindings>
+					<Binding name="HttpEndpoint" endpointName="defaultHttpEndpoint" />
+				</Bindings>
+			</Site>
+		</Sites>
+		<ConfigurationSettings>
+			<Setting name="APP_URL" />
+		</ConfigurationSettings>
+	</WebRole>
+</ServiceDefinition>

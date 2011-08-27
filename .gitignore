@@ -1,0 +1,4 @@
+hostingapp/Deployment/Websites/Sample/*
+hostingapp/ServiceConfiguration.cscfg
+log.txt
+*.cspkg
