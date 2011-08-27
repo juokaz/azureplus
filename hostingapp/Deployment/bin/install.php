@@ -19,6 +19,10 @@ if (file_exists($existing)) {
 
 $new = file_get_contents($url);
 
+if (!$new) {
+	die('Cannot download a new file');
+}
+
 // new file
 if (sha1($current) != sha1($new)) {
 	echo 'Updating the APP' . PHP_EOL;
