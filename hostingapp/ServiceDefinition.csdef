@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ServiceDefinition name="Azurepp" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
+<ServiceDefinition name="Azurep" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 	<WebRole name="Deployment" vmsize="Small" enableNativeCodeExecution="true">
 		<Startup>
 			<Task commandLine="install-php.cmd" executionContext="elevated" taskType="background" />
@@ -8,16 +8,13 @@
 		<Endpoints>
 			<InputEndpoint name="defaultHttpEndpoint" protocol="http" port="80"/>
 		</Endpoints>
-		<Imports>
-			<Import moduleName="RemoteAccess"/>
-			<Import moduleName="RemoteForwarder"/>
-		</Imports>
+		<Imports />
 		<Sites>
 			<Site name="PHPApp" physicalDirectory=".\Deployment\Websites\Sample">
 				<Bindings>
-          				<Binding name="HttpEndpoint" endpointName="defaultHttpEndpoint" />
-        				</Bindings>
-      			</Site>
+					<Binding name="HttpEndpoint" endpointName="defaultHttpEndpoint" />
+				</Bindings>
+			</Site>
 		</Sites>
 		<ConfigurationSettings>
 			<Setting name="APP_URL" />
