@@ -22,7 +22,7 @@ class Storage extends Microsoft_Console_Command
 	 */
 	public function createAppContainerCommand($app, $identifier)
 	{
-		$storageClient = new Microsoft_WindowsAzure_Storage_Blob(str_replace('http://', '', Microsoft_WindowsAzure_Storage::URL_CLOUD_BLOB), self::ACCOUNT, self::KEY);
+		$storageClient = $this->getClient();
 		
 		$container = $this->getContainerName($app);
 		
@@ -52,7 +52,7 @@ class Storage extends Microsoft_Console_Command
 	 */
 	public function storeCommand($container, $name, $from)
 	{
-		$storageClient = new Microsoft_WindowsAzure_Storage_Blob('blob.core.windows.net', self::ACCOUNT, self::KEY);
+		$storageClient = $this->getClient();
 
 		if (!$storageClient->containerExists($container)) {
 			print 'Container doesn\'t exist' . PHP_EOL;
@@ -103,6 +103,34 @@ class Storage extends Microsoft_Console_Command
 		
 		// No need for this anymore
 		unlink($temp_file);
+	}
+		
+	/**
+	 * @command-name get-signed-url
+	 * @command-description Get signed URL for a specific blog
+	 * @command-parameter-for $app Microsoft_Console_Command_ParameterSource_Argv --app|-a App name.
+	 * @command-parameter-for $name Microsoft_Console_Command_ParameterSource_Argv --name|-n Required. Blob name.
+	 * @command-parameter-for $identifier Microsoft_Console_Command_ParameterSource_Argv --identifier|-i Acl identifier.
+	 */
+	public function getSignedUrl($app, $name, $identifier)
+	{
+		$container = $this->getContainerName($app);
+	
+		$storageClient = $this->getClient();
+		
+		$signed = $storageClient->generateSharedAccessUrl($container, $name, 'b', '', '', '', $identifier);
+		
+		// replace buggy query string params which are not needed
+		$signed = str_replace(array('se=', 'sp='), '', $signed);
+		$signed = str_replace('&&', '&', $signed);
+		$signed = str_replace('?&', '?', $signed);
+		
+		print $signed . PHP_EOL;
+	}
+	
+	private function getClient()
+	{
+		return new Microsoft_WindowsAzure_Storage_Blob(str_replace('http://', '', Microsoft_WindowsAzure_Storage::URL_CLOUD_BLOB), self::ACCOUNT, self::KEY);
 	}
 	
 	private function getContainerName($app) {
