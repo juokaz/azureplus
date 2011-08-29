@@ -58,15 +58,18 @@ class Deploy extends Microsoft_Console_Command
 
 		// Create deployment
 		$client->createDeployment($app, 'production', 'deployment', 'deployment', $package->Url, $conf, true);
-
-		// Get deployment information
-		$deployment = $client->getDeploymentBySlot($app, 'production');
 		
 		// is it deployed?
-		while (!$this->isDeployed($deployment)) {
+		do {
 			usleep(250);
-			$deployment = $client->getDeploymentBySlot($app, 'production');
-		}
+			
+			// Get deployment information
+			try {
+				$deployment = $client->getDeploymentBySlot($app, 'production');		
+			} catch (Exception $e) {
+				// failed to get deployment info
+			}
+		} while (!$this->isDeployed($deployment));
 		
 		print 'Deployed to: ' . $deployment->url . PHP_EOL;
 	}
@@ -133,9 +136,9 @@ class Deploy extends Microsoft_Console_Command
 		print $package->Url;
 	}
 	
-	private function isDeployed(Microsoft_WindowsAzure_Management_DeploymentInstance $deployment)
+	private function isDeployed(Microsoft_WindowsAzure_Management_DeploymentInstance $deployment = null)
 	{
-		if ($deployment->status != 'Running') {
+		if (!$deployment || $deployment->status != 'Running') {
 			return false;
 		}
 		
