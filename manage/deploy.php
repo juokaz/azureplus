@@ -28,7 +28,7 @@ class Deploy extends Microsoft_Console_Command
 	public function createAppCommand($app)
 	{
 		$client = $this->getClient();
-		 
+
 		try {
 			$client->createHostedService($app, $app, $app, 'West Europe');
 		} catch (Exception $e) {
@@ -58,8 +58,16 @@ class Deploy extends Microsoft_Console_Command
 		// Create deployment
 		$client->createDeployment($app, 'production', 'deployment', 'deployment', $package->Url, $conf, true);
 
-		// Wait for it to finish
-		$client->waitForOperation();
+		// Get deployment information
+		$deployment = $client->getDeploymentBySlot($app, 'production');
+		
+		// is it deployed?
+		while (!$this->isDeployed($deployment)) {
+			usleep(250);
+			$deployment = $client->getDeploymentBySlot($app, 'production');
+		}
+		
+		print 'Deployed to: ' . $deployment->url . PHP_EOL;
 	}
 	
 	/**
@@ -103,6 +111,21 @@ class Deploy extends Microsoft_Console_Command
 		$package = $blobClient->getBlobInstance($collection, $location);
 		
 		print $package->Url;
+	}
+	
+	private function isDeployed(Microsoft_WindowsAzure_Management_DeploymentInstance $deployment)
+	{
+		if ($deployment->status != 'Running') {
+			return false;
+		}
+		
+		foreach ($deployment->roleinstancelist as $instance) {
+			if ($instance['instancestatus'] != 'Ready') {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	private function getClient()
