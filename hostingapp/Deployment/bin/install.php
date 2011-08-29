@@ -20,7 +20,8 @@ if (file_exists($existing)) {
 $new = file_get_contents($url);
 
 if (!$new) {
-	die('Cannot download a new file');
+	echo 'Cannot download a new file' . PHP_EOL;
+	exit(1);
 }
 
 // new file
