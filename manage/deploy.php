@@ -41,15 +41,9 @@ class Deploy extends Microsoft_Console_Command
 		if ('OK' !== ($putput = exec(sprintf('php storage.php create-app-container -a=%s -i=%s', $app, $identifier)))) {
 			die ('Failed to create app container');
 		}
-		
-		// Upload initial application
-		$app_file = 'app.zip';
-		$from = 'data/initial-app'; // @todo fix this
-		if ('OK' !== ($putput = exec(sprintf('php storage.php store-archive -a=%s -n=%s -f=%s', $app, $app_file, $from)))) {
-			die ('Failed to store initial app archive');
-		}
-		
+
 		// Get app URL for future use
+		$app_file = 'app.zip';
 		$app_url = exec(sprintf('php storage.php get-signed-url -a=%s -n=%s -i=%s', $app, $app_file, $identifier));
 		
 		// App specific settings
