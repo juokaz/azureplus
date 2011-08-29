@@ -103,7 +103,7 @@ class Storage extends Microsoft_Console_Command
 
 		// initialize an iterator
 		// pass it the directory to be processed
-		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($folder));
+		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($folder, FilesystemIterator::SKIP_DOTS));
 
 		// iterate over the directory
 		// add each file found to the archive
