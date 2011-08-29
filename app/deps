@@ -57,3 +57,8 @@
     git=http://github.com/symfony/AsseticBundle.git
     target=/bundles/Symfony/Bundle/AsseticBundle
     version=v1.0.0
+    
+[FOSRestBundle]
+    git=git://github.com/FriendsOfSymfony/FOSRestBundle.git
+    target=bundles/FOS/RestBundle
+
