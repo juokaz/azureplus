@@ -42,7 +42,7 @@ class Storage extends Microsoft_Console_Command
 			return;
 		}
 
-		print 'OK';
+		print 'OK' . PHP_EOL;
 	}
 
 	/**
@@ -58,7 +58,7 @@ class Storage extends Microsoft_Console_Command
 		
 		$storageClient->deleteContainer($container);
 		
-		print 'OK';
+		print 'OK' . PHP_EOL;
 	}
 
 	/**
@@ -122,7 +122,7 @@ class Storage extends Microsoft_Console_Command
 		// No need for this anymore
 		unlink($temp_file);
 
-		print 'OK';
+		print 'OK' . PHP_EOL;
 	}
 		
 	/**
