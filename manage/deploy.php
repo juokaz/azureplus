@@ -79,10 +79,13 @@ class Deploy extends Microsoft_Console_Command
 	{
 		$client = $this->getClient();
 		
-		$client->deleteDeploymentBySlot($app, 'production');
-
-		// Wait for it to finish
-		$client->waitForOperation();
+		try {
+			$client->deleteDeploymentBySlot($app, 'production');
+			// Wait for it to finish
+			$client->waitForOperation();
+		} catch (Exception $e) {
+			// no deployment exist
+		}
 
 		$client->deleteHostedService($app);
 
