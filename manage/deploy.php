@@ -63,6 +63,30 @@ class Deploy extends Microsoft_Console_Command
 	}
 	
 	/**
+	 * @command-name delete-app
+	 * @command-description Delete app
+	 * @command-parameter-for $app Microsoft_Console_Command_ParameterSource_Argv --app|-a Required. App name.
+	 */
+	public function deleteAppCommand($app)
+	{
+		$client = $this->getClient();
+		
+		$client->deleteDeploymentBySlot($app, 'production');
+
+		// Wait for it to finish
+		$client->waitForOperation();
+
+		$client->deleteHostedService($app);
+
+		// Wait for it to finish
+		$client->waitForOperation();
+		
+		if ('OK' !== ($putput = exec(sprintf('php storage.php delete-app-container -a=%s', $app)))) {
+			die ('Failed to delete app container');
+		}
+	}
+	
+	/**
 	 * @command-name store-base
 	 * @command-description Store base app file
 	 * @command-parameter-for $from Microsoft_Console_Command_ParameterSource_Argv --from|-f Required. From file.

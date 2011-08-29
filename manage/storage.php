@@ -46,6 +46,22 @@ class Storage extends Microsoft_Console_Command
 	}
 
 	/**
+	 * @command-name delete-app-container
+	 * @command-description Delete container for an app
+	 * @command-parameter-for $app Microsoft_Console_Command_ParameterSource_Argv --app|-a Required. App name.
+	 */
+	public function deleteAppContainerCommand($app)
+	{
+		$storageClient = $this->getClient();
+		
+		$container = $this->getContainerName($app);
+		
+		$storageClient->deleteContainer($container);
+		
+		print 'OK';
+	}
+
+	/**
 	 * @command-name store
 	 * @command-description Store data in Azure cloud
 	 * @command-parameter-for $container Microsoft_Console_Command_ParameterSource_Argv --container|-c Required. Container name.
