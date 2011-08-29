@@ -90,7 +90,7 @@ class Storage extends Microsoft_Console_Command
 	public function storeArchiveCommand($app, $name, $folder)
 	{
 		$container = $this->getContainerName($app);
-		$folder = rtrim($folder, '\\') . '\\';
+		$folder = rtrim($folder, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 		
 		$temp_file = tempnam(sys_get_temp_dir(), 'Azure');
 		
