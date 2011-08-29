@@ -19,6 +19,7 @@ class Deploy extends Microsoft_Console_Command
 	const STORAGE = 'azurep';
 	const COLLECTION = 'base';
 	const LOCATION = 'base.cspkg';
+	const APP = 'app.zip';
 
 	/**
 	 * @command-name create-app
@@ -38,12 +39,12 @@ class Deploy extends Microsoft_Console_Command
 		
 		// Create app container
 		$identifier = 'testings'; // @todo fix this
-		if ('OK' !== ($putput = exec(sprintf('php storage.php create-app-container -a=%s -i=%s', $app, $identifier)))) {
+		if ('OK' !== ($output = exec(sprintf('php storage.php create-app-container -a=%s -i=%s', $app, $identifier)))) {
 			die ('Failed to create app container');
 		}
 
 		// Get app URL for future use
-		$app_file = 'app.zip';
+		$app_file = self::APP;
 		$app_url = exec(sprintf('php storage.php get-signed-url -a=%s -n=%s -i=%s', $app, $app_file, $identifier));
 		
 		// App specific settings
@@ -95,6 +96,22 @@ class Deploy extends Microsoft_Console_Command
 		if ('OK' !== ($putput = exec(sprintf('php storage.php delete-app-container -a=%s', $app)))) {
 			die ('Failed to delete app container');
 		}
+	}
+	
+	/**
+	 * @command-name deploy-app
+	 * @command-description Deploy app
+	 * @command-parameter-for $app Microsoft_Console_Command_ParameterSource_Argv --app|-a Required. App name.
+	 * @command-parameter-for $from Microsoft_Console_Command_ParameterSource_Argv --folder|-f Required. From folder.
+	 */
+	public function deployAppCommand($app, $from) 
+	{
+		$app_file = self::APP;
+	    if ('OK' !== ($output = exec(sprintf('php storage.php store-archive -a=%s -n=%s -f=%s', $app, $app_file, $from)))) {
+			die ('Failed to store app archive');
+	    }
+
+		print 'OK';
 	}
 	
 	/**
