@@ -114,7 +114,7 @@ class Deploy extends Microsoft_Console_Command
 			die ('Failed to store app archive');
 	    }
 
-		print 'OK';
+		print 'OK' . PHP_EOL;
 	}
 	
 	/**
