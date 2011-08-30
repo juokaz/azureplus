@@ -54,7 +54,7 @@ class AppManager
      */
     public function getAppsToFinish()
     {
-        return $this->em->getRepository($this->class)->findBy(array('status' => App::STATUS_DEPLOYING));
+        return $this->em->getRepository($this->class)->findBy(array('status' => App::STATUS_CREATING));
     }
 
     /**

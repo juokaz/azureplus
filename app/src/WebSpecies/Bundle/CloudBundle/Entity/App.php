@@ -11,8 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 class App
 {
     const STATUS_NEW = 'new';
-    const STATUS_DEPLOYING = 'deploying';
-    const STATUS_DEPLOYED = 'deployed';
+    const STATUS_CREATING = 'creating';
+    const STATUS_CREATED = 'created';
     const STATUS_DELETED = 'deleted';
 
     /**

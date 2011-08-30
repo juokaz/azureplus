@@ -35,7 +35,7 @@ class Apps
         }
 
         // update app status
-        $app->setStatus(App::STATUS_DEPLOYING);
+        $app->setStatus(App::STATUS_CREATING);
 
         // create hosted service
         $this->azure->createServer($app->getName());
