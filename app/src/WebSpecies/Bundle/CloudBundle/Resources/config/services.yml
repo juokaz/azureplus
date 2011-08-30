@@ -29,10 +29,12 @@ services:
         arguments: [@cloud.service.storage, %cloud_app_file%]
         
     cloud.service.storage:
+        public: false
         class: %cloud.service.storage.class%
         arguments: [@azure.storage]
 
     cloud.service.azure:
+        public: false
         class: %cloud.service.azure.class%
         arguments: [@azure.management]
 
@@ -45,9 +47,11 @@ services:
         arguments: [@doctrine.orm.entity_manager]
         
     azure.storage:
+        public: false
         class: %azure.storage.class%
         arguments: [%storage_url%, %storage_account%, %storage_key%]
 
     azure.management:
+        public: false
         class: %azure.management.class%
         arguments: [%azure_subscription%, %azure_certificate%, %azure_password%]
