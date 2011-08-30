@@ -10,6 +10,20 @@ class Storage
     {
         $this->client = $client;
     }
+
+    /**
+     * Get url
+     *
+     * @param string $container
+     * @param string $name
+     * @return string
+     */
+    public function getUrl($container, $name)
+    {
+		$app_instance = $this->client->getBlobInstance($container, $name);
+
+		return $app_instance->Url;
+    }
     
     public function store($container, $name, $content)
     {
@@ -22,9 +36,7 @@ class Storage
 		$this->client->putBlob($container, $name, $content);
 
 		// get package location
-		$app_instance = $this->client->getBlobInstance($container, $name);
-		
-		return $app_instance->Url;
+		return $this->getUrl($container, $name);
     }
 
     /**
@@ -63,6 +75,26 @@ class Storage
 		}
 
         return $identifier_;
+    }
+
+    /**
+     * Get signed URL
+     *
+     * @param string $container
+     * @param string $name
+     * @param string $identifier
+     * @return string
+     */
+    public function getSignerUrl($container, $name, $identifier)
+    {
+		$signed = $this->client->generateSharedAccessUrl($container, $name, 'b', '', '', '', $identifier);
+
+		// replace buggy query string params which are not needed
+		$signed = str_replace(array('se=', 'sp='), '', $signed);
+		$signed = str_replace('&&', '&', $signed);
+		$signed = str_replace('?&', '?', $signed);
+
+		return $signed;
     }
 
     /**

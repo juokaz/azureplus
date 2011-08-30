@@ -61,3 +61,7 @@ jms_security_extra:
 cloud:
     storage_account: %storage_account%
     storage_key:     %storage_key%
+
+    azure_subscription: %azure_subscription%
+    azure_certificate:  %kernel.root_dir%/config/certs/%azure_cert%
+    azure_password:     %azure_password%

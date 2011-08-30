@@ -16,6 +16,10 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('storage_account')->end()
                 ->scalarNode('storage_key')->end()
+
+                ->scalarNode('azure_subscription')->end()
+                ->scalarNode('azure_password')->end()
+                ->scalarNode('azure_certificate')->end()
             ->end()
         ;
 

@@ -1,16 +1,27 @@
 parameters:
     cloud.manager.app.class: WebSpecies\Bundle\CloudBundle\Document\AppManager
     
+    cloud.service.apps.class: WebSpecies\Bundle\CloudBundle\Service\Apps
     cloud.service.deploy.class: WebSpecies\Bundle\CloudBundle\Service\Deploy
     cloud.service.storage.class: WebSpecies\Bundle\CloudBundle\Service\Storage
+    cloud.service.azure.class: WebSpecies\Bundle\CloudBundle\Service\Azure
     
     cloud_app_file: app.zip
 
+    base_collection: base
+    base_file: base.cspkg
+
     azure.storage.class: Microsoft_WindowsAzure_Storage_Blob
-    
+    azure.management.class: Microsoft_WindowsAzure_Management_Client
+
     storage_url: blob.core.windows.net
     storage_account: 
-    storage_key: 
+    storage_key:
+
+    azure_subscription:
+    azure_certificate:
+    azure_password:
+    azure_template: %kernel.root_dir%/../src/WebSpecies/Bundle/CloudBundle/Resources/data/ServiceConfiguration.cscfg
 
 services:
     cloud.service.deploy:
@@ -19,7 +30,15 @@ services:
         
     cloud.service.storage:
         class: %cloud.service.storage.class%
-        arguments: [@azure.storage, %cloud_app_file%]
+        arguments: [@azure.storage]
+
+    cloud.service.azure:
+        class: %cloud.service.azure.class%
+        arguments: [@azure.management]
+
+    cloud.service.apps:
+        class: %cloud.service.apps.class%
+        arguments: [@cloud.service.storage, @cloud.service.azure, %base_collection%, %base_file%, %cloud_app_file%, %azure_template%]
         
     cloud.manager.app:
         class: %cloud.manager.app.class%
@@ -28,3 +47,7 @@ services:
     azure.storage:
         class: %azure.storage.class%
         arguments: [%storage_url%, %storage_account%, %storage_key%]
+
+    azure.management:
+        class: %azure.management.class%
+        arguments: [%azure_subscription%, %azure_certificate%, %azure_password%]
