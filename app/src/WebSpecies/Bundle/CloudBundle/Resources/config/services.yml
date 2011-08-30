@@ -1,0 +1,25 @@
+parameters:
+    cloud.manager.app.class: WebSpecies\Bundle\CloudBundle\Document\AppManager
+    
+    cloud.service.deploy.class: WebSpecies\Bundle\CloudBundle\Service\Deploy
+    
+    cloud_app_file: app.zip
+
+    azure.storage.class: Microsoft_WindowsAzure_Storage_Blob
+    
+    storage_url: blob.core.windows.net
+    storage_account: 
+    storage_key: 
+
+services:
+    cloud.service.deploy:
+        class: %cloud.service.deploy.class%
+        arguments: [@azure.storage, %cloud_app_file%]
+        
+    cloud.manager.app:
+        class: %cloud.manager.app.class%
+        arguments: [@doctrine.orm.entity_manager]
+        
+    azure.storage:
+        class: %azure.storage.class%
+        arguments: [%storage_url%, %storage_account%, %storage_key%]

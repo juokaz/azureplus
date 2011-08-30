@@ -17,3 +17,6 @@
     locale            = en
 
     secret            = ThisTokenIsNotSoSecretChangeIt
+    
+    storage_account   =
+    storage_key       =
