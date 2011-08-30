@@ -9,7 +9,7 @@ class Deploy
     private $client;
     private $app_file;
     
-    public function __construct(\Microsoft_WindowsAzure_Storage_Blob $client, $app_file)
+    public function __construct(Storage $client, $app_file)
     {
         $this->client = $client;
         $this->app_file = $app_file;
@@ -46,21 +46,20 @@ class Deploy
 
 		// close and save archive
 		$zip->close();
-
-        // check if container is in place
-		if (!$this->client->containerExists($container)) {
-			throw new \RuntimeException (sprintf('Container "%s" doesn\'t exist', $container));
-		}
-
-        // put blob in the storage
-		$this->client->putBlob($container, $this->app_file, $temp_file);
-
-		// no need for this anymore
-		unlink($temp_file);
 		
-		// get package location
-		$app_instance = $this->client->getBlobInstance($container, $this->app_file);
+		// store contents
+		try {
+            $result = $this->client->store($container, $this->app_file, $temp_file);
+            
+    	    // no need for this anymore
+		    unlink($temp_file);
+        } catch (Exception $e) {
+		    // no need for this anymore
+		    unlink($temp_file);    
+		    
+		    throw $e;    
+        }
 		
-		return $app_instance->Url;
+		return $result;
     }
 }

@@ -2,6 +2,7 @@ parameters:
     cloud.manager.app.class: WebSpecies\Bundle\CloudBundle\Document\AppManager
     
     cloud.service.deploy.class: WebSpecies\Bundle\CloudBundle\Service\Deploy
+    cloud.service.storage.class: WebSpecies\Bundle\CloudBundle\Service\Storage
     
     cloud_app_file: app.zip
 
@@ -14,6 +15,10 @@ parameters:
 services:
     cloud.service.deploy:
         class: %cloud.service.deploy.class%
+        arguments: [@cloud.service.storage, %cloud_app_file%]
+        
+    cloud.service.storage:
+        class: %cloud.service.storage.class%
         arguments: [@azure.storage, %cloud_app_file%]
         
     cloud.manager.app:
