@@ -57,6 +57,19 @@ class Storage
     }
 
     /**
+     * Delete container
+     *
+     * @param string $container
+     * @return bool
+     */
+    public function deleteContainer($container)
+    {
+        $this->client->deleteContainer($container);
+
+        return true;
+    }
+
+    /**
      * Create new identifier for storage
      *
      * @throws \RuntimeException

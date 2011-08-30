@@ -53,6 +53,36 @@ class Azure
     }
 
     /**
+     * Delete server
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function deleteServer($name)
+    {
+		$deployment = false;
+		try {
+			$this->client->getDeploymentBySlot($name, 'production');
+			$deployment = true;
+		} catch (\Exception $e) {
+			// no deployment exist
+		}
+
+		if ($deployment) {
+			$this->client->deleteDeploymentBySlot($name, 'production');
+			// Wait for it to finish
+			$this->client->waitForOperation();
+		}
+
+		$this->client->deleteHostedService($name);
+
+		// Wait for it to finish
+		$this->client->waitForOperation();
+
+        return true;
+    }
+
+    /**
      * Get service URL
      *
      * @param string $name

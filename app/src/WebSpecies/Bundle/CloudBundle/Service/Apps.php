@@ -69,4 +69,21 @@ class Apps
 
         return $app;
     }
+
+    /**
+     * Delete app
+     *
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @return bool
+     */
+    public function deleteApp(App $app)
+    {
+        // Delete hosted service and deployment
+        $this->azure->deleteServer($app->getName());
+
+        // Delete app container
+        $this->storage->deleteContainer($app->getContainer());
+
+        return true;
+    }
 }
