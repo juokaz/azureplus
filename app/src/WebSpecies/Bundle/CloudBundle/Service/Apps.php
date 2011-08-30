@@ -31,6 +31,10 @@ class Apps
      */
     public function createApp(App $app, $wait = false)
     {
+        if ($app->getStatus() != App::STATUS_NEW) {
+            throw new \InvalidArgumentException('Only new apps can be created');
+        }
+
         $this->azure->createServer($app->getName());
 
         $container = $app->getContainer();
@@ -65,6 +69,8 @@ class Apps
             while (!$this->azure->isDeployed($app->getName())) {
                 sleep(1);
             }
+
+            $app->setStatus(App::STATUS_DEPLOYED);
         }
 
         return $app;

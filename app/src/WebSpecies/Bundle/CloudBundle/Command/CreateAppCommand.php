@@ -17,6 +17,7 @@ class CreateAppCommand extends ContainerAwareCommand
         $this
             ->setName('cloud:app:create')
             ->setDescription('Creates new app in the cloud')
+            ->addArgument('user', InputArgument::REQUIRED, 'User name')
             ->addArgument('app', InputArgument::REQUIRED, 'APP name')
         ;
     }
@@ -31,11 +32,19 @@ class CreateAppCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $app = $input->getArgument('app');
+        $user = $input->getArgument('user');
+
+        $user = $this->getContainer()->get('cloud.manager.user')->getUser($user);
+
+        if (!$user) {
+            $output->writeln('<error>User not found</error>');
+            return;
+        }
         
-        $app = $this->getContainer()->get('cloud.manager.app')->getApp($app);    
+        $app = $this->getContainer()->get('cloud.manager.app')->createApp($user, $app);
 
         try {
-            if (!$this->client->createApp($app, true)) {
+            if (!$this->client->createApp($app)) {
                 // @todo handle the failure here
                 return;
             }
@@ -43,6 +52,11 @@ class CreateAppCommand extends ContainerAwareCommand
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             return;
         }
+
+        // Save app instance
+        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $em->persist($app);
+        $em->flush();
 
         $output->writeln(sprintf('<info>Created the app: %s</info>', $app->getUrl()));
     }

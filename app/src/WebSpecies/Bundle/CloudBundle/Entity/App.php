@@ -10,6 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class App
 {
+    const STATUS_NEW = 'new';
+    const STATUS_DEPLOYED = 'deployed';
+
     /**
      * @ORM\Id
      * @ORM\Column(type="string")
@@ -31,11 +34,17 @@ class App
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $status;
     
     public function __construct(User $user, $name)
     {
         $this->user = $user;
         $this->name = $name;
+        $this->status = self::STATUS_NEW;
     }
     
     public function getName()
@@ -56,6 +65,16 @@ class App
     public function getUrl()
     {
         return $this->url;
+    }
+
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
     }
     
     public function getContainer()

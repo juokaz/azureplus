@@ -34,7 +34,12 @@ class DeployCommand extends ContainerAwareCommand
         $app = $input->getArgument('app');
         $folder = $input->getArgument('location');
         
-        $app = $this->getContainer()->get('cloud.manager.app')->getApp($app);    
+        $app = $this->getContainer()->get('cloud.manager.app')->getApp($app);
+
+        if (!$app) {
+            $output->writeln('<error>App not found</error>');
+            return;
+        }
     
         if ($result = $this->client->deploy($app, $folder)) {
             $output->writeln(sprintf('<info>Deployed app package to "%s"</info>', $result));

@@ -1,5 +1,6 @@
 parameters:
     cloud.manager.app.class: WebSpecies\Bundle\CloudBundle\Entity\AppManager
+    cloud.manager.user.class: WebSpecies\Bundle\CloudBundle\Entity\UserManager
     
     cloud.service.apps.class: WebSpecies\Bundle\CloudBundle\Service\Apps
     cloud.service.deploy.class: WebSpecies\Bundle\CloudBundle\Service\Deploy
@@ -44,6 +45,10 @@ services:
         
     cloud.manager.app:
         class: %cloud.manager.app.class%
+        arguments: [@doctrine.orm.entity_manager]
+
+    cloud.manager.user:
+        class: %cloud.manager.user.class%
         arguments: [@doctrine.orm.entity_manager]
         
     azure.storage:

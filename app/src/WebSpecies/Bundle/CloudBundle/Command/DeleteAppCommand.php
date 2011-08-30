@@ -32,9 +32,19 @@ class DeleteAppCommand extends ContainerAwareCommand
     {
         $app = $input->getArgument('app');
         
-        $app = $this->getContainer()->get('cloud.manager.app')->getApp($app);    
+        $app = $this->getContainer()->get('cloud.manager.app')->getApp($app);
+
+        if (!$app) {
+            $output->writeln('<error>App not found</error>');
+            return;
+        }
 
         $this->client->deleteApp($app);
+
+        // Remove app instance
+        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $em->remove($app);
+        $em->flush();
 
         $output->writeln(sprintf('<info>App deleted: %s</info>', $app->getUrl()));
     }
