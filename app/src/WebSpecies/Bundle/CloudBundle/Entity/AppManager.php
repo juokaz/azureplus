@@ -29,12 +29,25 @@ class AppManager
      * Create new app
      *
      * @param \WebSpecies\Bundle\CloudBundle\Entity\User $user
-     * @param string $name
+     * @param string|null $name
      * @return \WebSpecies\Bundle\CloudBundle\Entity\App
      */
-    public function createApp(User $user, $name)
+    public function createApp(User $user, $name = null)
     {
         return new $this->class($user, $name);
+    }
+
+    /**
+     * List of apps belonging to the user
+     *
+     * @return \WebSpecies\Bundle\CloudBundle\Entity\App[]
+     */
+    public function getUserApps(User $user)
+    {
+        $query = $this->em->createQuery('SELECT a FROM ' . $this->class . ' a WHERE a.user = ?1 AND a.status != \'' . APP::STATUS_DELETED . '\'');
+        $query->setParameter(1, $user->getId());
+
+        return $query->getResult();        
     }
 
     /**

@@ -7,6 +7,7 @@ use WebSpecies\Bundle\CloudBundle\Entity\App;
 use WebSpecies\Bundle\CloudBundle\Entity\AppManager;
 use WebSpecies\Bundle\CloudBundle\Entity\User;
 use WebSpecies\Bundle\CloudBundle\Entity\UserManager;
+use \WebSpecies\Bundle\CloudBundle\Form\Model\App as AppModel;
 
 class Manager
 {
@@ -29,7 +30,7 @@ class Manager
      * Create APP
      *
      * @param string $username
-     * @param string $name
+     * @param string|\WebSpecies\Bundle\CloudBundle\Form\Model\App $name
      * @return \WebSpecies\Bundle\CloudBundle\Entity\App
      */
     public function createApp($username, $name)
@@ -42,6 +43,11 @@ class Manager
 
         if (!$user) {
             throw new \InvalidArgumentException('User not found');
+        }
+
+        if ($name instanceof AppModel) {
+            $app_model = $name;
+            $name = $app_model->getName();
         }
 
         $app = $this->app_manager->createApp($user, $name);

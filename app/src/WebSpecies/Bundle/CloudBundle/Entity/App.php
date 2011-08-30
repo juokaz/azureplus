@@ -3,7 +3,7 @@
 namespace WebSpecies\Bundle\CloudBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+    
 /**
  * @ORM\Entity
  * @ORM\Table(name="apps")
@@ -48,6 +48,11 @@ class App
         $this->name = $name;
         $this->status = self::STATUS_NEW;
     }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
     
     public function getName()
     {
@@ -67,6 +72,11 @@ class App
     public function getUrl()
     {
         return $this->url;
+    }
+
+    public function getUser()
+    {
+        return $this->user;
     }
 
     public function setStatus($status)

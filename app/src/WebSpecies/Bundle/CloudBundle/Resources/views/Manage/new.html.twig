@@ -1,5 +1,11 @@
 {% extends '::base.html.twig' %}
 
 {% block content %}
-Hello!
+
+<form action="" {{ form_enctype(form) }} method="post">
+    {{ form_widget(form) }}
+
+    <input type="submit" />
+</form>
+
 {% endblock %}
