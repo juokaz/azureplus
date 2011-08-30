@@ -1,5 +1,5 @@
 parameters:
-    cloud.manager.app.class: WebSpecies\Bundle\CloudBundle\Document\AppManager
+    cloud.manager.app.class: WebSpecies\Bundle\CloudBundle\Entity\AppManager
     
     cloud.service.apps.class: WebSpecies\Bundle\CloudBundle\Service\Apps
     cloud.service.deploy.class: WebSpecies\Bundle\CloudBundle\Service\Deploy

@@ -1,6 +1,6 @@
 <?php
 
-namespace WebSpecies\Bundle\CloudBundle\Document;
+namespace WebSpecies\Bundle\CloudBundle\Entity;
 
 class App
 {

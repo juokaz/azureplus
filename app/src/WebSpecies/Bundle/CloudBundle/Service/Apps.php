@@ -2,7 +2,7 @@
 
 namespace WebSpecies\Bundle\CloudBundle\Service;
 
-use WebSpecies\Bundle\CloudBundle\Document\App;
+use WebSpecies\Bundle\CloudBundle\Entity\App;
 
 class Apps
 {
@@ -59,7 +59,7 @@ class Apps
     /**
      * Is app Live
      *
-     * @param \WebSpecies\Bundle\CloudBundle\Document\App $app
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
      * @return bool
      */
     public function isLive(App $app)

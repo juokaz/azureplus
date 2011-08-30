@@ -2,7 +2,7 @@
 
 namespace WebSpecies\Bundle\CloudBundle\Service;
 
-use WebSpecies\Bundle\CloudBundle\Document\App;
+use WebSpecies\Bundle\CloudBundle\Entity\App;
 
 class Azure
 {
@@ -20,7 +20,7 @@ class Azure
      * Create server
      *
      * @throws \RuntimeException
-     * @param \WebSpecies\Bundle\CloudBundle\Document\App $app
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
      * @param string $region
      * @return bool
      */
@@ -44,7 +44,7 @@ class Azure
     /**
      * Create deployment
      *
-     * @param \WebSpecies\Bundle\CloudBundle\Document\App $app
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
      * @param string $package
      * @param string $configuration
      * @return bool
@@ -59,7 +59,7 @@ class Azure
     /**
      * Get service URL
      *
-     * @param \WebSpecies\Bundle\CloudBundle\Document\App $app
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
      * @param string $where
      * @return string
      */
@@ -73,7 +73,7 @@ class Azure
     /**
      * Get app status
      *
-     * @param \WebSpecies\Bundle\CloudBundle\Document\App $app
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
      * @return string
      */
     public function getStatus(App $app)

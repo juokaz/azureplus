@@ -2,7 +2,7 @@
 
 namespace WebSpecies\Bundle\CloudBundle\Service;
 
-use WebSpecies\Bundle\CloudBundle\Document\App;
+use WebSpecies\Bundle\CloudBundle\Entity\App;
 
 class Deploy
 {
