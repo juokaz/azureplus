@@ -35,9 +35,7 @@ class CreateAppCommand extends ContainerAwareCommand
         $app = $this->getContainer()->get('cloud.manager.app')->getApp($app);    
 
         try {
-            if (false != ($url = $this->client->createApp($app))) {
-                $output->writeln(sprintf('<info>Initialised the app</info>', $url));
-            } else {
+            if (!$this->client->createApp($app, true)) {
                 // @todo handle the failure here
                 return;
             }
@@ -46,6 +44,6 @@ class CreateAppCommand extends ContainerAwareCommand
             return;
         }
 
-        $output->writeln(sprintf('<info>Created the app: %s</info>', $url));
+        $output->writeln(sprintf('<info>Created the app: %s</info>', $app->getUrl()));
     }
 }

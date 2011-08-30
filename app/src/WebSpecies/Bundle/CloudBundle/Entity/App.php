@@ -6,6 +6,8 @@ class App
 {
     private $name;
 
+    private $url;
+
     private $storage_identifier;
     
     public function __construct($name)
@@ -21,6 +23,16 @@ class App
     public function setStorageIdentifier($identifier)
     {
         $this->storage_identifier = $identifier;
+    }
+
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    }
+
+    public function getUrl()
+    {
+        return $this->url;
     }
     
     public function getContainer()

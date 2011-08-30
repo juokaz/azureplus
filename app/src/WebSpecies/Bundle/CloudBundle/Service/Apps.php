@@ -26,9 +26,10 @@ class Apps
      * Create a new app
      *
      * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @param bool $wait 
      * @return string
      */
-    public function createApp(App $app)
+    public function createApp(App $app, $wait = false)
     {
         $this->azure->createServer($app->getName());
 
@@ -56,11 +57,16 @@ class Apps
         // create deployment
         $this->azure->createDeployment($app->getName(), $package, $conf);
 
-        // wait for deployment to finish
-        while (!$this->azure->isDeployed($app->getName())) {
-            sleep(1);
+        // set url
+        $app->setUrl($this->azure->getUrl($app->getName()));
+
+        if ($wait) {
+            // wait for deployment to finish
+            while (!$this->azure->isDeployed($app->getName())) {
+                sleep(1);
+            }
         }
 
-        return $this->azure->getUrl($app->getName());
+        return $app;
     }
 }
