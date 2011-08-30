@@ -30,10 +30,11 @@ class App
      * @ORM\ManyToOne(targetEntity="WebSpecies\Bundle\CloudBundle\Entity\User", inversedBy="apps")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    protected $category;
+    private $user;
     
-    public function __construct($name)
+    public function __construct(User $user, $name)
     {
+        $this->user = $user;
         $this->name = $name;
     }
     
