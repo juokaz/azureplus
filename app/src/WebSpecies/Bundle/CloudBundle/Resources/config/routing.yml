@@ -1,0 +1,3 @@
+CloudBundle_homepage:
+    pattern:  /
+    defaults: { _controller: CloudBundle:Default:index }
