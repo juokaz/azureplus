@@ -24,7 +24,7 @@ class Apps
 
     public function createApp(App $app)
     {
-        $this->azure->createServer($app);
+        $this->azure->createServer($app->getName());
 
         $container = $app->getContainer();
 
@@ -47,13 +47,13 @@ class Apps
         // base package url
         $package = $this->storage->getUrl($this->base_collection, $this->base_file);
 
-        $this->azure->createDeployment($app, $package, $conf);
+        $this->azure->createDeployment($app->getName(), $package, $conf);
 
-        while (!$this->isLive($app)) {
+        while (!$this->isLive($app->getName())) {
             sleep(1);
         }
 
-        return $this->azure->getUrl($app);
+        return $this->azure->getUrl($app->getName());
     }
 
     /**
@@ -65,7 +65,7 @@ class Apps
     public function isLive(App $app)
     {
         try {
-            return $this->azure->getStatus($app) == 'Ready';
+            return $this->azure->getStatus($app->getName()) == 'Ready';
         } catch (\Exception $e) {
             return false;
         }

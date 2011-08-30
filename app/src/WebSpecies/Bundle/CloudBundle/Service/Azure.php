@@ -2,8 +2,6 @@
 
 namespace WebSpecies\Bundle\CloudBundle\Service;
 
-use WebSpecies\Bundle\CloudBundle\Entity\App;
-
 class Azure
 {
     /**
@@ -20,14 +18,12 @@ class Azure
      * Create server
      *
      * @throws \RuntimeException
-     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @param string $name
      * @param string $region
      * @return bool
      */
-    public function createServer(App $app, $region = 'West Europe')
+    public function createServer($name, $region = 'West Europe')
     {
-        $name = $app->getName();
-        
 		try {
 			$this->client->createHostedService($name, $name, null, $region);
 		} catch (\Exception $e) {
@@ -44,14 +40,14 @@ class Azure
     /**
      * Create deployment
      *
-     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @param string $name
      * @param string $package
      * @param string $configuration
      * @return bool
      */
-    public function createDeployment(App $app, $package, $configuration)
+    public function createDeployment($name, $package, $configuration)
     {
-        $this->client->createDeployment($app->getName(), 'production', 'deployment', 'deployment', $package, $configuration, true);
+        $this->client->createDeployment($name, 'production', 'deployment', 'deployment', $package, $configuration, true);
 
         return true;
     }
@@ -59,13 +55,13 @@ class Azure
     /**
      * Get service URL
      *
-     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @param string $name
      * @param string $where
      * @return string
      */
-    public function getUrl(App $app, $where = 'production')
+    public function getUrl($name, $where = 'production')
     {
-        $deployment = $this->client->getDeploymentBySlot($app->getName(), $where);
+        $deployment = $this->client->getDeploymentBySlot($name, $where);
 
         return $deployment->url;
     }
@@ -73,12 +69,12 @@ class Azure
     /**
      * Get app status
      *
-     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @param string $name
      * @return string
      */
-    public function getStatus(App $app)
+    public function getStatus($name)
     {
-        $deployment = $this->client->getDeploymentBySlot($app->getName(), 'production');
+        $deployment = $this->client->getDeploymentBySlot($name, 'production');
 
         if ($deployment->status != 'Running') {
 			return $deployment->status;
