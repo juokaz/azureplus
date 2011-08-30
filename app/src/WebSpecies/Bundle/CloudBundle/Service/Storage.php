@@ -64,7 +64,9 @@ class Storage
      */
     public function deleteContainer($container)
     {
-        $this->client->deleteContainer($container);
+        if ($this->client->containerExists($container)) {
+            $this->client->deleteContainer($container);
+        }
 
         return true;
     }

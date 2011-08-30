@@ -65,7 +65,10 @@ class Azure
 			$this->client->getDeploymentBySlot($name, 'production');
 			$deployment = true;
 		} catch (\Exception $e) {
-			// no deployment exist
+			// deployment service might be already deleted or wasn't created at all
+            if ($e->getMessage() != 'No deployments were found.') {
+                throw $e;
+            }
 		}
 
 		if ($deployment) {
@@ -74,10 +77,14 @@ class Azure
 			$this->client->waitForOperation();
 		}
 
-		$this->client->deleteHostedService($name);
-
-		// Wait for it to finish
-		$this->client->waitForOperation();
+        try {
+		    $this->client->deleteHostedService($name);
+        } catch (\Exception $e) {
+            // hosted service might be already deleted
+            if ($e->getMessage() != 'The hosted service does not exist.') {
+                throw $e;
+            }
+        }
 
         return true;
     }
