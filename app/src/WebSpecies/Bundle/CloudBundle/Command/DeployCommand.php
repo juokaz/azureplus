@@ -10,6 +10,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class DeployCommand extends ContainerAwareCommand
 {
+    /**
+     * @var \WebSpecies\Bundle\CloudBundle\Service\Deploy
+     */
     private $client;
 
     protected function configure()

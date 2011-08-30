@@ -36,4 +36,34 @@ class AppManager
     {
         return new $this->class($user, $name);
     }
+
+    /**
+     * List of apps to create in azure servers
+     *
+     * @return \WebSpecies\Bundle\CloudBundle\Entity\App[]
+     */
+    public function getAppsToCreate()
+    {
+        return $this->em->getRepository($this->class)->findBy(array('status' => App::STATUS_NEW));
+    }
+
+    /**
+     * List of apps which might have been finished to deploy
+     *
+     * @return \WebSpecies\Bundle\CloudBundle\Entity\App[]
+     */
+    public function getAppsToFinish()
+    {
+        return $this->em->getRepository($this->class)->findBy(array('status' => App::STATUS_DEPLOYING));
+    }
+
+    /**
+     * List of apps which need to be deleted
+     *
+     * @return \WebSpecies\Bundle\CloudBundle\Entity\App[]
+     */
+    public function getAppsToBeDeleted()
+    {
+        return $this->em->getRepository($this->class)->findBy(array('status' => App::STATUS_DELETED));
+    }
 }

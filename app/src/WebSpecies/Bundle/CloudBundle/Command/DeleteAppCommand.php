@@ -10,6 +10,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class DeleteAppCommand extends ContainerAwareCommand
 {
+    /**
+     * @var \WebSpecies\Bundle\CloudBundle\Service\Manager
+     */
     private $client;
 
     protected function configure()
@@ -25,27 +28,20 @@ class DeleteAppCommand extends ContainerAwareCommand
     {
         parent::initialize($input, $output);
         
-        $this->client = $this->getContainer()->get('cloud.service.apps');
+        $this->client = $this->getContainer()->get('cloud.service.manager');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $app = $input->getArgument('app');
-        
-        $app = $this->getContainer()->get('cloud.manager.app')->getApp($app);
 
-        if (!$app) {
-            $output->writeln('<error>App not found</error>');
+        try {
+            $app = $this->client->deleteApp($app);
+        } catch (\Exception $e) {
+            $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             return;
         }
 
-        $this->client->deleteApp($app);
-
-        // Remove app instance
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $em->remove($app);
-        $em->flush();
-
-        $output->writeln(sprintf('<info>App deleted: %s</info>', $app->getUrl()));
+        $output->writeln(sprintf('<info>App deleted "%s"</info>', $app->getName()));
     }
 }

@@ -91,9 +91,13 @@ class Azure
      */
     public function getUrl($name, $where = 'production')
     {
-        $deployment = $this->client->getDeploymentBySlot($name, $where);
+        if ($where == 'production') {
+            return sprintf('http://%s.cloudapp.net', $name);
+        } else {
+            $deployment = $this->client->getDeploymentBySlot($name, $where);
 
-        return $deployment->url;
+            return $deployment->url;
+        }
     }
 
     /**

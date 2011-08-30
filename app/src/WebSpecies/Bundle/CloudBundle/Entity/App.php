@@ -11,7 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
 class App
 {
     const STATUS_NEW = 'new';
+    const STATUS_DEPLOYING = 'deploying';
     const STATUS_DEPLOYED = 'deployed';
+    const STATUS_DELETED = 'deleted';
 
     /**
      * @ORM\Id
@@ -20,12 +22,12 @@ class App
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $url;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $storage_identifier;
 

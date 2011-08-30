@@ -26,15 +26,18 @@ class Apps
      * Create a new app
      *
      * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
-     * @param bool $wait 
      * @return string
      */
-    public function createApp(App $app, $wait = false)
+    public function createApp(App $app)
     {
         if ($app->getStatus() != App::STATUS_NEW) {
             throw new \InvalidArgumentException('Only new apps can be created');
         }
 
+        // update app status
+        $app->setStatus(App::STATUS_DEPLOYING);
+
+        // create hosted service
         $this->azure->createServer($app->getName());
 
         $container = $app->getContainer();
@@ -64,15 +67,6 @@ class Apps
         // set url
         $app->setUrl($this->azure->getUrl($app->getName()));
 
-        if ($wait) {
-            // wait for deployment to finish
-            while (!$this->azure->isDeployed($app->getName())) {
-                sleep(1);
-            }
-
-            $app->setStatus(App::STATUS_DEPLOYED);
-        }
-
         return $app;
     }
 
@@ -91,5 +85,16 @@ class Apps
         $this->storage->deleteContainer($app->getContainer());
 
         return true;
+    }
+
+    /**
+     * Is app deployed?
+     *
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @return bool
+     */
+    public function isDeployed(App $app)
+    {
+        return $this->azure->isDeployed($app->getName());
     }
 }
