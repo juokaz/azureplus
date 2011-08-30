@@ -8,6 +8,7 @@ security:
             pattern: ^/
             form_login:
                 provider: fos_userbundle
+                default_target_path: /manage
             logout:       true
             anonymous:    true
 
