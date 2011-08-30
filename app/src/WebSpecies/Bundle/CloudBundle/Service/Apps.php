@@ -22,6 +22,12 @@ class Apps
         $this->configuration_template = $configuration_template;
     }
 
+    /**
+     * Create a new app
+     *
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @return string
+     */
     public function createApp(App $app)
     {
         $this->azure->createServer($app->getName());
@@ -47,27 +53,14 @@ class Apps
         // base package url
         $package = $this->storage->getUrl($this->base_collection, $this->base_file);
 
+        // create deployment
         $this->azure->createDeployment($app->getName(), $package, $conf);
 
-        while (!$this->isLive($app->getName())) {
+        // wait for deployment to finish
+        while (!$this->azure->isDeployed($app->getName())) {
             sleep(1);
         }
 
         return $this->azure->getUrl($app->getName());
-    }
-
-    /**
-     * Is app Live
-     *
-     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
-     * @return bool
-     */
-    public function isLive(App $app)
-    {
-        try {
-            return $this->azure->getStatus($app->getName()) == 'Ready';
-        } catch (\Exception $e) {
-            return false;
-        }
     }
 }

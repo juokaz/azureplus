@@ -67,21 +67,31 @@ class Azure
     }
 
     /**
-     * Get app status
+     * Is the app deployed
      *
      * @param string $name
-     * @return string
+     * @param string $where
+     * @return bool
      */
-    public function getStatus($name)
-    {
-        $deployment = $this->client->getDeploymentBySlot($name, 'production');
+    public function isDeployed($name, $where = 'production')
+	{
+        try {
+            $deployment = $this->client->getDeploymentBySlot($name, $where);
+        } catch (\Exception $e) {
+            // this might fail because of HTTP errors communicating to Azure
+            return false;
+        }
 
-        if ($deployment->status != 'Running') {
-			return $deployment->status;
+		if ($deployment->status != 'Running') {
+			return false;
 		}
 
-        $instance = current($deployment->roleinstancelist);
+		foreach ($deployment->roleinstancelist as $instance) {
+			if ($instance['instancestatus'] != 'Ready') {
+				return false;
+			}
+		}
 
-		return $instance['instancestatus'];
-    }
+		return true;
+	}
 }
