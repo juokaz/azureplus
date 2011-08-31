@@ -26,7 +26,7 @@ class Apps
      * Create a new app
      *
      * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
-     * @return string
+     * @return \WebSpecies\Bundle\CloudBundle\Entity\App
      */
     public function createApp(App $app)
     {
@@ -40,19 +40,35 @@ class Apps
         // create hosted service
         $this->azure->createServer($app->getName());
 
+        return $app;
+    }
+
+    /**
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @param bool $force
+     * @return \WebSpecies\Bundle\CloudBundle\Entity\App
+     */
+    public function setupApp(App $app, $force = false)
+    {
+        if (!$force && $app->getStatus() != App::STATUS_CREATING) {
+            throw new \InvalidArgumentException('App is already set up');
+        }
+
         $container = $app->getContainer();
 
-        // create container for app code
-        $this->storage->createContainer($container);
+        if (!$this->storage->containerExists($container)) {
+            // create container for app code
+            $this->storage->createContainer($container);
 
-        // create and retrieve new storage identifier
-        $identifier = $this->storage->setIdentifier($container);
+            // create and retrieve new storage identifier
+            $identifier = $this->storage->setIdentifier($container);
 
-        // store identifier in app instance
-        $app->setStorageIdentifier($identifier);
+            // store identifier in app instance
+            $app->setStorageIdentifier($identifier);
+        }
 
         // get signed URL for code downloads
-        $app_url = $this->storage->getSignerUrl($container, $this->app_file, $identifier);
+        $app_url = $this->storage->getSignerUrl($container, $this->app_file, $app->getStorageIdentifier());
 
         // app specific settings
 		$conf = file_get_contents($this->configuration_template);

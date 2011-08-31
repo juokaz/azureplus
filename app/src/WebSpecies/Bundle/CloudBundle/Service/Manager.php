@@ -50,7 +50,11 @@ class Manager
             $name = $app_model->getName();
         }
 
+        // Create app entity
         $app = $this->app_manager->createApp($user, $name);
+
+        // Create app instance
+        $this->apps->createApp($app);
 
         // Save app instance
         $this->em->persist($app);

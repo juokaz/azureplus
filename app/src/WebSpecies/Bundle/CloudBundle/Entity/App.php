@@ -64,6 +64,11 @@ class App
         $this->storage_identifier = $identifier;
     }
 
+    public function getStorageIdentifier()
+    {
+        return $this->storage_identifier;
+    }
+
     public function setUrl($url)
     {
         $this->url = $url;

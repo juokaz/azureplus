@@ -42,7 +42,7 @@ class ProcessCommand extends ContainerAwareCommand
 
         foreach ($apps->getAppsToCreate() as $app) {
             $output->writeln(sprintf('<comment>Creating the app "%s"</comment>', $app->getName()));
-            $this->client->createApp($app);
+            $this->client->setupApp($app);
             $output->writeln(sprintf('<info>Created the app "%s"</info>', $app->getName()));
         }
 

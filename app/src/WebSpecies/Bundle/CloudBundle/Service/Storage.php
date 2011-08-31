@@ -72,6 +72,17 @@ class Storage
     }
 
     /**
+     * Is container already created?
+     *
+     * @param string $container
+     * @return bool
+     */
+    public function containerExists($container)
+    {
+        return $this->client->containerExists($container);
+    }    
+
+    /**
      * Create new identifier for storage
      *
      * @throws \RuntimeException
