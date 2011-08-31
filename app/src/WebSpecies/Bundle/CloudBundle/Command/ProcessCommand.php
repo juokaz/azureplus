@@ -52,7 +52,7 @@ class ProcessCommand extends ContainerAwareCommand
         foreach ($apps->getAppsToFinish() as $app) {
             $output->writeln(sprintf('<comment>Checking if app "%s" is deployed</comment>', $app->getName()));
             if ($this->client->isDeployed($app)) {
-                $app->setStatus(App::STATUS_CREATED);
+                $app->setStatus(App::STATUS_LIVE);
                 $output->writeln(sprintf('<info>App "%s" is deployed</info>', $app->getName()));
             }
         }

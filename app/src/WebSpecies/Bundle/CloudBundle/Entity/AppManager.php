@@ -57,7 +57,7 @@ class AppManager
      */
     public function getAppsToCreate()
     {
-        return $this->em->getRepository($this->class)->findBy(array('status' => App::STATUS_NEW));
+        return $this->em->getRepository($this->class)->findBy(array('status' => App::STATUS_CREATING));
     }
 
     /**
@@ -67,7 +67,7 @@ class AppManager
      */
     public function getAppsToFinish()
     {
-        return $this->em->getRepository($this->class)->findBy(array('status' => App::STATUS_CREATING));
+        return $this->em->getRepository($this->class)->findBy(array('status' => App::STATUS_CREATED));
     }
 
     /**

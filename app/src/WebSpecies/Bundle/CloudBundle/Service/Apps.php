@@ -34,11 +34,14 @@ class Apps
             throw new \InvalidArgumentException('Only new apps can be created');
         }
 
-        // update app status
-        $app->setStatus(App::STATUS_CREATING);
-
         // create hosted service
         $this->azure->createServer($app->getName());
+
+        // set url
+        $app->setUrl($this->azure->getUrl($app->getName()));
+
+        // update app status
+        $app->setStatus(App::STATUS_CREATING);
 
         return $app;
     }
@@ -80,8 +83,8 @@ class Apps
         // create deployment
         $this->azure->createDeployment($app->getName(), $package, $conf);
 
-        // set url
-        $app->setUrl($this->azure->getUrl($app->getName()));
+        // update app status
+        $app->setStatus(App::STATUS_CREATED);
 
         return $app;
     }

@@ -13,6 +13,7 @@ class App
     const STATUS_NEW = 'new';
     const STATUS_CREATING = 'creating';
     const STATUS_CREATED = 'created';
+    const STATUS_LIVE = 'live';
     const STATUS_DELETED = 'deleted';
 
     /**
