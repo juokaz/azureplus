@@ -4,8 +4,8 @@ parameters:
     
     cloud.service.apps.class: WebSpecies\Bundle\CloudBundle\Service\Apps
     cloud.service.deploy.class: WebSpecies\Bundle\CloudBundle\Service\Deploy
-    cloud.service.storage.class: WebSpecies\Bundle\CloudBundle\Service\Storage
-    cloud.service.azure.class: WebSpecies\Bundle\CloudBundle\Service\Azure
+    cloud.service.storage.class: WebSpecies\Bundle\CloudBundle\Service\Internal\Storage
+    cloud.service.azure.class: WebSpecies\Bundle\CloudBundle\Service\Internal\Azure
     cloud.service.manager.class: WebSpecies\Bundle\CloudBundle\Service\Manager
     
     cloud_app_file: app.zip
@@ -46,7 +46,7 @@ services:
 
     cloud.service.manager:
         class: %cloud.service.manager.class%
-        arguments: [@doctrine.orm.entity_manager, @cloud.service.storage, @cloud.service.apps, @cloud.manager.app, @cloud.manager.user]
+        arguments: [@doctrine.orm.entity_manager, @cloud.service.apps, @cloud.manager.app, @cloud.manager.user]
         
     cloud.manager.app:
         class: %cloud.manager.app.class%

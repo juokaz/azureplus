@@ -3,6 +3,8 @@
 namespace WebSpecies\Bundle\CloudBundle\Service;
 
 use WebSpecies\Bundle\CloudBundle\Entity\App;
+use WebSpecies\Bundle\CloudBundle\Service\Internal\Storage;
+use WebSpecies\Bundle\CloudBundle\Service\Internal\Azure;
 
 class Apps
 {

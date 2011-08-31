@@ -3,6 +3,7 @@
 namespace WebSpecies\Bundle\CloudBundle\Service;
 
 use WebSpecies\Bundle\CloudBundle\Entity\App;
+use WebSpecies\Bundle\CloudBundle\Service\Internal\Storage;
 
 class Deploy
 {
@@ -53,7 +54,7 @@ class Deploy
             
     	    // no need for this anymore
 		    unlink($temp_file);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
 		    // no need for this anymore
 		    unlink($temp_file);    
 		    

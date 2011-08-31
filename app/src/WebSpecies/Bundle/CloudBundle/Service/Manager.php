@@ -12,14 +12,12 @@ use \WebSpecies\Bundle\CloudBundle\Form\Model\App as AppModel;
 class Manager
 {
     private $apps;
-    private $storage;
     private $em;
     private $app_manager;
     private $user_manager;
     
-    public function __construct(EntityManager $em, Storage $storage, Apps $apps, AppManager $app_manager, UserManager $user_manager)
+    public function __construct(EntityManager $em, Apps $apps, AppManager $app_manager, UserManager $user_manager)
     {
-        $this->storage = $storage;
         $this->apps = $apps;
         $this->em = $em;
         $this->app_manager = $app_manager;

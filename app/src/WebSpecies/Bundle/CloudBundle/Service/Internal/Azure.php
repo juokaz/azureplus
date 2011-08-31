@@ -1,6 +1,6 @@
 <?php
 
-namespace WebSpecies\Bundle\CloudBundle\Service;
+namespace WebSpecies\Bundle\CloudBundle\Service\Internal;
 
 class Azure
 {
