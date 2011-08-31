@@ -1,0 +1,8 @@
+/web/bundles/
+/app/bootstrap*
+/app/cache/*
+/app/logs/*
+/vendor/*
+!/vendor/php-azure
+/app/config/parameters.ini
+/app/config/certs/*

@@ -1,0 +1,21 @@
+{% extends '::base.html.twig' %}
+
+{% block content %}
+
+{% if apps %}
+    {% for app in apps %}
+        <p>
+            <strong>App: {{ app.getName }}</strong><br />
+            Status: {% if app.getStatus == 'live' %}
+                <a href="{{ app.getUrl }}" target="_blank">Live</a>
+                {% else %}
+                Creating
+            {% endif %}<br />
+            Actions: <a href="{{ path('CloudBundle_delete_app', {'name': app.getName}) }}">Delete</a><br />
+        </p>
+    {% endfor %}
+{% else %}
+No apps, <a href="{{ path('CloudBundle_new_app') }}">create one</a>!
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,67 @@
+parameters:
+    cloud.manager.app.class: WebSpecies\Bundle\CloudBundle\Entity\AppManager
+    cloud.manager.user.class: WebSpecies\Bundle\CloudBundle\Entity\UserManager
+    
+    cloud.service.apps.class: WebSpecies\Bundle\CloudBundle\Service\Apps
+    cloud.service.deploy.class: WebSpecies\Bundle\CloudBundle\Service\Deploy
+    cloud.service.storage.class: WebSpecies\Bundle\CloudBundle\Service\Internal\Storage
+    cloud.service.azure.class: WebSpecies\Bundle\CloudBundle\Service\Internal\Azure
+    cloud.service.manager.class: WebSpecies\Bundle\CloudBundle\Service\Manager
+    
+    cloud_app_file: app.zip
+
+    base_collection: base
+    base_file: base.cspkg
+
+    azure.storage.class: Microsoft_WindowsAzure_Storage_Blob
+    azure.management.class: Microsoft_WindowsAzure_Management_Client
+
+    storage_url: blob.core.windows.net
+    storage_account: 
+    storage_key:
+
+    azure_subscription:
+    azure_certificate:
+    azure_password:
+    azure_template: %kernel.root_dir%/../src/WebSpecies/Bundle/CloudBundle/Resources/data/ServiceConfiguration.cscfg
+
+services:
+    cloud.service.deploy:
+        class: %cloud.service.deploy.class%
+        arguments: [@cloud.service.storage, %cloud_app_file%]
+        
+    cloud.service.storage:
+        public: false
+        class: %cloud.service.storage.class%
+        arguments: [@azure.storage]
+
+    cloud.service.azure:
+        public: false
+        class: %cloud.service.azure.class%
+        arguments: [@azure.management]
+
+    cloud.service.apps:
+        class: %cloud.service.apps.class%
+        arguments: [@cloud.service.storage, @cloud.service.azure, %base_collection%, %base_file%, %cloud_app_file%, %azure_template%]
+
+    cloud.service.manager:
+        class: %cloud.service.manager.class%
+        arguments: [@doctrine.orm.entity_manager, @cloud.service.apps, @cloud.manager.app, @cloud.manager.user]
+        
+    cloud.manager.app:
+        class: %cloud.manager.app.class%
+        arguments: [@doctrine.orm.entity_manager]
+
+    cloud.manager.user:
+        class: %cloud.manager.user.class%
+        arguments: [@doctrine.orm.entity_manager]
+        
+    azure.storage:
+        public: false
+        class: %azure.storage.class%
+        arguments: [%storage_url%, %storage_account%, %storage_key%]
+
+    azure.management:
+        public: false
+        class: %azure.management.class%
+        arguments: [%azure_subscription%, %azure_certificate%, %azure_password%]

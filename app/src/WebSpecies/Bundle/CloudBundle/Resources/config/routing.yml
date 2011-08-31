@@ -1,0 +1,19 @@
+CloudBundle_homepage:
+    pattern:  /
+    defaults: { _controller: CloudBundle:Default:index }
+
+CloudBundle_manage:
+    pattern:  /manage
+    defaults: { _controller: CloudBundle:Manage:index }
+
+CloudBundle_apps:
+    pattern:  /manage/apps
+    defaults: { _controller: CloudBundle:Manage:apps }
+
+CloudBundle_new_app:
+    pattern:  /manage/apps/new
+    defaults: { _controller: CloudBundle:Manage:new }
+
+CloudBundle_delete_app:
+    pattern:  /manage/apps/{name}/delete
+    defaults: { _controller: CloudBundle:Manage:delete }
