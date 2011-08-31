@@ -51,11 +51,11 @@ class AppManager
     }
 
     /**
-     * List of apps to create in azure servers
+     * List of apps to set up in azure servers
      *
      * @return \WebSpecies\Bundle\CloudBundle\Entity\App[]
      */
-    public function getAppsToCreate()
+    public function getAppsToSetUp()
     {
         return $this->em->getRepository($this->class)->findBy(array('status' => App::STATUS_CREATING));
     }

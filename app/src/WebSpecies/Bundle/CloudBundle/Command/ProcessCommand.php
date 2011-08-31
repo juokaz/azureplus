@@ -40,10 +40,10 @@ class ProcessCommand extends ContainerAwareCommand
         /** @var $apps \WebSpecies\Bundle\CloudBundle\Entity\AppManager */
         $apps = $this->getContainer()->get('cloud.manager.app');
 
-        foreach ($apps->getAppsToCreate() as $app) {
-            $output->writeln(sprintf('<comment>Creating the app "%s"</comment>', $app->getName()));
+        foreach ($apps->getAppsToSetUp() as $app) {
+            $output->writeln(sprintf('<comment>Setting up the app "%s"</comment>', $app->getName()));
             $this->client->setupApp($app);
-            $output->writeln(sprintf('<info>Created the app "%s"</info>', $app->getName()));
+            $output->writeln(sprintf('<info>Set up the app "%s"</info>', $app->getName()));
         }
 
         // flush apps in process of deploying
