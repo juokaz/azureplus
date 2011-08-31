@@ -47,7 +47,11 @@ class Azure
      */
     public function createDeployment($name, $package, $configuration)
     {
-        $this->client->createDeployment($name, 'production', 'deployment', 'deployment', $package, $configuration, true);
+        if (!$this->client->getDeploymentBySlot($name, 'production')) {
+            $this->client->createDeployment($name, 'production', 'deployment', 'deployment', $package, $configuration, true);
+        } else {
+            $this->client->upgradeDeploymentBySlot($name, 'production', 'deployment', $package, $configuration);
+        }
 
         return true;
     }

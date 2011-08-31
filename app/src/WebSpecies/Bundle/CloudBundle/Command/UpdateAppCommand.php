@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class DeleteAppCommand extends ContainerAwareCommand
+class UpdateAppCommand extends ContainerAwareCommand
 {
     /**
      * @var \WebSpecies\Bundle\CloudBundle\Service\Manager
@@ -18,8 +18,8 @@ class DeleteAppCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('cloud:app:delete')
-            ->setDescription('Delete app')
+            ->setName('cloud:app:update')
+            ->setDescription('Update app base instance')
             ->addArgument('app', InputArgument::REQUIRED, 'APP name')
         ;
     }
@@ -27,7 +27,7 @@ class DeleteAppCommand extends ContainerAwareCommand
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
         parent::initialize($input, $output);
-        
+
         $this->client = $this->getContainer()->get('cloud.service.manager');
     }
 
@@ -35,8 +35,8 @@ class DeleteAppCommand extends ContainerAwareCommand
     {
         $app = $input->getArgument('app');
 
-        $app = $this->client->deleteApp($app);
+        $app = $this->client->updateApp($app);
 
-        $output->writeln(sprintf('<info>App deleted "%s"</info>', $app->getName()));
+        $output->writeln(sprintf('<info>App updated "%s"</info>', $app->getName()));
     }
 }

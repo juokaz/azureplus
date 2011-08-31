@@ -85,4 +85,29 @@ class Manager
 
         return $app;
     }
+
+    /**
+     * Update APP
+     *
+     * @param string $name
+     * @return \WebSpecies\Bundle\CloudBundle\Entity\App
+     */
+    public function updateApp($name)
+    {
+        if ($name instanceof App) {
+            $app = $name;
+        } else {
+            $app = $this->app_manager->getApp($name);
+        }
+
+        if (!$app) {
+            throw new \InvalidArgumentException('App not found');
+        }
+
+        $app->setStatus(App::STATUS_CREATING);
+
+        $this->em->flush();
+
+        return $app;
+    }
 }
