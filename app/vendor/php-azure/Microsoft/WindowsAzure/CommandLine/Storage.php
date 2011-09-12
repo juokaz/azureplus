@@ -36,7 +36,7 @@
 /**
  * @see Microsoft_AutoLoader
  */
-require_once dirname(__FILE__) . '/../../AutoLoader.php';
+// require_once dirname(__FILE__) . '/../../AutoLoader.php';
 
 /**
  * Storage commands

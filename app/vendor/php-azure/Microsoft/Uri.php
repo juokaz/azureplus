@@ -22,7 +22,7 @@
 /**
  * @see Microsoft_AutoLoader
  */
-require_once dirname(__FILE__) . '/AutoLoader.php';
+// require_once dirname(__FILE__) . '/AutoLoader.php';
 
 /**
  * Abstract class for all Microsoft_Uri handlers
@@ -99,13 +99,13 @@ abstract class Microsoft_Uri
         $schemeSpecific = isset($uri[1]) === true ? $uri[1] : '';
 
         if (strlen($scheme) === 0) {
-            require_once 'Microsoft/Uri/Exception.php';
+            // require_once 'Microsoft/Uri/Exception.php';
             throw new Microsoft_Uri_Exception('An empty string was supplied for the scheme');
         }
 
         // Security check: $scheme is used to load a class file, so only alphanumerics are allowed.
         if (ctype_alnum($scheme) === false) {
-            require_once 'Microsoft/Uri/Exception.php';
+            // require_once 'Microsoft/Uri/Exception.php';
             throw new Microsoft_Uri_Exception('Illegal scheme supplied, only alphanumeric characters are permitted');
         }
 
@@ -123,13 +123,13 @@ abstract class Microsoft_Uri
             case 'mailto':
                 // TODO
             default:
-                require_once 'Microsoft/Uri/Exception.php';
+                // require_once 'Microsoft/Uri/Exception.php';
                 throw new Microsoft_Uri_Exception("Scheme \"$scheme\" is not supported");
                 break;
         }
 
         if (!class_exists($className)) {
-            require_once str_replace('_', '/', $className) . '.php';
+            // require_once str_replace('_', '/', $className) . '.php';
         }
         $schemeHandler = new $className($scheme, $schemeSpecific);
 

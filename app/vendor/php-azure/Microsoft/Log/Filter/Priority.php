@@ -23,7 +23,7 @@
 /**
  * @see Microsoft_AutoLoader
  */
-require_once dirname(__FILE__) . '/../../AutoLoader.php';
+// require_once dirname(__FILE__) . '/../../AutoLoader.php';
 
 /**
  * @category   Microsoft
@@ -56,7 +56,7 @@ class Microsoft_Log_Filter_Priority extends Microsoft_Log_Filter_Abstract
     public function __construct($priority, $operator = NULL)
     {
         if (! is_integer($priority)) {
-            require_once 'Microsoft/Log/Exception.php';
+            // require_once 'Microsoft/Log/Exception.php';
             throw new Microsoft_Log_Exception('Priority must be an integer');
         }
 

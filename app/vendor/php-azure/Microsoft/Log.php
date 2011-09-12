@@ -22,7 +22,7 @@
 /**
  * @see Microsoft_AutoLoader
  */
-require_once dirname(__FILE__) . '/AutoLoader.php';
+// require_once dirname(__FILE__) . '/AutoLoader.php';
 
 /**
  * @category   Microsoft
@@ -102,7 +102,7 @@ class Microsoft_Log
     {
         if (!is_array($config) || empty($config)) {
             /** @see Microsoft_Log_Exception */
-            require_once 'Microsoft/Log/Exception.php';
+            // require_once 'Microsoft/Log/Exception.php';
             throw new Microsoft_Log_Exception('Configuration must be an array');
         }
 
@@ -135,7 +135,7 @@ class Microsoft_Log
                         ? get_class($writer)
                         : 'The specified writer';
             /** @see Microsoft_Log_Exception */
-            require_once 'Microsoft/Log/Exception.php';
+            // require_once 'Microsoft/Log/Exception.php';
             throw new Microsoft_Log_Exception("{$writerName} does not extend Microsoft_Log_Writer_Abstract!");
         }
 
@@ -162,7 +162,7 @@ class Microsoft_Log
                          ? get_class($filter)
                          : 'The specified filter';
             /** @see Microsoft_Log_Exception */
-            require_once 'Microsoft/Log/Exception.php';
+            // require_once 'Microsoft/Log/Exception.php';
             throw new Microsoft_Log_Exception("{$filterName} does not implement Microsoft_Log_Filter_Interface");
         }
 
@@ -180,20 +180,20 @@ class Microsoft_Log
     protected function _constructFromConfig($type, $config, $namespace)
     {
         if (!is_array($config) || empty($config)) {
-            require_once 'Microsoft/Log/Exception.php';
+            // require_once 'Microsoft/Log/Exception.php';
             throw new Microsoft_Log_Exception('Configuration must be an array');
         }
 
         $params    = isset($config[ $type .'Params' ]) ? $config[ $type .'Params' ] : array();
         $className = $this->getClassName($config, $type, $namespace);
         if (!class_exists($className)) {
-            require_once 'Microsoft/Loader.php';
+            // require_once 'Microsoft/Loader.php';
             Microsoft_Loader::loadClass($className);
         }
 
         $reflection = new ReflectionClass($className);
         if (!$reflection->implementsInterface('Microsoft_Log_FactoryInterface')) {
-            require_once 'Zend/Log/Exception.php';
+            // require_once 'Zend/Log/Exception.php';
             throw new Microsoft_Log_Exception(
                 'Driver does not implement Microsoft_Log_FactoryInterface and can not be constructed from config.'
             );
@@ -213,7 +213,7 @@ class Microsoft_Log
     protected function getClassName($config, $type, $defaultNamespace)
     {
         if (!isset($config[ $type . 'Name' ])) {
-            require_once 'Zend/Log/Exception.php';
+            // require_once 'Zend/Log/Exception.php';
             throw new Microsoft_Log_Exception("Specify {$type}Name in the configuration array");
         }
         $className = $config[ $type . 'Name' ];
@@ -257,7 +257,7 @@ class Microsoft_Log
             switch (count($params)) {
                 case 0:
                     /** @see Microsoft_Log_Exception */
-                    require_once 'Microsoft_/Log/Exception.php';
+                    // require_once 'Microsoft_/Log/Exception.php';
                     throw new Microsoft_Log_Exception('Missing log message');
                 case 1:
                     $message = array_shift($params);
@@ -271,7 +271,7 @@ class Microsoft_Log
             $this->log($message, $priority, $extras);
         } else {
             /** @see Microsoft_Log_Exception */
-            require_once 'Microsoft/Log/Exception.php';
+            // require_once 'Microsoft/Log/Exception.php';
             throw new Microsoft_Log_Exception('Bad log priority');
         }
     }
@@ -290,13 +290,13 @@ class Microsoft_Log
         // sanity checks
         if (empty($this->_writers)) {
             /** @see Microsoft_Log_Exception */
-            require_once 'Microsoft/Log/Exception.php';
+            // require_once 'Microsoft/Log/Exception.php';
             throw new Microsoft_Log_Exception('No writers were added');
         }
 
         if (! isset($this->_priorities[$priority])) {
             /** @see Microsoft_Log_Exception */
-            require_once 'Microsoft/Log/Exception.php';
+            // require_once 'Microsoft/Log/Exception.php';
             throw new Microsoft_Log_Exception('Bad log priority');
         }
 
@@ -353,7 +353,7 @@ class Microsoft_Log
         if (isset($this->_priorities[$priority])
             || false !== array_search($name, $this->_priorities)) {
             /** @see Microsoft_Log_Exception */
-            require_once 'Microsoft/Log/Exception.php';
+            // require_once 'Microsoft/Log/Exception.php';
             throw new Microsoft_Log_Exception('Existing priorities cannot be overwritten');
         }
 
@@ -372,7 +372,7 @@ class Microsoft_Log
     {
         if (is_integer($filter)) {
             /** @see Microsoft_Log_Filter_Priority */
-            require_once 'Microsoft/Log/Filter/Priority.php';
+            // require_once 'Microsoft/Log/Filter/Priority.php';
             $filter = new Microsoft_Log_Filter_Priority($filter);
 
         } elseif ($filter instanceof Microsoft_Config || is_array($filter)) {
@@ -380,7 +380,7 @@ class Microsoft_Log
 
         } elseif(! $filter instanceof Microsoft_Log_Filter_Interface) {
             /** @see Microsoft_Log_Exception */
-            require_once 'Microsoft/Log/Exception.php';
+            // require_once 'Microsoft/Log/Exception.php';
             throw new Microsoft_Log_Exception('Invalid filter provided');
         }
 
@@ -402,7 +402,7 @@ class Microsoft_Log
 
         if (!$writer instanceof Microsoft_Log_Writer_Abstract) {
             /** @see Microsoft_Log_Exception */
-            require_once 'Microsoft/Log/Exception.php';
+            // require_once 'Microsoft/Log/Exception.php';
             throw new Microsoft_Log_Exception(
                 'Writer must be an instance of Microsoft_Log_Writer_Abstract'
                 . ' or you should pass a configuration array'

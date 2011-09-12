@@ -36,7 +36,7 @@
 /**
  * @see Microsoft_AutoLoader
  */
-require_once dirname(__FILE__) . '/../../AutoLoader.php';
+// require_once dirname(__FILE__) . '/../../AutoLoader.php';
 
 
 /**
@@ -1865,7 +1865,7 @@ class Microsoft_WindowsAzure_Storage_Blob extends Microsoft_WindowsAzure_Storage
 		/**
 		 * @see Microsoft_WindowsAzure_Storage_Blob_Stream
 		 */
-		require_once 'Microsoft/WindowsAzure/Storage/Blob/Stream.php';
+		// require_once 'Microsoft/WindowsAzure/Storage/Blob/Stream.php';
 
 		stream_register_wrapper($name, 'Microsoft_WindowsAzure_Storage_Blob_Stream');
 		$this->registerAsClient($name);

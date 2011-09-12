@@ -23,7 +23,7 @@
 /**
  * @see Microsoft_AutoLoader
  */
-require_once dirname(__FILE__) . '/../AutoLoader.php';
+// require_once dirname(__FILE__) . '/../AutoLoader.php';
 
 /**
  * A Microsoft_Http_CookieJar object is designed to contain and maintain HTTP cookies, and should
@@ -123,7 +123,7 @@ class Microsoft_Http_CookieJar implements Countable, IteratorAggregate
             $this->cookies[$domain][$path][$cookie->getName()] = $cookie;
             $this->_rawCookies[] = $cookie;
         } else {
-            require_once 'Microsoft/Http/Exception.php';
+            // require_once 'Microsoft/Http/Exception.php';
             throw new Microsoft_Http_Exception('Supplient argument is not a valid cookie string or object');
         }
     }
@@ -138,7 +138,7 @@ class Microsoft_Http_CookieJar implements Countable, IteratorAggregate
     public function addCookiesFromResponse($response, $ref_uri)
     {
         if (! $response instanceof Microsoft_Http_Response) {
-            require_once 'Microsoft/Http/Exception.php';
+            // require_once 'Microsoft/Http/Exception.php';
             throw new Microsoft_Http_Exception('$response is expected to be a Response object, ' .
                 gettype($response) . ' was passed');
         }
@@ -182,7 +182,7 @@ class Microsoft_Http_CookieJar implements Countable, IteratorAggregate
     {
         if (is_string($uri)) $uri = Microsoft_Uri::factory($uri);
         if (! $uri instanceof Microsoft_Uri_Http) {
-            require_once 'Microsoft/Http/Exception.php';
+            // require_once 'Microsoft/Http/Exception.php';
             throw new Microsoft_Http_Exception("Invalid URI string or object passed");
         }
 
@@ -218,7 +218,7 @@ class Microsoft_Http_CookieJar implements Countable, IteratorAggregate
         }
 
         if (! $uri instanceof Microsoft_Uri_Http) {
-            require_once 'Microsoft/Http/Exception.php';
+            // require_once 'Microsoft/Http/Exception.php';
             throw new Microsoft_Http_Exception('Invalid URI specified');
         }
 
@@ -241,7 +241,7 @@ class Microsoft_Http_CookieJar implements Countable, IteratorAggregate
                     break;
 
                 default:
-                    require_once 'Microsoft/Http/Exception.php';
+                    // require_once 'Microsoft/Http/Exception.php';
                     throw new Microsoft_Http_Exception("Invalid value passed for \$ret_as: {$ret_as}");
                     break;
             }

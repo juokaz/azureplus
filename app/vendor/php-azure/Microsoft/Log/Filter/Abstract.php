@@ -23,7 +23,7 @@
 /**
  * @see Microsoft_AutoLoader
  */
-require_once dirname(__FILE__) . '/../../AutoLoader.php';
+// require_once dirname(__FILE__) . '/../../AutoLoader.php';
 
 /**
  * @category   Microsoft
@@ -46,7 +46,7 @@ abstract class Microsoft_Log_Filter_Abstract
     static protected function _parseConfig($config)
     {
         if (!is_array($config)) {
-            require_once 'Microsoft/Log/Exception.php';
+            // require_once 'Microsoft/Log/Exception.php';
             throw new Microsoft_Log_Exception('Configuration must be an array');
         }
 

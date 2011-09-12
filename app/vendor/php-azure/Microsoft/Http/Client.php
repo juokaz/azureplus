@@ -25,7 +25,7 @@
 /**
  * @see Microsoft_AutoLoader
  */
-require_once dirname(__FILE__) . '/../AutoLoader.php';
+// require_once dirname(__FILE__) . '/../AutoLoader.php';
 
 /**
  * Microsoft_Http_Client is an implemetation of an HTTP client in PHP. The client
@@ -248,7 +248,7 @@ class Microsoft_Http_Client
 
         if (!$uri instanceof Microsoft_Uri_Http) {
             /** @see Microsoft_Http_Client_Exception */
-            require_once 'Microsoft/Http/Client/Exception.php';
+            // require_once 'Microsoft/Http/Client/Exception.php';
             throw new Microsoft_Http_Client_Exception('Passed parameter is not a valid HTTP URI.');
         }
 
@@ -296,7 +296,7 @@ class Microsoft_Http_Client
 
         } elseif (! is_array($config)) {
             /** @see Microsoft_Http_Client_Exception */
-            require_once 'Microsoft/Http/Client/Exception.php';
+            // require_once 'Microsoft/Http/Client/Exception.php';
             throw new Microsoft_Http_Client_Exception('Array expected, got ' . gettype($config));
         }
 
@@ -327,7 +327,7 @@ class Microsoft_Http_Client
     {
         if (! preg_match('/^[^\x00-\x1f\x7f-\xff\(\)<>@,;:\\\\"\/\[\]\?={}\s]+$/', $method)) {
             /** @see Microsoft_Http_Client_Exception */
-            require_once 'Microsoft/Http/Client/Exception.php';
+            // require_once 'Microsoft/Http/Client/Exception.php';
             throw new Microsoft_Http_Client_Exception("'{$method}' is not a valid HTTP request method.");
         }
 
@@ -379,7 +379,7 @@ class Microsoft_Http_Client
             // Make sure the name is valid if we are in strict mode
             if ($this->config['strict'] && (! preg_match('/^[a-zA-Z0-9-]+$/', $name))) {
                 /** @see Microsoft_Http_Client_Exception */
-                require_once 'Microsoft/Http/Client/Exception.php';
+                // require_once 'Microsoft/Http/Client/Exception.php';
                 throw new Microsoft_Http_Client_Exception("{$name} is not a valid HTTP header name");
             }
 
@@ -536,7 +536,7 @@ class Microsoft_Http_Client
             // Check we got a proper authentication type
             if (! defined('self::AUTH_' . strtoupper($type))) {
                 /** @see Microsoft_Http_Client_Exception */
-                require_once 'Microsoft/Http/Client/Exception.php';
+                // require_once 'Microsoft/Http/Client/Exception.php';
                 throw new Microsoft_Http_Client_Exception("Invalid or not supported authentication type: '$type'");
             }
 
@@ -563,7 +563,7 @@ class Microsoft_Http_Client
     public function setCookieJar($cookiejar = true)
     {
         if (! class_exists('Microsoft_Http_CookieJar')) {
-            require_once 'Microsoft/Http/CookieJar.php';
+            // require_once 'Microsoft/Http/CookieJar.php';
         }
 
         if ($cookiejar instanceof Microsoft_Http_CookieJar) {
@@ -574,7 +574,7 @@ class Microsoft_Http_Client
             $this->cookiejar = null;
         } else {
             /** @see Microsoft_Http_Client_Exception */
-            require_once 'Microsoft/Http/Client/Exception.php';
+            // require_once 'Microsoft/Http/Client/Exception.php';
             throw new Microsoft_Http_Client_Exception('Invalid parameter type passed as CookieJar');
         }
 
@@ -603,7 +603,7 @@ class Microsoft_Http_Client
     public function setCookie($cookie, $value = null)
     {
         if (! class_exists('Microsoft_Http_Cookie')) {
-            require_once 'Microsoft/Http/Cookie.php';
+            // require_once 'Microsoft/Http/Cookie.php';
         }
 
         if (is_array($cookie)) {
@@ -638,7 +638,7 @@ class Microsoft_Http_Client
 
             if (preg_match("/[=,; \t\r\n\013\014]/", $cookie)) {
                 /** @see Microsoft_Http_Client_Exception */
-                require_once 'Microsoft/Http/Client/Exception.php';
+                // require_once 'Microsoft/Http/Client/Exception.php';
                 throw new Microsoft_Http_Client_Exception("Cookie name cannot contain these characters: =,; \t\r\n\013\014 ({$cookie})");
             }
 
@@ -678,7 +678,7 @@ class Microsoft_Http_Client
         if ($data === null) {
             if (($data = @file_get_contents($filename)) === false) {
                 /** @see Microsoft_Http_Client_Exception */
-                require_once 'Microsoft/Http/Client/Exception.php';
+                // require_once 'Microsoft/Http/Client/Exception.php';
                 throw new Microsoft_Http_Client_Exception("Unable to read file '{$filename}' for upload");
             }
 
@@ -815,7 +815,7 @@ class Microsoft_Http_Client
     {
         if (is_string($adapter)) {
             if (!class_exists($adapter)) {
-            	@require_once( str_replace('_', '/', $adapter) . '.php' );
+            	// require_once( str_replace('_', '/', $adapter) . '.php' );
             }
 
             $adapter = new $adapter;
@@ -823,7 +823,7 @@ class Microsoft_Http_Client
 
         if (! $adapter instanceof Microsoft_Http_Client_Adapter_Interface) {
             /** @see Microsoft_Http_Client_Exception */
-            require_once 'Microsoft/Http/Client/Exception.php';
+            // require_once 'Microsoft/Http/Client/Exception.php';
             throw new Microsoft_Http_Client_Exception('Passed adapter is not a HTTP connection adapter');
         }
 
@@ -881,7 +881,7 @@ class Microsoft_Http_Client
         $fp = fopen($this->_stream_name, "w+b");
         if(!$fp) {
                 $this->close();
-                require_once 'Microsoft/Http/Client/Exception.php';
+                // require_once 'Microsoft/Http/Client/Exception.php';
                 throw new Microsoft_Http_Client_Exception("Could not open temp file $name");
 
         }
@@ -899,7 +899,7 @@ class Microsoft_Http_Client
     {
         if (! $this->uri instanceof Microsoft_Uri_Http) {
             /** @see Microsoft_Http_Client_Exception */
-            require_once 'Microsoft/Http/Client/Exception.php';
+            // require_once 'Microsoft/Http/Client/Exception.php';
             throw new Microsoft_Http_Client_Exception('No valid URI has been passed to the client');
         }
 
@@ -934,7 +934,7 @@ class Microsoft_Http_Client
             // check that adapter supports streaming before using it
             if(is_resource($body) && !($this->adapter instanceof Microsoft_Http_Client_Adapter_Stream)) {
                 /** @see Microsoft_Http_Client_Exception */
-                require_once 'Microsoft/Http/Client/Exception.php';
+                // require_once 'Microsoft/Http/Client/Exception.php';
                 throw new Microsoft_Http_Client_Exception('Adapter does not support streaming');
             }
 
@@ -948,7 +948,7 @@ class Microsoft_Http_Client
                     $this->adapter->setOutputStream($stream);
                 } else {
                     /** @see Microsoft_Http_Client_Exception */
-                    require_once 'Microsoft/Http/Client/Exception.php';
+                    // require_once 'Microsoft/Http/Client/Exception.php';
                     throw new Microsoft_Http_Client_Exception('Adapter does not support streaming');
                 }
             }
@@ -959,7 +959,7 @@ class Microsoft_Http_Client
             $response = $this->adapter->read();
             if (! $response) {
                 /** @see Microsoft_Http_Client_Exception */
-                require_once 'Microsoft/Http/Client/Exception.php';
+                // require_once 'Microsoft/Http/Client/Exception.php';
                 throw new Microsoft_Http_Client_Exception('Unable to read response, or response is empty');
             }
 
@@ -1195,7 +1195,7 @@ class Microsoft_Http_Client
                     }
 
                     /** @see Microsoft_Http_Client_Exception */
-                    require_once 'Microsoft/Http/Client/Exception.php';
+                    // require_once 'Microsoft/Http/Client/Exception.php';
                     throw new Microsoft_Http_Client_Exception("Cannot handle content type '{$this->enctype}' automatically." .
                         " Please use Microsoft_Http_Client::setRawData to send this kind of content.");
                     break;
@@ -1356,7 +1356,7 @@ class Microsoft_Http_Client
                 // In basic authentication, the user name cannot contain ":"
                 if (strpos($user, ':') !== false) {
                     /** @see Microsoft_Http_Client_Exception */
-                    require_once 'Microsoft/Http/Client/Exception.php';
+                    // require_once 'Microsoft/Http/Client/Exception.php';
                     throw new Microsoft_Http_Client_Exception("The user name cannot contain ':' in 'Basic' HTTP authentication");
                 }
 
@@ -1371,7 +1371,7 @@ class Microsoft_Http_Client
 
             default:
                 /** @see Microsoft_Http_Client_Exception */
-                require_once 'Microsoft/Http/Client/Exception.php';
+                // require_once 'Microsoft/Http/Client/Exception.php';
                 throw new Microsoft_Http_Client_Exception("Not a supported HTTP authentication type: '$type'");
         }
 
