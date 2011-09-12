@@ -42,12 +42,26 @@ class App
      * @ORM\Column(type="string", length=100)
      */
     private $status;
+
+    /**
+     * @ORM\OneToOne(targetEntity="WebSpecies\Bundle\CloudBundle\Entity\Configuration", cascade={"all"})
+     * @ORM\JoinColumn(name="config_id", referencedColumnName="id")
+     */
+    private $configuration;
+
+    /**
+     * @ORM\OneToOne(targetEntity="WebSpecies\Bundle\CloudBundle\Entity\Source", cascade={"all"})
+     * @ORM\JoinColumn(name="source_id", referencedColumnName="id")
+     */
+    private $source;
     
     public function __construct(User $user, $name)
     {
         $this->user = $user;
         $this->name = $name;
         $this->status = self::STATUS_NEW;
+        $this->configuration = new Configuration();
+        $this->source = new Source();
     }
 
     public function setName($name)
@@ -98,5 +112,15 @@ class App
     public function getContainer()
     {
         return $this->getName();
+    }
+
+    public function getConfiguration()
+    {
+        return $this->configuration;
+    }
+
+    public function getSource()
+    {
+        return $this->source;
     }
 }
