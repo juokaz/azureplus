@@ -6,3 +6,4 @@
 !/vendor/php-azure
 /app/config/parameters.ini
 /app/config/certs/*
+.idea
