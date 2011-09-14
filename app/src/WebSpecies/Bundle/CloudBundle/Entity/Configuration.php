@@ -28,17 +28,7 @@ class Configuration
     /**
      * @ORM\Column(type="string", length=100)
      */
-    private $index_file = 'index.php';
-
-    public function setIndexFile($index_file)
-    {
-        $this->index_file = $index_file;
-    }
-
-    public function getIndexFile()
-    {
-        return $this->index_file;
-    }
+    private $app_root = '';
 
     public function setPhpVersion($php_version)
     {
@@ -48,5 +38,65 @@ class Configuration
     public function getPhpVersion()
     {
         return $this->php_version;
+    }
+
+    public function setAppRoot($app_root)
+    {
+        $this->app_root = rtrim(ltrim($app_root, '/'), '/');
+    }
+
+    public function getAppRoot()
+    {
+        return $this->app_root;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRouter()
+    {
+        $split = strrpos($this->app_root, '/');
+        
+        if (!$split && strpos($this->app_root, '.') !== false) {
+            return $this->app_root;
+        } elseif (!$split) {
+            return '';
+        }
+
+        return substr($this->app_root, $split + 1, strlen($this->app_root) + $split);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPublicFolder()
+    {
+        $split = strrpos($this->app_root, '/');
+
+        if (!$split && strpos($this->app_root, '.') === false) {
+            return $this->app_root;
+        } elseif (!$split) {
+            return '';
+        }
+
+        return substr($this->app_root, 0, $split);
+    }
+
+    public function getPhpRoot()
+    {
+        if (!$this->php_version) {
+            throw new \RuntimeException('PHP version is not set');
+        }
+
+        $root = 'C:\Program Files\PHP\%s\php-cgi.exe';
+
+        switch ($this->php_version) {
+            case self::PHP_52:
+                    return sprintf($root, 'v5.2');
+                break;
+            case self::PHP_53:
+                    return sprintf($root, 'v5.3');
+                break;
+        }
     }
 }

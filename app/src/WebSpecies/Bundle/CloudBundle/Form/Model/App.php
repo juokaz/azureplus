@@ -26,7 +26,7 @@ class App
     /**
      * @Assert\NotBlank()
      */
-    private $index_file;
+    private $app_root;
 
     public function setName($name)
     {
@@ -48,16 +48,6 @@ class App
         return $this->git_repository;
     }
 
-    public function setIndexFile($index_file)
-    {
-        $this->index_file = $index_file;
-    }
-
-    public function getIndexFile()
-    {
-        return $this->index_file;
-    }
-
     public function setPhpVersion($php_version)
     {
         $this->php_version = $php_version;
@@ -66,5 +56,15 @@ class App
     public function getPhpVersion()
     {
         return $this->php_version;
+    }
+
+    public function setAppRoot($app_root)
+    {
+        $this->app_root = $app_root;
+    }
+
+    public function getAppRoot()
+    {
+        return $this->app_root;
     }
 }

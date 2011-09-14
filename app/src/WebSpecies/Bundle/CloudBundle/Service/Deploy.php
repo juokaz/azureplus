@@ -25,13 +25,16 @@ class Deploy
      */
     private $git;
     
-    public function __construct(Storage $client, $app_file, $filesystem, $temp_folder, $git)
+    private $web_config;
+    
+    public function __construct(Storage $client, $app_file, $filesystem, $temp_folder, $git, $web_config)
     {
         $this->client = $client;
         $this->app_file = $app_file;
         $this->temp_folder = $temp_folder;
         $this->filesystem = $filesystem;
         $this->git = $git;
+        $this->web_config = $web_config;
     }
     
     public function deploy(App $app, $folder)
@@ -69,6 +72,9 @@ class Deploy
 			    throw new \RuntimeException ("ERROR: Could not add file: $key");
 		    }
 		}
+
+        // Add web.config file
+        $zip->addFromString('web.config', $this->getWebConfig($app));
 
 		// close and save archive
 		$zip->close();
@@ -110,5 +116,36 @@ class Deploy
         } else {
             return false;
         }
+    }
+
+    /**
+     * Get IIS web.config file to the package
+     *
+     * @param \ZipArchive $zip
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @return void
+     */
+    private function getWebConfig(App $app)
+    {
+        $router = $app->getConfiguration()->getRouter();
+        $public = $app->getConfiguration()->getPublicFolder();
+
+        $template = file_get_contents($this->web_config);
+        $template = str_replace('%PUBLIC_FOLDER%', $public, $template);
+
+        if ($router) {
+            $template = str_replace('%ROUTER_ENABLE%', 'true', $template);
+        } else {
+            $template = str_replace('%ROUTER_ENABLE%', 'false', $template);
+        }
+
+        // some apps might not have a router file, but should still have a default document
+        $index = $router ?: 'index.php';
+
+        $template = str_replace('%INDEX_FILE%', $index, $template);
+
+        $template = str_replace('%PHP_PATH%', $app->getConfiguration()->getPhpRoot(), $template);
+
+        return $template;
     }
 }

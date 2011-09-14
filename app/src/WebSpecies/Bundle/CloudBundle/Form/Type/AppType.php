@@ -18,7 +18,7 @@ class AppType extends AbstractType
             )
         ));
         $builder->add('git_repository');
-        $builder->add('index_file');
+        $builder->add('app_root');
     }
 
     public function getDefaultOptions(array $options)
