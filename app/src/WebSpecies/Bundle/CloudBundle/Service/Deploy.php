@@ -144,6 +144,8 @@ class Deploy
 
         $template = str_replace('%INDEX_FILE%', $index, $template);
 
+        $template = str_replace('%PHP_PATH%', $app->getConfiguration()->getPhpRoot(), $template);
+
         return $template;
     }
 }

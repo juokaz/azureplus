@@ -34,6 +34,22 @@ class EntityTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($public, $c->getPublicFolder());
     }
 
+    public function testPhp52Root()
+    {
+        $c = new Configuration();
+        $c->setPhpVersion(Configuration::PHP_52);
+
+        $this->assertSame('C:\Program Files\PHP\v5.2\php-cgi.exe', $c->getPhpRoot());
+    }
+
+    public function testPhp53Root()
+    {
+        $c = new Configuration();
+        $c->setPhpVersion(Configuration::PHP_53);
+
+        $this->assertSame('C:\Program Files\PHP\v5.3\php-cgi.exe', $c->getPhpRoot());
+    }
+
     public static function approots()
     {
         return array(

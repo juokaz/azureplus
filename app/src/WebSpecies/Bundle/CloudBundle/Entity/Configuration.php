@@ -50,6 +50,9 @@ class Configuration
         return $this->app_root;
     }
 
+    /**
+     * @return string
+     */
     public function getRouter()
     {
         $split = strrpos($this->app_root, '/');
@@ -63,6 +66,9 @@ class Configuration
         return substr($this->app_root, $split + 1, strlen($this->app_root) + $split);
     }
 
+    /**
+     * @return string
+     */
     public function getPublicFolder()
     {
         $split = strrpos($this->app_root, '/');
@@ -74,5 +80,23 @@ class Configuration
         }
 
         return substr($this->app_root, 0, $split);
+    }
+
+    public function getPhpRoot()
+    {
+        if (!$this->php_version) {
+            throw new \RuntimeException('PHP version is not set');
+        }
+
+        $root = 'C:\Program Files\PHP\%s\php-cgi.exe';
+
+        switch ($this->php_version) {
+            case self::PHP_52:
+                    return sprintf($root, 'v5.2');
+                break;
+            case self::PHP_53:
+                    return sprintf($root, 'v5.3');
+                break;
+        }
     }
 }
