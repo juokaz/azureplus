@@ -59,9 +59,12 @@ class Deploy
 			$name_ = str_replace($folder, '', $key);
 
             // check for ignored files and folders
-            if (in_array($name_, array('.git')))
-                continue;
-			
+            foreach (array('.git') as $pattern) {
+                if (strpos($name_, $pattern) !== false) {
+                    continue 2;
+                }
+            }
+
 			if (!$zip->addFile(realpath($key), $name_)) {
 			    throw new \RuntimeException ("ERROR: Could not add file: $key");
 		    }
