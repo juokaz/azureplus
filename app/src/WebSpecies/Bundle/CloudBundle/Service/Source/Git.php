@@ -33,13 +33,29 @@ class Git implements SourceInterface
     public function checkout(App $app, $location)
     {
         if (file_exists($location)) {
-            $output = $this->runCommand($location, 'pull');
-            return trim($output) != 'Already up-to-date.';
+            $old_version = $this->getCurrentVersion($location);
+            $this->runCommand($location, 'pull');
+            return $old_version !== $this->getCurrentVersion($location);
         } else {
             $this->filesystem->mkdir($location);
-            $output = $this->runCommand($location, 'clone ' . $app->getSource()->getGitRepository() . ' .');
+            $this->runCommand($location, 'clone ' . $app->getSource()->getGitRepository() . ' .');
             return true;
         }
+    }
+
+    /**
+     * Get git current version
+     *
+     * @param string $location
+     * @return string
+     */
+    private function getCurrentVersion($location)
+    {
+        // -n1 is to get one last commit
+        // %H format returns hash of it
+        $command = 'log -n1 --pretty="%H"';
+
+        return trim($this->runCommand($location, $command));
     }
 
     /**
