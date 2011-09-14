@@ -127,8 +127,10 @@ class Deploy
     private function addWebConfig(\ZipArchive $zip, App $app)
     {
         $index = $app->getConfiguration()->getIndexFile();
+        $public = $app->getConfiguration()->getPublicFolder();
 
         $template = file_get_contents($this->web_config);
+        $template = str_replace('%PUBLIC_FOLDER%', $public, $template);
         $template = str_replace('%INDEX_FILE%', $index, $template);
 
         $zip->addFromString('web.config', $template);
