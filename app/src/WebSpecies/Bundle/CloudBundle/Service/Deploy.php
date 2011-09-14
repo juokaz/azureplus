@@ -73,7 +73,8 @@ class Deploy
 		    }
 		}
 
-        $this->addWebConfig($zip, $app);
+        // Add web.config file
+        $zip->addFromString('web.config', $this->getWebConfig($app));
 
 		// close and save archive
 		$zip->close();
@@ -118,21 +119,31 @@ class Deploy
     }
 
     /**
-     * Add IIS web.config file to the package
+     * Get IIS web.config file to the package
      *
      * @param \ZipArchive $zip
      * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
      * @return void
      */
-    private function addWebConfig(\ZipArchive $zip, App $app)
+    private function getWebConfig(App $app)
     {
-        $index = $app->getConfiguration()->getIndexFile();
+        $router = $app->getConfiguration()->getRouter();
         $public = $app->getConfiguration()->getPublicFolder();
 
         $template = file_get_contents($this->web_config);
         $template = str_replace('%PUBLIC_FOLDER%', $public, $template);
+
+        if ($router) {
+            $template = str_replace('%ROUTER_ENABLE%', 'true', $template);
+        } else {
+            $template = str_replace('%ROUTER_ENABLE%', 'false', $template);
+        }
+
+        // some apps might not have a router file, but should still have a default document
+        $index = $router ?: 'index.php';
+
         $template = str_replace('%INDEX_FILE%', $index, $template);
 
-        $zip->addFromString('web.config', $template);
+        return $template;
     }
 }
