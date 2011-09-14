@@ -48,7 +48,7 @@ class Manager
         if ($name instanceof AppModel) {
             $app = $this->app_manager->createApp($user, $name->getName());
 
-            $app->getConfiguration()->setIndexFile($name->getIndexFile());
+            $app->getConfiguration()->setAppRoot($name->getAppRoot());
             $app->getConfiguration()->setPhpVersion($name->getPhpVersion());
 
             $app->getSource()->setGitRepository($name->getGitRepository());
