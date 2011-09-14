@@ -69,5 +69,12 @@ class ProcessCommand extends ContainerAwareCommand
 
         // delete apps to be deleted
         $em->flush();
+
+        foreach ($apps->getAppsWithGitPath() as $app) {
+            $output->writeln(sprintf('<comment>Checking out the app "%s"</comment>', $app->getName()));
+            $output->writeln(sprintf('<info>Checked out the app "%s"</info>', $app->getName()));
+            $output->writeln(sprintf('<comment>Deploying the app "%s"</comment>', $app->getName()));
+            $output->writeln(sprintf('<info>Deployed the app "%s"</info>', $app->getName()));
+        }
     }
 }
