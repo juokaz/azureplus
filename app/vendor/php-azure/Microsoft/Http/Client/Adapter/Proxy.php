@@ -24,7 +24,7 @@
 /**
  * @see Microsoft_AutoLoader
  */
-require_once dirname(__FILE__) . '/../../../AutoLoader.php';
+// require_once dirname(__FILE__) . '/../../../AutoLoader.php';
 
 /**
  * HTTP Proxy-supporting Microsoft_Http_Client adapter class, based on the default
@@ -109,7 +109,7 @@ class Microsoft_Http_Client_Adapter_Proxy extends Microsoft_Http_Client_Adapter_
 
         // Make sure we're properly connected
         if (! $this->socket) {
-            require_once 'Microsoft/Http/Client/Adapter/Exception.php';
+            // require_once 'Microsoft/Http/Client/Adapter/Exception.php';
             throw new Microsoft_Http_Client_Adapter_Exception("Trying to write but we are not connected");
         }
 
@@ -117,7 +117,7 @@ class Microsoft_Http_Client_Adapter_Proxy extends Microsoft_Http_Client_Adapter_
         $port = $this->config['proxy_port'];
 
         if ($this->connected_to[0] != "tcp://$host" || $this->connected_to[1] != $port) {
-            require_once 'Microsoft/Http/Client/Adapter/Exception.php';
+            // require_once 'Microsoft/Http/Client/Adapter/Exception.php';
             throw new Microsoft_Http_Client_Adapter_Exception("Trying to write but we are connected to the wrong proxy server");
         }
 
@@ -159,7 +159,7 @@ class Microsoft_Http_Client_Adapter_Proxy extends Microsoft_Http_Client_Adapter_
 
         // Send the request
         if (! @fwrite($this->socket, $request)) {
-            require_once 'Microsoft/Http/Client/Adapter/Exception.php';
+            // require_once 'Microsoft/Http/Client/Adapter/Exception.php';
             throw new Microsoft_Http_Client_Adapter_Exception("Error writing request to proxy server");
         }
 
@@ -195,7 +195,7 @@ class Microsoft_Http_Client_Adapter_Proxy extends Microsoft_Http_Client_Adapter_
 
         // Send the request
         if (! @fwrite($this->socket, $request)) {
-            require_once 'Microsoft/Http/Client/Adapter/Exception.php';
+            // require_once 'Microsoft/Http/Client/Adapter/Exception.php';
             throw new Microsoft_Http_Client_Adapter_Exception("Error writing request to proxy server");
         }
 
@@ -212,7 +212,7 @@ class Microsoft_Http_Client_Adapter_Proxy extends Microsoft_Http_Client_Adapter_
 
         // Check that the response from the proxy is 200
         if (Microsoft_Http_Response::extractCode($response) != 200) {
-            require_once 'Microsoft/Http/Client/Adapter/Exception.php';
+            // require_once 'Microsoft/Http/Client/Adapter/Exception.php';
             throw new Microsoft_Http_Client_Adapter_Exception("Unable to connect to HTTPS proxy. Server response: " . $response);
         }
 
@@ -232,7 +232,7 @@ class Microsoft_Http_Client_Adapter_Proxy extends Microsoft_Http_Client_Adapter_
         }
 
         if (! $success) {
-                require_once 'Microsoft/Http/Client/Adapter/Exception.php';
+                // require_once 'Microsoft/Http/Client/Adapter/Exception.php';
                 throw new Microsoft_Http_Client_Adapter_Exception("Unable to connect to" .
                     " HTTPS server through proxy: could not negotiate secure connection.");
         }

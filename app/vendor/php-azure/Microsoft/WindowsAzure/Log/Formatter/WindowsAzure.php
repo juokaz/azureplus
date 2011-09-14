@@ -36,7 +36,7 @@
 /**
  * @see Microsoft_AutoLoader
  */
-require_once dirname(__FILE__) . '/../../../AutoLoader.php';
+// require_once dirname(__FILE__) . '/../../../AutoLoader.php';
 
 /**
  * @category   Microsoft
@@ -55,7 +55,7 @@ class Microsoft_WindowsAzure_Log_Formatter_WindowsAzure implements Microsoft_Log
 	 */
 	public function format($event)
 	{
-		require_once 'Microsoft/WindowsAzure/Storage/DynamicTableEntity.php';
+		// require_once 'Microsoft/WindowsAzure/Storage/DynamicTableEntity.php';
 
 		// partition key is the current date, represented as YYYYMMDD
 		// row key will always be the current timestamp. These values MUST be hardcoded.

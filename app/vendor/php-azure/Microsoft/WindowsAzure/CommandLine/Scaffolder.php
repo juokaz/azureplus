@@ -36,7 +36,7 @@
 /**
  * @see Microsoft_AutoLoader
  */
-require_once dirname(__FILE__) . '/../../AutoLoader.php';
+// require_once dirname(__FILE__) . '/../../AutoLoader.php';
 
 /**
  * Scaffold commands
@@ -87,7 +87,7 @@ class Microsoft_WindowsAzure_CommandLine_Scaffolder
 		}
 		
 		// Include scaffolder
-		require_once $scaffolderFile;
+		// require_once $scaffolderFile;
 		$scaffolderClass = str_replace('.phar', '', basename($scaffolderFile));
 		if (!class_exists($scaffolderClass)) {
 			$scaffolderClass = str_replace('-', '_', str_replace('.', '_', $scaffolderClass));
@@ -139,7 +139,7 @@ class Microsoft_WindowsAzure_CommandLine_Scaffolder
 		}
 		
 		// Include scaffolder
-		require_once $scaffolderFile;
+		// require_once $scaffolderFile;
 		$scaffolderClass = str_replace('.phar', '', basename($scaffolderFile));
 		if (!class_exists($scaffolderClass)) {
 			$scaffolderClass = str_replace('-', '_', str_replace('.', '_', $scaffolderClass));

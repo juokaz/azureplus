@@ -35,7 +35,7 @@
 /**
  * @see Microsoft_AutoLoader
  */
-require_once dirname(__FILE__) . '/../AutoLoader.php';
+// require_once dirname(__FILE__) . '/../AutoLoader.php';
 
 /**
  * @category   Microsoft
@@ -140,7 +140,7 @@ class Microsoft_Console_Command
 			}
 		}
 		if (is_null($handler)) {
-			self::stderr("No class found that implements handler '" . $requiredHandlerName . "'. Create a class that is named '" . $requiredHandlerName . "' and extends Microsoft_Console_Command or is decorated with a docblock comment '@command-handler " . $requiredHandlerName . "'. Make sure it is loaded either through an autoloader or explicitly using require_once().");
+			self::stderr("No class found that implements handler '" . $requiredHandlerName . "'. Create a class that is named '" . $requiredHandlerName . "' and extends Microsoft_Console_Command or is decorated with a docblock comment '@command-handler " . $requiredHandlerName . "'. Make sure it is loaded either through an autoloader or explicitly using // require_once().");
 			die();
 		}
 		

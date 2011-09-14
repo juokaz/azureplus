@@ -23,7 +23,7 @@
 /**
  * @see Microsoft_AutoLoader
  */
-require_once dirname(__FILE__) . '/../../AutoLoader.php';
+// require_once dirname(__FILE__) . '/../../AutoLoader.php';
 
 /**
  * @category   Microsoft
@@ -49,7 +49,7 @@ class Microsoft_Log_Filter_Message extends Microsoft_Log_Filter_Abstract
     public function __construct($regexp)
     {
         if (@preg_match($regexp, '') === false) {
-            require_once 'Microsoft/Log/Exception.php';
+            // require_once 'Microsoft/Log/Exception.php';
             throw new Microsoft_Log_Exception("Invalid regular expression '$regexp'");
         }
         $this->_regexp = $regexp;

@@ -24,7 +24,7 @@
 /**
  * @see Microsoft_AutoLoader
  */
-require_once dirname(__FILE__) . '/../../AutoLoader.php';
+// require_once dirname(__FILE__) . '/../../AutoLoader.php';
 
 /**
  * Microsoft_Http_Response represents an HTTP 1.0 / 1.1 response message. It

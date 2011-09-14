@@ -79,4 +79,17 @@ class AppManager
     {
         return $this->em->getRepository($this->class)->findBy(array('status' => App::STATUS_DELETED));
     }
+
+    /**
+     * List of apps with git path
+     *
+     * @return \WebSpecies\Bundle\CloudBundle\Entity\App[]
+     */
+    public function getAppsWithGitPath()
+    {
+        $query = $this->em->createQuery('SELECT a FROM ' . $this->class . ' a JOIN a.source s
+                                WHERE s.git_repository IS NOT NULL AND s.git_repository != \'\'');
+
+        return $query->getResult();
+    }
 }

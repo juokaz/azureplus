@@ -36,7 +36,7 @@
 /**
  * @see Microsoft_AutoLoader
  */
-require_once dirname(__FILE__) . '/../../../AutoLoader.php';
+// require_once dirname(__FILE__) . '/../../../AutoLoader.php';
 
 /**
  * @category   Microsoft
@@ -91,12 +91,12 @@ class Microsoft_WindowsAzure_Log_Writer_WindowsAzure extends Microsoft_Log_Write
 		$tableName, $createTable = true, $bufferMessages = true)
 	{
 		if ($tableStorageConnection == null) {
-			require_once 'Microsoft/Log/Exception.php';
+			// require_once 'Microsoft/Log/Exception.php';
 			throw new Microsoft_Log_Exception('No connection to the Windows Azure tables provided.');
 		}
 
 		if (!is_string($tableName)) {
-			require_once 'Microsoft/Log/Exception.php';
+			// require_once 'Microsoft/Log/Exception.php';
 			throw new Microsoft_Log_Exception('Provided Windows Azure table name must be a string.');
 		}
 
@@ -162,7 +162,7 @@ class Microsoft_WindowsAzure_Log_Writer_WindowsAzure extends Microsoft_Log_Write
      */
     public function setFormatter(Microsoft_Log_Formatter_Interface $formatter)
     {
-        require_once 'Microsoft/Log/Exception.php';
+        // require_once 'Microsoft/Log/Exception.php';
         throw new Microsoft_Log_Exception(get_class($this) . ' does not support formatting');
     }
 

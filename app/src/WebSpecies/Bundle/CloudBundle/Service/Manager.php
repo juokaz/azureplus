@@ -43,13 +43,18 @@ class Manager
             throw new \InvalidArgumentException('User not found');
         }
 
-        if ($name instanceof AppModel) {
-            $app_model = $name;
-            $name = $app_model->getName();
-        }
-
         // Create app entity
-        $app = $this->app_manager->createApp($user, $name);
+        /** @var $app \WebSpecies\Bundle\CloudBundle\Entity\App */
+        if ($name instanceof AppModel) {
+            $app = $this->app_manager->createApp($user, $name->getName());
+
+            $app->getConfiguration()->setIndexFile($name->getIndexFile());
+            $app->getConfiguration()->setPhpVersion($name->getPhpVersion());
+
+            $app->getSource()->setGitRepository($name->getGitRepository());
+        } else {
+            $app = $this->app_manager->createApp($user, $name);
+        }
 
         // Create app instance
         $this->apps->createApp($app);
