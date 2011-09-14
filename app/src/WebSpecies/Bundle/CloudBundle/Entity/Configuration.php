@@ -23,12 +23,12 @@ class Configuration
     /**
      * @ORM\Column(type="string", length=100)
      */
-    private $php_version;
+    private $php_version = self::PHP_53;
 
     /**
      * @ORM\Column(type="string", length=100)
      */
-    private $index_file;
+    private $index_file = 'index.php';
 
     public function setIndexFile($index_file)
     {
