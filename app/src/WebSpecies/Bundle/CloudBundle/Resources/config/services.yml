@@ -4,14 +4,19 @@ parameters:
     
     cloud.service.apps.class: WebSpecies\Bundle\CloudBundle\Service\Apps
     cloud.service.deploy.class: WebSpecies\Bundle\CloudBundle\Service\Deploy
+    cloud.service.manager.class: WebSpecies\Bundle\CloudBundle\Service\Manager
+
+    cloud.service.source.git.class: WebSpecies\Bundle\CloudBundle\Service\Source\Git
+    
     cloud.service.storage.class: WebSpecies\Bundle\CloudBundle\Service\Internal\Storage
     cloud.service.azure.class: WebSpecies\Bundle\CloudBundle\Service\Internal\Azure
-    cloud.service.manager.class: WebSpecies\Bundle\CloudBundle\Service\Manager
     
     cloud_app_file: app.zip
 
     base_collection: base
     base_file: base.cspkg
+
+    git_path: git
 
     azure.storage.class: Microsoft_WindowsAzure_Storage_Blob
     azure.management.class: Microsoft_WindowsAzure_Management_Client
@@ -28,7 +33,7 @@ parameters:
 services:
     cloud.service.deploy:
         class: %cloud.service.deploy.class%
-        arguments: [@cloud.service.storage, %cloud_app_file%]
+        arguments: [@cloud.service.storage, %cloud_app_file%, @filesystem, %kernel.cache_dir%, @cloud.service.source.git]
         
     cloud.service.storage:
         public: false
@@ -47,6 +52,11 @@ services:
     cloud.service.manager:
         class: %cloud.service.manager.class%
         arguments: [@doctrine.orm.entity_manager, @cloud.service.apps, @cloud.manager.app, @cloud.manager.user]
+
+    cloud.service.source.git:
+        public: false
+        class: %cloud.service.source.git.class%
+        arguments: [%git_path%, @filesystem]
         
     cloud.manager.app:
         class: %cloud.manager.app.class%

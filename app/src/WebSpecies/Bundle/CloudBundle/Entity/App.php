@@ -123,4 +123,9 @@ class App
     {
         return $this->source;
     }
+
+    public function isAutoDeployable()
+    {
+        return $this->getSource()->getGitRepository() != null;
+    }
 }

@@ -17,6 +17,11 @@ class ProcessCommand extends ContainerAwareCommand
      */
     private $client;
 
+    /**
+     * @var \WebSpecies\Bundle\CloudBundle\Service\Deploy
+     */
+    private $deploy;
+
     protected function configure()
     {
         $this
@@ -30,6 +35,7 @@ class ProcessCommand extends ContainerAwareCommand
         parent::initialize($input, $output);
         
         $this->client = $this->getContainer()->get('cloud.service.apps');
+        $this->deploy = $this->getContainer()->get('cloud.service.deploy');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -71,10 +77,12 @@ class ProcessCommand extends ContainerAwareCommand
         $em->flush();
 
         foreach ($apps->getAppsWithGitPath() as $app) {
-            $output->writeln(sprintf('<comment>Checking out the app "%s"</comment>', $app->getName()));
-            $output->writeln(sprintf('<info>Checked out the app "%s"</info>', $app->getName()));
-            $output->writeln(sprintf('<comment>Deploying the app "%s"</comment>', $app->getName()));
-            $output->writeln(sprintf('<info>Deployed the app "%s"</info>', $app->getName()));
+            $output->writeln(sprintf('<comment>Updating the app "%s"</comment>', $app->getName()));
+            if ($this->deploy->deployCheckout($app)) {
+                $output->writeln(sprintf('<info>Updated the app "%s"</info>', $app->getName()));
+            } else {
+                $output->writeln(sprintf('<comment>App "%s" is up to date</comment>', $app->getName()));
+            }
         }
     }
 }
