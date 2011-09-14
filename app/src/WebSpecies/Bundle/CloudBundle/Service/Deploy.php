@@ -25,13 +25,16 @@ class Deploy
      */
     private $git;
     
-    public function __construct(Storage $client, $app_file, $filesystem, $temp_folder, $git)
+    private $web_config;
+    
+    public function __construct(Storage $client, $app_file, $filesystem, $temp_folder, $git, $web_config)
     {
         $this->client = $client;
         $this->app_file = $app_file;
         $this->temp_folder = $temp_folder;
         $this->filesystem = $filesystem;
         $this->git = $git;
+        $this->web_config = $web_config;
     }
     
     public function deploy(App $app, $folder)
@@ -69,6 +72,8 @@ class Deploy
 			    throw new \RuntimeException ("ERROR: Could not add file: $key");
 		    }
 		}
+
+        $this->addWebConfig($zip, $app);
 
 		// close and save archive
 		$zip->close();
@@ -110,5 +115,22 @@ class Deploy
         } else {
             return false;
         }
+    }
+
+    /**
+     * Add IIS web.config file to the package
+     *
+     * @param \ZipArchive $zip
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @return void
+     */
+    private function addWebConfig(\ZipArchive $zip, App $app)
+    {
+        $index = $app->getConfiguration()->getIndexFile();
+
+        $template = file_get_contents($this->web_config);
+        $template = str_replace('%INDEX_FILE%', $index, $template);
+
+        $zip->addFromString('web.config', $template);
     }
 }
