@@ -28,6 +28,11 @@ class App
      */
     private $app_root;
 
+    /**
+     * @Assert\NotBlank()
+     */
+    private $location;
+
     public function setName($name)
     {
         $this->name = $name;
@@ -66,5 +71,15 @@ class App
     public function getAppRoot()
     {
         return $this->app_root;
+    }
+
+    public function setLocation($location)
+    {
+        $this->location = $location;
+    }
+
+    public function getLocation()
+    {
+        return $this->location;
     }
 }

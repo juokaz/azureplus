@@ -50,6 +50,7 @@ class Manager
 
             $app->getConfiguration()->setAppRoot($name->getAppRoot());
             $app->getConfiguration()->setPhpVersion($name->getPhpVersion());
+            $app->getConfiguration()->setLocation($name->getLocation());
 
             $app->getSource()->setGitRepository($name->getGitRepository());
         } else {
