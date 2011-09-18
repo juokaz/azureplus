@@ -88,7 +88,10 @@ class AppManager
     public function getAppsWithGitPath()
     {
         $query = $this->em->createQuery('SELECT a FROM ' . $this->class . ' a JOIN a.source s
-                                WHERE s.git_repository IS NOT NULL AND s.git_repository != \'\'');
+                                WHERE s.git_repository IS NOT NULL AND s.git_repository != \'\' AND a.status = :status');
+        
+        // only live apps need deployments
+        $query->setParameter('status', App::STATUS_LIVE);
 
         return $query->getResult();
     }

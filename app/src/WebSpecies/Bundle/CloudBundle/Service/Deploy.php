@@ -39,6 +39,10 @@ class Deploy
     
     public function deploy(App $app, $folder)
     {
+        if (!$app->isLive()) {
+            throw new \InvalidArgumentException('App cannot be deployed, because it\'s not live yet');
+        }
+        
         $container = $app->getContainer();
 		$folder = rtrim($folder, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 

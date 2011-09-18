@@ -128,4 +128,9 @@ class App
     {
         return $this->getSource()->getGitRepository() != null;
     }
+
+    public function isLive()
+    {
+        return $this->status == self::STATUS_LIVE;
+    }
 }
