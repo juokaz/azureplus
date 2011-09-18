@@ -17,8 +17,12 @@ class AppType extends AbstractType
                 Configuration::PHP_52 => 'PHP v5.2'
             )
         ));
-        $builder->add('git_repository');
-        $builder->add('app_root');
+        $builder->add('git_repository', null, array(
+            'required' => false
+        ));
+        $builder->add('app_root', null, array(
+            'required' => false
+        ));
     }
 
     public function getDefaultOptions(array $options)

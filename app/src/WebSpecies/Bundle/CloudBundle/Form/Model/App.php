@@ -18,14 +18,10 @@ class App
     private $php_version;
 
     /**
-     * @Assert\NotBlank()
      * @Assert\Url(protocols={"http", "https", "git"})
      */
     private $git_repository;
 
-    /**
-     * @Assert\NotBlank()
-     */
     private $app_root;
 
     public function setName($name)
