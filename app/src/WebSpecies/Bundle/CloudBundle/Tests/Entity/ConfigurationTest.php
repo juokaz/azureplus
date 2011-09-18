@@ -39,7 +39,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
         $c = new Configuration();
         $c->setPhpVersion(Configuration::PHP_52);
 
-        $this->assertSame('C:\Program Files\PHP\v5.2\php-cgi.exe', $c->getPhpRoot());
+        $this->assertSame('D:\Program Files (x86)\PHP\v5.2\php-cgi.exe', $c->getPhpRoot());
     }
 
     public function testPhp53Root()
@@ -47,7 +47,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
         $c = new Configuration();
         $c->setPhpVersion(Configuration::PHP_53);
 
-        $this->assertSame('C:\Program Files\PHP\v5.3\php-cgi.exe', $c->getPhpRoot());
+        $this->assertSame('D:\Program Files (x86)\PHP\v5.3\php-cgi.exe', $c->getPhpRoot());
     }
 
     public static function approots()
