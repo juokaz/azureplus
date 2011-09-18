@@ -47,7 +47,7 @@ class Azure
      */
     public function createDeployment($name, $package, $configuration)
     {
-        if (!$this->client->getDeploymentBySlot($name, 'production')) {
+		if (!$this->isDeploymentExist($name, 'production')) {
             $this->client->createDeployment($name, 'production', 'deployment', 'deployment', $package, $configuration, true);
         } else {
             $this->client->upgradeDeploymentBySlot($name, 'production', 'deployment', $package, $configuration);
@@ -64,18 +64,7 @@ class Azure
      */
     public function deleteServer($name)
     {
-		$deployment = false;
-		try {
-			$this->client->getDeploymentBySlot($name, 'production');
-			$deployment = true;
-		} catch (\Exception $e) {
-			// deployment service might be already deleted or wasn't created at all
-            if ($e->getMessage() != 'No deployments were found.') {
-                throw $e;
-            }
-		}
-
-		if ($deployment) {
+		if ($this->isDeploymentExist($name, 'production')) {
 			$this->client->deleteDeploymentBySlot($name, 'production');
 			// Wait for it to finish
 			$this->client->waitForOperation();
@@ -138,5 +127,29 @@ class Azure
 		}
 
 		return true;
+	}
+	
+	
+    /**
+     * Is the deployment created
+     *
+     * @param string $name
+     * @param string $where
+     * @return bool
+     */
+	private function isDeploymentExist($name, $where = 'production')
+	{
+	    $deployment = false;
+		try {
+			$this->client->getDeploymentBySlot($name, $where);
+			$deployment = true;
+		} catch (\Exception $e) {
+			// deployment service might be already deleted or wasn't created at all
+            if ($e->getMessage() != 'No deployments were found.') {
+                throw $e;
+            }
+		}
+		
+		return $deployment;
 	}
 }
