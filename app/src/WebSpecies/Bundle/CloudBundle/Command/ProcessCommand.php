@@ -68,6 +68,8 @@ class ProcessCommand extends ContainerAwareCommand
 
         foreach ($apps->getAppsToBeDeleted() as $app) {
             $output->writeln(sprintf('<comment>Deleting the app "%s"</comment>', $app->getName()));
+            $this->deploy->delete($app);
+            $output->writeln(sprintf('<comment>Deleted deployment folder of the app "%s"</comment>', $app->getName()));
             $this->client->deleteApp($app);
             $output->writeln(sprintf('<info>Deleted the app "%s"</info>', $app->getName()));
             $em->remove($app);

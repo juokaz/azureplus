@@ -123,6 +123,28 @@ class Deploy
     }
 
     /**
+     * Delete app folder
+     *
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @return void
+     */
+    public function delete(App $app)
+    {
+        $this->filesystem->remove($this->getAppFolder($app));    
+    }
+
+    /**
+     * Get app folder to deploy to
+     *
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @return bool
+     */
+    private function getAppFolder(App $app)
+    {
+        return $this->temp_folder . DIRECTORY_SEPARATOR . 'apps' . DIRECTORY_SEPARATOR . $app->getName();
+    }
+
+    /**
      * Get IIS web.config file to the package
      *
      * @param \ZipArchive $zip
