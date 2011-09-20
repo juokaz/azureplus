@@ -7,16 +7,30 @@
         
 {% if apps %}
     {% for app in apps %}
-        <p>
-            <strong>App: {{ app.getName }}</strong><br />
-            Status: {% if app.isLive %}
-                <a href="{{ app.getUrl }}" target="_blank">Live</a>
-                {% else %}
-                Creating
-            {% endif %}<br />
-            Actions: <a href="{{ path('CloudBundle_delete_app', {'name': app.getName}) }}">Delete</a><br />
-        </p>
+        <div class="modal" style="position: relative; top: auto; left: auto; margin: 10px auto; z-index: 1">
+          <div class="modal-header">
+            <h3>{{ app.getUrl }}</h3>
+          </div>
+          <div class="modal-body">
+            <p>One fine body…</p>
+          </div>
+          <div class="modal-footer">
+            {% if app.isLive %}
+                <a href="{{ path('CloudBundle_delete_app', {'name': app.getName}) }}" class="btn secondary">Delete</a>
+                <a href="{{ path('CloudBundle_view_app', {'name': app.getName}) }}" class="btn secondary">Configure</a>
+                <a href="{{ app.getUrl }}" class="btn primary">Visit</a>
+            {% else %}
+                Creating <img src="{{ asset('bundles/cloud/images/loading.gif') }}" alt="Loading">
+            {% endif %}
+          </div>
+        </div>
     {% endfor %}
+
+    <div class="form-stacked">
+      <div class="actions">
+        <a href="{{ path('CloudBundle_new_app') }}" class="btn large primary">Create one more!</a>
+      </div>
+    </div>
 {% else %}
 <div class="alert-message block-message info">
   <p><strong>You have no apps :(</strong> Best check yo self, you’re not looking too good. Nulla vitae elit libero, a pharetra augue. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
