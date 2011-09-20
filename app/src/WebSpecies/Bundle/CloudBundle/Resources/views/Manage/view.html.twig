@@ -4,12 +4,23 @@
 <div class="page-header">
     <h2><a href="{{ path('CloudBundle_manage') }}">&larr; MyApps</a> <span class="divider">/</span> {{ entity.getUrl }}</h2>
 </div>
+        
+<div class="row">
+  <div class="span9">
+      acassca
+  </div>
 
-<form action="" method="post" novalidate {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
-    <div class="actions">
-        <input type="submit" value="{{ 'Save'|trans }}" class="btn primary">
-    </div>
-</form>
+  <div class="span5">
+    <form action="" method="post" novalidate {{ form_enctype(form) }} class="form-stacked">
+        <fieldset>
+            <legend>Edit</legend>
+            {{ form_widget(form) }}
+            <div class="actions">
+                <input type="submit" value="{{ 'Save'|trans }}" class="btn primary">
+            </div>
+        </fieldset>
+    </form>
+  </div>
+</div>
 
 {% endblock %}
