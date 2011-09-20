@@ -1,23 +1,70 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>{% block title %}Test Application{% endblock %}</title>
-    </head>
-    <body>
-    <body>
-        <div id="sidebar">
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    {% stylesheets '@CloudBundle/Resources/public/css/*' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+  </head>
+
+  <body>
+
+    <div class="topbar">
+      <div class="fill">
+        <div class="container">
+          <h3><a href="#">Project name</a></h3>
+          {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
             <ul>
-            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                <li><a href="{{ path('CloudBundle_manage') }}">My stack</a></li>
-                <li><a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></li>
-            {% else %}
-                <li><a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a></li>
-            {% endif %}
+                <li><a href="{{ path('CloudBundle_manage') }}">Apps</a></li>
             </ul>
+            <ul class="nav secondary-nav">
+              <li class="menu">
+                <a href="#" class="menu">{{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}</a>
+                <ul class="menu-dropdown">
+                    <li><a href="{{ path('fos_user_security_logout') }}">
+                        {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                    </a></li>
+                </ul>
+              </li>
+            </ul>
+          {% endif %}
         </div>
-        <div id="content">
-            {% block content %}{% endblock %}
+      </div>
+    </div>
+
+    <div class="container">
+
+    {% for key, message in app.session.getFlashes() %}
+    <div class="{{ key }}">
+        <div class="alert-message warning">
+          <a class="close" href="#">×</a>
+          <p>{{ message }}</p>
         </div>
-    </body>
+    </div>
+    {% endfor %}
+
+      <div class="hero-unit">
+        {% block content %}{% endblock %}
+      </div>
+
+      <footer>
+        <p>&copy; Company 2011</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    {% javascripts '@CloudBundle/Resources/public/js/jquery-1.5.2.min.js' '@CloudBundle/Resources/public/js/application.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+  </body>
 </html>

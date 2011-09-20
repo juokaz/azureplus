@@ -1,0 +1,43 @@
+{% extends "::base.html.twig" %}
+
+{% block content %}
+{% if error %}
+    <div class="alert-message error">
+        <p>{{ error }}</p>
+    </div>
+{% endif %}
+
+<form action="{{ path("fos_user_security_check") }}" method="post">
+    <fieldset>
+        <legend>Login</legend>
+        <div class="clearfix">
+            <label for="username">{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}</label>
+            <div class="input">
+                <input class="xlarge" type="text" id="username" name="_username" value="{{ last_username }}" />
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <label for="password">{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}</label>
+            <div class="input">
+                <input class="xlarge" type="password" id="password" name="_password" />
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <div class="input">
+                <div class="input-prepend">
+                    <label class="add-on">
+                        <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                    </label>
+                    <input class="medium disabled" id="disabledInput" size="30" type="text" placeholder="{{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}" disabled="" />
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <input type="submit" class="btn primary" name="_submit" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" />
+        </div>
+    </fieldset>
+</form>
+{% endblock content %}

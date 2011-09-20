@@ -10,15 +10,10 @@ class ManageController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('CloudBundle:Manage:index.html.twig');
-    }
-
-    public function appsAction()
-    {
         $apps = $this->getAppsManager()->getUserApps($this->getUser());
 
 
-        return $this->render('CloudBundle:Manage:apps.html.twig', array(
+        return $this->render('CloudBundle:Manage:index.html.twig', array(
             'apps' => $apps
         ));
     }
