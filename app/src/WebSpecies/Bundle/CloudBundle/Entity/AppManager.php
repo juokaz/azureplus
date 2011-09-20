@@ -15,6 +15,18 @@ class AppManager
     }
 
     /**
+     * Save app
+     *
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @return void
+     */
+    public function saveApp(App $app)
+    {
+        $this->em->persist($app);
+        $this->em->flush();
+    }
+
+    /**
      * Get app by name
      *
      * @param string $app

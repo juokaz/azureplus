@@ -1,0 +1,15 @@
+{% extends '::base.html.twig' %}
+
+{% block content %}
+<div class="page-header">
+    <h2><a href="{{ path('CloudBundle_manage') }}">&larr; MyApps</a> <span class="divider">/</span> {{ entity.getUrl }}</h2>
+</div>
+
+<form action="" method="post" novalidate {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <div class="actions">
+        <input type="submit" value="{{ 'Create'|trans }}" class="btn primary">
+    </div>
+</form>
+
+{% endblock %}

@@ -38,7 +38,7 @@ class CreateAppCommand extends ContainerAwareCommand
         $user = $input->getArgument('user');
 
         try {
-            $app = $this->client->createApp($user, $app);
+            $app = $this->client->createApp($app, $user);
         } catch (\Exception $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             return;
