@@ -1,15 +1,15 @@
 {% extends '::base.html.twig' %}
 
 {% block content %}
+<div class="page-header">
+    <h2>New app</h2>
+</div>
 
 <form action="" method="post" novalidate {{ form_enctype(form) }}>
-    <fieldset>
-        <legend>New app</legend>
-        {{ form_widget(form) }}
-        <div class="actions">
-            <input type="submit" value="{{ 'Create'|trans }}" class="btn primary">
-        </div>
-    </fieldset>
+    {{ form_widget(form) }}
+    <div class="actions">
+        <input type="submit" value="{{ 'Create'|trans }}" class="btn primary">
+    </div>
 </form>
 
 {% endblock %}

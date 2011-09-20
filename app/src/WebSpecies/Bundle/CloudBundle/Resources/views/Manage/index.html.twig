@@ -1,7 +1,10 @@
 {% extends '::base.html.twig' %}
 
 {% block content %}
-
+<div class="page-header">
+    <h2>My apps <small>Apps running in Azure+ cloud</small></h2>
+</div>
+        
 {% if apps %}
     {% for app in apps %}
         <p>
@@ -15,7 +18,12 @@
         </p>
     {% endfor %}
 {% else %}
-No apps, <a href="{{ path('CloudBundle_new_app') }}">create one</a>!
+<div class="alert-message block-message info">
+  <p><strong>You have no apps :(</strong> Best check yo self, you’re not looking too good. Nulla vitae elit libero, a pharetra augue. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+  <div class="alert-actions">
+    <a class="btn small" href="{{ path('CloudBundle_new_app') }}">Create one</a>
+  </div>
+</div>
 {% endif %}
 
 {% endblock %}
