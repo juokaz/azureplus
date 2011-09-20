@@ -6,7 +6,16 @@
 </div>
 
 <form action="" method="post" novalidate {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
+    <div class="clearfix">
+        {{ form_label(form.name) }}
+        <div class="input">
+            <div class="input-append">
+                {{ form_widget(form.name) }}
+                <span class="add-on">.cloudapp.net</span>
+            </div>
+        </div>
+    </div>
+    {{ form_rest(form) }}
     <div class="actions">
         <input type="submit" value="{{ 'Create'|trans }}" class="btn primary">
     </div>
