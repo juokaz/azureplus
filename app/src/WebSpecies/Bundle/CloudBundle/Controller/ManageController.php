@@ -5,6 +5,7 @@ namespace WebSpecies\Bundle\CloudBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use WebSpecies\Bundle\CloudBundle\Form\Type\AppType;
 use WebSpecies\Bundle\CloudBundle\Form\Model\App as AppModel;
+use Symfony\Component\Form\FormError;
 
 class ManageController extends Controller
 {
@@ -28,10 +29,14 @@ class ManageController extends Controller
             $form->bindRequest($this->getRequest());
 
             if ($form->isValid()) {
-                $this->getManager()->createApp($this->getUser(), $app);
+                try {
+                    $this->getManager()->createApp($this->getUser(), $app);
 
-                $this->container->get('session')->setFlash('success', sprintf('App "%s" created', $app->getName()));
-                return $this->redirect($this->generateUrl('CloudBundle_apps'));
+                    $this->container->get('session')->setFlash('success', sprintf('App "%s" created', $app->getName()));
+                    return $this->redirect($this->generateUrl('CloudBundle_apps'));
+                } catch (\Exception $e) {
+                    $form->addError(new FormError($e->getMessage()));
+                }
             }
         }
         

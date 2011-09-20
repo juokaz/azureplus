@@ -6,6 +6,7 @@
 </div>
 
 <form action="" method="post" novalidate {{ form_enctype(form) }}>
+    {{ form_errors(form) }}
     <div class="clearfix {{ (0 < form_errors(form.name)|length)? 'error':'' }}">
         {{ form_label(form.name) }}
         <div class="input">
