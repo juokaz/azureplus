@@ -33,7 +33,7 @@ class ManageController extends Controller
                     $this->getManager()->createApp($this->getUser(), $app);
 
                     $this->container->get('session')->setFlash('success', sprintf('App "%s" created', $app->getName()));
-                    return $this->redirect($this->generateUrl('CloudBundle_apps'));
+                    return $this->redirect($this->generateUrl('CloudBundle_manage'));
                 } catch (\Exception $e) {
                     $form->addError(new FormError($e->getMessage()));
                 }
@@ -55,7 +55,7 @@ class ManageController extends Controller
 
         $this->getManager()->deleteApp($name);
 
-        return $this->redirect($this->generateUrl('CloudBundle_apps'));
+        return $this->redirect($this->generateUrl('CloudBundle_manage'));
     }
 
     /**
