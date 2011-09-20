@@ -2,10 +2,14 @@
 
 {% block content %}
 
-<form action="" {{ form_enctype(form) }} method="post">
-    {{ form_widget(form) }}
-
-    <input type="submit" />
+<form action="" method="post" novalidate {{ form_enctype(form) }}>
+    <fieldset>
+        <legend>New app</legend>
+        {{ form_widget(form) }}
+        <div class="actions">
+            <input type="submit" value="{{ 'Create'|trans }}" class="btn primary">
+        </div>
+    </fieldset>
 </form>
 
 {% endblock %}
