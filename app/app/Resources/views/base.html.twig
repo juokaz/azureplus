@@ -44,16 +44,14 @@
 
     <div class="container">
 
-    {% for key, message in app.session.getFlashes() %}
-    <div class="{{ key }}">
-        <div class="alert-message warning">
-          <a class="close" href="#">×</a>
-          <p>{{ message }}</p>
-        </div>
-    </div>
-    {% endfor %}
-
       <div class="hero-unit">
+        {% for key, message in app.session.getFlashes() %}
+            <div class="alert-message {{ key }}">
+              <a class="close" href="#">×</a>
+              <p>{{ message }}</p>
+            </div>
+        {% endfor %}
+
         {% block content %}{% endblock %}
       </div>
 

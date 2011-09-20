@@ -68,7 +68,7 @@ class ManageController extends Controller
                 $this->getAppsManager()->saveApp($app);
 
                 $this->container->get('session')->setFlash('success', sprintf('App "%s" updated', $app->getName()));
-                return $this->redirect($this->generateUrl('CloudBundle_manage'));
+                return $this->redirect($this->generateUrl('CloudBundle_view_app', array('name' => $app->getName())));
             }
         }
 
