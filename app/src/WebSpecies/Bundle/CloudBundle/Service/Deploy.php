@@ -26,8 +26,10 @@ class Deploy
     private $git;
     
     private $web_config;
+
+    private $deploy_template;
     
-    public function __construct(Storage $client, $app_file, $filesystem, $temp_folder, $git, $web_config)
+    public function __construct(Storage $client, $app_file, $filesystem, $temp_folder, $git, $web_config, $deploy_template)
     {
         $this->client = $client;
         $this->app_file = $app_file;
@@ -35,8 +37,17 @@ class Deploy
         $this->filesystem = $filesystem;
         $this->git = $git;
         $this->web_config = $web_config;
+        $this->deploy_template = $deploy_template;
     }
-    
+
+    /**
+     * Deploy app
+     *
+     * @throws \Exception|\InvalidArgumentException|\RuntimeException
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @param string $folder
+     * @return string
+     */
     public function deploy(App $app, $folder)
     {
         if (!$app->isLive()) {
@@ -112,7 +123,7 @@ class Deploy
             throw new \InvalidArgumentException('App only supports direct deployments');
         }
 
-        $folder = $this->temp_folder . DIRECTORY_SEPARATOR . 'apps' . DIRECTORY_SEPARATOR . $app->getName();
+        $folder = $this->getAppFolder($app);
 
         if ($this->git->checkout($app, $folder)) {
             $this->deploy($app, $folder);
@@ -120,6 +131,47 @@ class Deploy
         } else {
             return false;
         }
+    }
+
+    /**
+     * Deploy app from code archive
+     *
+     * @throws \InvalidArgumentException|\RuntimeException
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @param string $type
+     * @param string $data
+     * @return bool
+     */
+    public function deployArchive(App $app, $type, $data)
+    {
+        if ($app->isAutoDeployable()) {
+            throw new \InvalidArgumentException('App only supports automatic deployments');
+        }
+
+        if ($type != 'application/zip') {
+            throw new \InvalidArgumentException('Archive type not supported');
+        }
+
+        $folder = $this->getAppFolder($app);
+
+        $zip = new \ZipArchive();
+
+        $temp_file = tempnam(sys_get_temp_dir(), 'Azure');
+        file_put_contents($temp_file, $data);
+
+        // open archive
+        if ($zip->open($temp_file) !== TRUE) {
+			throw new \RuntimeException ("Could not open archive");
+        }
+
+        $zip->extractTo($folder);
+        $zip->close();
+
+        // No need for this anymore
+        unlink($temp_file);
+
+        $this->deploy($app, $folder);
+        return true;
     }
 
     /**
@@ -131,6 +183,21 @@ class Deploy
     public function delete(App $app)
     {
         $this->filesystem->remove($this->getAppFolder($app));    
+    }
+
+    /**
+     * Get deploy script template
+     *
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @return string
+     */
+    public function getDeployScript(App $app, $endpoint)
+    {
+        $template = file_get_contents($this->deploy_template);
+        $template = str_replace('%API_KEY%', $app->getKey(), $template);
+        $template = str_replace('%ENDPOINT%', $endpoint, $template);
+
+        return $template;
     }
 
     /**
