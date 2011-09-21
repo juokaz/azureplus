@@ -7,6 +7,7 @@ use WebSpecies\Bundle\CloudBundle\Form\Type\AppType;
 use WebSpecies\Bundle\CloudBundle\Form\Model\App as AppModel;
 use WebSpecies\Bundle\CloudBundle\Entity\App;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\Response;
 
 class ManageController extends Controller
 {
@@ -66,6 +67,7 @@ class ManageController extends Controller
             if ($form->isValid()) {
                 $app = $type->getApp($app_model, $app);
                 $this->getAppsManager()->saveApp($app);
+                $this->getDeploy()->delete($app);
 
                 $this->container->get('session')->setFlash('success', sprintf('App "%s" updated', $app->getName()));
                 return $this->redirect($this->generateUrl('CloudBundle_view_app', array('name' => $app->getName())));
@@ -91,6 +93,19 @@ class ManageController extends Controller
         return $this->redirect($this->generateUrl('CloudBundle_manage'));
     }
 
+    public function deployScriptAction($name)
+    {
+        $app = $this->getAppsManager()->getApp($name);
+
+        if (!$app || $app->getUser()->getId() != $this->getUser()->getId()) {
+            throw $this->createNotFoundException('App not found');
+        }
+
+        $template = $this->getDeploy()->getDeployScript($app, $this->generateUrl('CloudBundle_deploy', array('name' => $app->getName()), true));
+
+        return new Response($template, 200, array('Content-type' => 'text/plain', 'Content-Disposition' => 'attachment; filename="deploy.php"'));
+    }
+
     /**
      * @return \WebSpecies\Bundle\CloudBundle\Entity\AppManager
      */
@@ -105,6 +120,14 @@ class ManageController extends Controller
     private function getManager()
     {
         return $this->get('cloud.service.manager');
+    }
+
+    /**
+     * @return \WebSpecies\Bundle\CloudBundle\Service\Deploy
+     */
+    private function getDeploy()
+    {
+        return $this->get('cloud.service.deploy');
     }
 
     /**

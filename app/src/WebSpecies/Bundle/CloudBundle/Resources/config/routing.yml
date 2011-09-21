@@ -2,6 +2,12 @@ CloudBundle_homepage:
     pattern:  /
     defaults: { _controller: CloudBundle:Default:index }
 
+CloudBundle_deploy:
+    pattern:  /apps/{name}
+    defaults: { _controller: CloudBundle:Deploy:deploy }
+    requirements:
+        _method:  POST
+
 CloudBundle_manage:
     pattern:  /manage
     defaults: { _controller: CloudBundle:Manage:index }
@@ -13,6 +19,10 @@ CloudBundle_new_app:
 CloudBundle_view_app:
     pattern:  /manage/apps/{name}
     defaults: { _controller: CloudBundle:Manage:view }
+
+CloudBundle_deploy_script:
+    pattern:  /manage/apps/{name}/deploy
+    defaults: { _controller: CloudBundle:Manage:deployScript }
 
 CloudBundle_delete_app:
     pattern:  /manage/apps/{name}/delete

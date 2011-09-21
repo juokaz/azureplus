@@ -18,7 +18,7 @@
             {% if app.isLive %}
                 <a href="{{ path('CloudBundle_delete_app', {'name': app.getName}) }}" class="btn secondary">Delete</a>
                 <a href="{{ path('CloudBundle_view_app', {'name': app.getName}) }}" class="btn secondary">Configure</a>
-                <a href="{{ app.getUrl }}" class="btn primary">Visit</a>
+                <a href="{{ app.getUrl }}" class="btn primary" target="_blank">Visit</a>
             {% else %}
                 Creating <img src="{{ asset('bundles/cloud/images/loading.gif') }}" alt="Loading">
             {% endif %}
