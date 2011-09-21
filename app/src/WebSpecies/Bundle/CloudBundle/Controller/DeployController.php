@@ -17,6 +17,11 @@ class DeployController extends Controller
         }
 
         $type = $this->getRequest()->server->get('CONTENT_TYPE');
+        $key = $this->getRequest()->server->get('HTTP_API_KEY');
+
+        if ($key != $app->getKey()) {
+            return new Response('Access denied', 401);
+        }
 
         if (!$type) {
             return new Response('Missing Content-Type or content type is unsupported', 415);

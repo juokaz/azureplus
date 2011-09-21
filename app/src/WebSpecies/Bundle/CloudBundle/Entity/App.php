@@ -23,6 +23,11 @@ class App
     private $name;
 
     /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $api_key;
+
+    /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $url;
@@ -62,6 +67,9 @@ class App
         $this->status = self::STATUS_NEW;
         $this->configuration = new Configuration();
         $this->source = new Source();
+
+        // @todo make this better
+        $this->api_key = sha1($name . uniqid());
     }
 
     public function setName($name)
@@ -122,6 +130,11 @@ class App
     public function getSource()
     {
         return $this->source;
+    }
+
+    public function getKey()
+    {
+        return $this->api_key;
     }
 
     public function isAutoDeployable()
