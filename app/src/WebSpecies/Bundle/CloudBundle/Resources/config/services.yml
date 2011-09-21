@@ -10,7 +10,8 @@ parameters:
     
     cloud.service.storage.class: WebSpecies\Bundle\CloudBundle\Service\Internal\Storage
     cloud.service.azure.class: WebSpecies\Bundle\CloudBundle\Service\Internal\Azure
-    
+    cloud.service.database.class: WebSpecies\Bundle\CloudBundle\Service\Internal\Database
+
     cloud_app_file: app.zip
     cloud_web_config: %kernel.root_dir%/../src/WebSpecies/Bundle/CloudBundle/Resources/data/web.config
 
@@ -21,6 +22,7 @@ parameters:
 
     azure.storage.class: Microsoft_WindowsAzure_Storage_Blob
     azure.management.class: Microsoft_WindowsAzure_Management_Client
+    azure.database.class: Microsoft_SqlAzure_Management_Client
 
     storage_url: blob.core.windows.net
     storage_account: 
@@ -46,9 +48,14 @@ services:
         class: %cloud.service.azure.class%
         arguments: [@azure.management]
 
+    cloud.service.database:
+        public: false
+        class: %cloud.service.database.class%
+        arguments: [@azure.database]
+
     cloud.service.apps:
         class: %cloud.service.apps.class%
-        arguments: [@cloud.service.storage, @cloud.service.azure, %base_collection%, %base_file%, %cloud_app_file%, %azure_template%]
+        arguments: [@cloud.service.storage, @cloud.service.azure, @cloud.service.database, %base_collection%, %base_file%, %cloud_app_file%, %azure_template%]
 
     cloud.service.manager:
         class: %cloud.service.manager.class%
@@ -75,4 +82,9 @@ services:
     azure.management:
         public: false
         class: %azure.management.class%
+        arguments: [%azure_subscription%, %azure_certificate%, %azure_password%]
+
+    azure.database:
+        public: false
+        class: %azure.database.class%
         arguments: [%azure_subscription%, %azure_certificate%, %azure_password%]
