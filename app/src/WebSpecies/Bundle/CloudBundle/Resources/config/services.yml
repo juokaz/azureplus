@@ -11,6 +11,8 @@ parameters:
     cloud.service.storage.class: WebSpecies\Bundle\CloudBundle\Service\Internal\Storage
     cloud.service.azure.class: WebSpecies\Bundle\CloudBundle\Service\Internal\Azure
     
+    deploy_template: %kernel.root_dir%/../src/WebSpecies/Bundle/CloudBundle/Resources/data/deploy.php
+    
     cloud_app_file: app.zip
     cloud_web_config: %kernel.root_dir%/../src/WebSpecies/Bundle/CloudBundle/Resources/data/web.config
 

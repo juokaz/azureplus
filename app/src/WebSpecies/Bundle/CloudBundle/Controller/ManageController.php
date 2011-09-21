@@ -7,6 +7,7 @@ use WebSpecies\Bundle\CloudBundle\Form\Type\AppType;
 use WebSpecies\Bundle\CloudBundle\Form\Model\App as AppModel;
 use WebSpecies\Bundle\CloudBundle\Entity\App;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\Response;
 
 class ManageController extends Controller
 {
@@ -89,6 +90,21 @@ class ManageController extends Controller
         $this->getManager()->deleteApp($name);
 
         return $this->redirect($this->generateUrl('CloudBundle_manage'));
+    }
+
+    public function deployScriptAction($name)
+    {
+        $app = $this->getAppsManager()->getApp($name);
+
+        if (!$app || $app->getUser()->getId() != $this->getUser()->getId()) {
+            throw $this->createNotFoundException('App not found');
+        }
+
+        $template = file_get_contents($this->container->getParameter('deploy_template'));
+        $template = str_replace('%API_KEY%', $app->getKey(), $template);
+        $template = str_replace('%ENDPOINT%', $this->generateUrl('CloudBundle_deploy', array('name' => $app->getName()), true), $template);
+
+        return new Response($template, 200, array('Content-type' => 'text/plain', 'Content-Disposition' => 'attachment; filename="deploy.php"'));
     }
 
     /**

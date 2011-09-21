@@ -20,6 +20,10 @@ CloudBundle_view_app:
     pattern:  /manage/apps/{name}
     defaults: { _controller: CloudBundle:Manage:view }
 
+CloudBundle_deploy_script:
+    pattern:  /manage/apps/{name}/deploy
+    defaults: { _controller: CloudBundle:Manage:deployScript }
+
 CloudBundle_delete_app:
     pattern:  /manage/apps/{name}/delete
     defaults: { _controller: CloudBundle:Manage:delete }
