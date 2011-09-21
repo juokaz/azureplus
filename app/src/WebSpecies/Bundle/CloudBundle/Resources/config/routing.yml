@@ -2,6 +2,12 @@ CloudBundle_homepage:
     pattern:  /
     defaults: { _controller: CloudBundle:Default:index }
 
+CloudBundle_deploy:
+    pattern:  /apps/{name}
+    defaults: { _controller: CloudBundle:Deploy:deploy }
+    requirements:
+        _method:  POST
+
 CloudBundle_manage:
     pattern:  /manage
     defaults: { _controller: CloudBundle:Manage:index }
