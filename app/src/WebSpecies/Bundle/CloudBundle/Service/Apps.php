@@ -37,7 +37,7 @@ class Apps
         }
 
         // create hosted service
-        $this->azure->createServer($app->getName());
+        $this->azure->createServer($app->getName(), $app->getConfiguration()->getLocation());
 
         // set url
         $app->setUrl($this->azure->getUrl($app->getName()));

@@ -6,13 +6,13 @@ CloudBundle_manage:
     pattern:  /manage
     defaults: { _controller: CloudBundle:Manage:index }
 
-CloudBundle_apps:
-    pattern:  /manage/apps
-    defaults: { _controller: CloudBundle:Manage:apps }
-
 CloudBundle_new_app:
     pattern:  /manage/apps/new
     defaults: { _controller: CloudBundle:Manage:new }
+
+CloudBundle_view_app:
+    pattern:  /manage/apps/{name}
+    defaults: { _controller: CloudBundle:Manage:view }
 
 CloudBundle_delete_app:
     pattern:  /manage/apps/{name}/delete

@@ -22,7 +22,7 @@ class Azure
      * @param string $region
      * @return bool
      */
-    public function createServer($name, $region = 'West Europe')
+    public function createServer($name, $region)
     {
 		try {
 			$this->client->createHostedService($name, $name, null, $region);

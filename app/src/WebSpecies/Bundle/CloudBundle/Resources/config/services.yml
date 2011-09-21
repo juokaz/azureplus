@@ -52,7 +52,7 @@ services:
 
     cloud.service.manager:
         class: %cloud.service.manager.class%
-        arguments: [@doctrine.orm.entity_manager, @cloud.service.apps, @cloud.manager.app, @cloud.manager.user]
+        arguments: [@cloud.service.apps, @cloud.manager.app, @cloud.manager.user]
 
     cloud.service.source.git:
         public: false

@@ -10,8 +10,21 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Configuration
 {
+    /**
+     * PHP Versions
+     */
     const PHP_53 = 'php53';
     const PHP_52 = 'php52';
+
+    /**
+     * Possible locations
+     */
+    const LOCATION_NORTH_CENTRAL_US = 'North Central US';
+    const LOCATION_SOUTH_CENTRAL_US = 'South Central US';
+    const LOCATION_NORTH_EUROPE = 'North Europe';
+    const LOCATION_WEST_EUROPE = 'West Europe';
+    const LOCATION_EAST_ASIA = 'East Asia';
+    const LOCATION_SOUTHEAST_ASIA = 'Southeast Asia';
     
     /**
      * @ORM\Id
@@ -29,6 +42,11 @@ class Configuration
      * @ORM\Column(type="string", length=100)
      */
     private $app_root = '';
+
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    private $location = self::LOCATION_WEST_EUROPE;
 
     public function setPhpVersion($php_version)
     {
@@ -48,6 +66,16 @@ class Configuration
     public function getAppRoot()
     {
         return $this->app_root;
+    }
+
+    public function setLocation($location)
+    {
+        $this->location = $location;
+    }
+
+    public function getLocation()
+    {
+        return $this->location;
     }
 
     /**
