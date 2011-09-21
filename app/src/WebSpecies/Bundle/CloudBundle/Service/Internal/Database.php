@@ -42,4 +42,31 @@ class Database
     {
         $this->client->dropServer($name);
     }
+
+    /**
+     * Create database on a server
+     *
+     * @param string $server
+     * @param string $name
+     * @param string $username
+     * @param string $password
+     * @return void
+     */
+    public function createDatabase($server, $name, $username, $password)
+    {
+        // @todo implement database creation
+        return $name;
+    }
+
+    /**
+     * Drop database on a server
+     *
+     * @param string $server
+     * @param string $name
+     * @return void
+     */
+    public function dropDatabase($server, $name)
+    {
+        return true;
+    }
 }

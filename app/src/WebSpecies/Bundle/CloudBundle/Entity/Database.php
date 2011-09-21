@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="`databases`")
+ * @ORM\Table(name="dbs")
  */
 class Database
 {
@@ -16,6 +16,11 @@ class Database
      * @ORM\GeneratedValue
      */
     private $id;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $server;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -38,9 +43,10 @@ class Database
      */
     private $app;
 
-    public function __construct(App $app, $name)
+    public function __construct(App $app, $server, $name)
     {
         $this->app = $app;
+        $this->server = $server;
         $this->name = $name;
     }
 
@@ -61,7 +67,7 @@ class Database
 
     public function getUser()
     {
-        return $this->user;
+        return sprintf('%s@%s', $this->user, $this->server);
     }
 
     public function setPassword($password)
@@ -74,8 +80,13 @@ class Database
         return $this->password;
     }
 
-    public function getDnsName()
+    public function setServer($server)
     {
-        return sprintf('%s.database.windows.net', $this->name);
+        $this->server = $server;
+    }
+
+    public function getServer()
+    {
+        return sprintf('%s.database.windows.net', $this->server);
     }
 }

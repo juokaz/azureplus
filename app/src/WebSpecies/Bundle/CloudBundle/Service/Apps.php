@@ -115,7 +115,7 @@ class Apps
         // Delete database server
         /** @var $db \WebSpecies\Bundle\CloudBundle\Entity\Database */
         foreach ($app->getDatabases() as $db) {
-            $this->database->dropServer($db->getName());
+            $this->database->dropDatabase($db->getServer(), $db->getName());
         }
 
         return true;
@@ -140,15 +140,16 @@ class Apps
      */
     private function addDatabase(App $app)
     {
-        $user = $app->getName();
-        $psw = '/scabsabasbsacblc1';
-        $location = $app->getConfiguration()->getLocation();
+        $server = 'srka3ubxla';
+        $user = 'azure';
+        $password = '/scabsabasbsacblc1';
+        $name = $app->getName();
 
-        $name = $this->database->createServer($user, $psw, $location);
+        $name = $this->database->createDatabase($server, $name, $user, $password);
 
-        $database = new DatabaseEntity($app, $name);
+        $database = new DatabaseEntity($app, $server, $name);
         $database->setUser($user);
-        $database->setPassword($psw);
+        $database->setPassword($password);
 
         $app->addDatabase($database);
     }
