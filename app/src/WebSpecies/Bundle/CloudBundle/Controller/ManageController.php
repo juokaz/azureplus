@@ -100,9 +100,7 @@ class ManageController extends Controller
             throw $this->createNotFoundException('App not found');
         }
 
-        $template = file_get_contents($this->container->getParameter('deploy_template'));
-        $template = str_replace('%API_KEY%', $app->getKey(), $template);
-        $template = str_replace('%ENDPOINT%', $this->generateUrl('CloudBundle_deploy', array('name' => $app->getName()), true), $template);
+        $template = $this->getDeploy()->getDeployScript($app, $this->generateUrl('CloudBundle_deploy', array('name' => $app->getName()), true));
 
         return new Response($template, 200, array('Content-type' => 'text/plain', 'Content-Disposition' => 'attachment; filename="deploy.php"'));
     }
@@ -121,6 +119,14 @@ class ManageController extends Controller
     private function getManager()
     {
         return $this->get('cloud.service.manager');
+    }
+
+    /**
+     * @return \WebSpecies\Bundle\CloudBundle\Service\Deploy
+     */
+    private function getDeploy()
+    {
+        return $this->get('cloud.service.deploy');
     }
 
     /**

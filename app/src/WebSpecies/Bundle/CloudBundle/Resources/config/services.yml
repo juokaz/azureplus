@@ -36,7 +36,7 @@ parameters:
 services:
     cloud.service.deploy:
         class: %cloud.service.deploy.class%
-        arguments: [@cloud.service.storage, %cloud_app_file%, @filesystem, %kernel.cache_dir%, @cloud.service.source.git, %cloud_web_config%]
+        arguments: [@cloud.service.storage, %cloud_app_file%, @filesystem, %kernel.cache_dir%, @cloud.service.source.git, %cloud_web_config%, %deploy_template%]
         
     cloud.service.storage:
         public: false

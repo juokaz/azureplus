@@ -26,8 +26,10 @@ class Deploy
     private $git;
     
     private $web_config;
+
+    private $deploy_template;
     
-    public function __construct(Storage $client, $app_file, $filesystem, $temp_folder, $git, $web_config)
+    public function __construct(Storage $client, $app_file, $filesystem, $temp_folder, $git, $web_config, $deploy_template)
     {
         $this->client = $client;
         $this->app_file = $app_file;
@@ -35,6 +37,7 @@ class Deploy
         $this->filesystem = $filesystem;
         $this->git = $git;
         $this->web_config = $web_config;
+        $this->deploy_template = $deploy_template;
     }
 
     /**
@@ -180,6 +183,21 @@ class Deploy
     public function delete(App $app)
     {
         $this->filesystem->remove($this->getAppFolder($app));    
+    }
+
+    /**
+     * Get deploy script template
+     *
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @return string
+     */
+    public function getDeployScript(App $app, $endpoint)
+    {
+        $template = file_get_contents($this->deploy_template);
+        $template = str_replace('%API_KEY%', $app->getKey(), $template);
+        $template = str_replace('%ENDPOINT%', $endpoint, $template);
+
+        return $template;
     }
 
     /**
