@@ -9,16 +9,16 @@
             <echo>Please choose what to deploy: all, nginx, website</echo>
         </target>
 
-        <target name="all" depends="nginx, website">
+        <target name="all" depends="nginx, website, vendor, cache-warmup">
         </target>
 
         <target name="website" depends="sshconfig, copy">
-            <sshexec host="${deploy.host}" username="${deploy.username}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${passphrase}" command="rm -rf ${deploy.url}/*" failonerror="false"/>
             <scp todir="${deploy.username}@${deploy.host}:${deploy.url}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${passphrase}">
-                <fileset dir="${temp.dir}/" />
+                <fileset dir="${temp.dir}/">
+                    <exclude name="vendor/" />
+                </fileset>
             </scp>
-            <sshexec host="${deploy.host}" username="${deploy.username}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${passphrase}"
-                command="mkdir -p ${deploy.url}/app/cache; chmod 777 ${deploy.url}/app/cache; mkdir -p ${deploy.url}/app/logs; chmod 777 ${deploy.url}/app/logs"/>
+            <sshexec host="${deploy.host}" username="${deploy.username}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${passphrase}" command="chmod +x ${deploy.url}/app/console"/>
         </target>
 
         <target name="nginx" depends="sshconfig, replace">
@@ -26,10 +26,27 @@
             <sshexec host="${deploy.host}" username="${deploy.username}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${passphrase}" command="sudo /etc/init.d/nginx reload"/>
         </target>
 
+        <target name="vendor" depends="sshconfig, copy">
+            <scp todir="${deploy.username}@${deploy.host}:${deploy.url}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${passphrase}">
+                <fileset dir="${temp.dir}/">
+                    <include name="vendor/" />
+                </fileset>
+            </scp>
+        </target>
+
         <target name="sshconfig">
             <input message="Please enter private key username:" addproperty="passphrase">
                 <handler classname="org.apache.tools.ant.input.SecureInputHandler" />
             </input>
+        </target>
+
+        <target name="cache-warmup" depends="sshconfig">
+            <sshexec host="${deploy.host}" username="${deploy.username}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${passphrase}"
+                command="mkdir -p ${deploy.url}/app/cache; mkdir -p ${deploy.url}/app/logs"/>
+            <sshexec host="${deploy.host}" username="${deploy.username}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${passphrase}"
+                command="cd ${deploy.url}/app; ./console cache:clear --env=prod; ./console cache:warm --env=prod"/>
+            <sshexec host="${deploy.host}" username="${deploy.username}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${passphrase}"
+                command="chmod -R 777 ${deploy.url}/app/cache; chmod -R 777 ${deploy.url}/app/logs"/>
         </target>
 
         <target name="copy">
@@ -40,7 +57,7 @@
                     <exclude name="bin/" />
                     <exclude name="app/cache/**/*" />
                     <exclude name="app/logs/**/*" />
-                    <exclude name="app/config/properties.ini" />
+                    <exclude name="app/config/parameters.ini" />
                     <exclude name="${temp.dir}/" />
                     <exclude name="build.xml" />
                     <exclude name="config.properties" />
