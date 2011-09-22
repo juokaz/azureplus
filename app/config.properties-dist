@@ -1,0 +1,7 @@
+config.domain = cloud.webspecies.co.uk
+config.script = app.php
+deploy.host = webspecies.co.uk
+deploy.username = deploy
+deploy.url = /var/www/cloud
+deploy.nginx = /etc/nginx/sites-available/cloud
+temp.dir   = build

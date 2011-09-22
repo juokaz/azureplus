@@ -1,0 +1,43 @@
+server {
+    # port to listen on. Can also be set to an IP:PORT
+	listen   80;
+
+    # sets the domain[s] that this vhost server requests for
+	server_name  @domain@;
+
+    # Set the charset
+    charset utf-8;
+	
+    # vhost specific access log
+	access_log  /var/log/nginx/cloud.access.log;
+
+    # doc root
+	root   @folder@/web;
+    index  @script@;
+
+    # Set image format types to expire in a very long time
+    location ~* ^.+\.(jpg|jpeg|gif|png|ico)$ {
+        access_log off;
+        expires max;
+    }
+
+    # Set css and js to expire in a very long time
+    location ~* ^bundles/.+\.(css|js)$ {
+        access_log off;
+        expires max;
+    }
+
+    # Catchall for everything else
+	location / {
+        try_files $uri $uri/ /@script@?$args;
+        expires max;
+	}
+
+    location ~ \.php($|/)
+    {
+        fastcgi_pass unix:/var/run/php-fastcgi/php-fastcgi.socket;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO               $fastcgi_script_name;  
+        include /etc/nginx/fastcgi_params;
+    }
+}

@@ -9,3 +9,5 @@
 /app/config/certs/*
 .idea
 phpunit.xml
+build
+config.properties
