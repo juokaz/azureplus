@@ -5,7 +5,7 @@ if (PHP_SAPI !== 'cli') {
     exit();
 }
 
-$folder = './';
+$folder = '.' . DIRECTORY_SEPARATOR;
 $temp_file = tempnam(sys_get_temp_dir(), 'Azurep');
 $endpoint = '%ENDPOINT%';
 		
