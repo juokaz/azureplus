@@ -90,5 +90,8 @@ class ProcessCommand extends ContainerAwareCommand
                 $output->writeln(sprintf('<comment>App "%s" is up to date</comment>', $app->getName()));
             }
         }
+
+        // save log messages
+        $em->flush();
     }
 }
