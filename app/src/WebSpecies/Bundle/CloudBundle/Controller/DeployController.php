@@ -35,6 +35,8 @@ class DeployController extends Controller
             return new Response($e->getMessage(), 500);
         }
 
+        $this->getAppsManager()->saveApp($app);
+
         return new Response('Deployed');
     }
 
