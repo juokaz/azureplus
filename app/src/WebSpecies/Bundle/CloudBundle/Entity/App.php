@@ -65,6 +65,12 @@ class App
      * @ORM\OneToMany(targetEntity="WebSpecies\Bundle\CloudBundle\Entity\Database", mappedBy="app", cascade={"all"})
      */
     private $databases;
+
+    /**
+     * @ORM\OneToMany(targetEntity="WebSpecies\Bundle\CloudBundle\Entity\Log", mappedBy="app", cascade={"all"})
+     * @ORM\OrderBy({"id" = "DESC"})
+     */
+    private $log;
     
     public function __construct(User $user, $name)
     {
@@ -74,6 +80,7 @@ class App
         $this->configuration = new Configuration();
         $this->source = new Source();
         $this->databases = new ArrayCollection();
+        $this->log = new ArrayCollection();
 
         // @todo make this better
         $this->api_key = sha1($name . uniqid());
@@ -147,6 +154,30 @@ class App
     public function getDatabases()
     {
         return $this->databases;
+    }
+
+    public function addLog(Log $log)
+    {
+        $this->log[] = $log;
+    }
+
+    public function addLogMessage($message, $type)
+    {
+        $this->addLog(new Log($this, $message, $type));
+    }
+
+    public function getLog()
+    {
+        return $this->log;
+    }
+
+    public function getLastLog($count = 0)
+    {
+        if ($count == 0) {
+            return $this->log[0];
+        } else {
+            return $this->log->slice(0, $count);
+        }
     }
     
     public function getKey()
