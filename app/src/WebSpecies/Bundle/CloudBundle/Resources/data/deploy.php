@@ -1,5 +1,10 @@
 <?php
 
+// this is not supposed to be called from anywhere else but CLI
+if (PHP_SAPI !== 'cli') {
+    exit();
+}
+
 $folder = './';
 $temp_file = tempnam(sys_get_temp_dir(), 'Azurep');
 $endpoint = '%ENDPOINT%';
