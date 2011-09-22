@@ -12,7 +12,7 @@
             <h3>{{ app.getUrl }}</h3>
           </div>
           <div class="modal-body">
-            <p>One fine body…</p>
+            <p><span class="label success">{{ app.getLastLog.getFormattedTime }}</span> {{ app.getLastLog.getMessage }}</p>
           </div>
           <div class="modal-footer">
             {% if app.isLive %}

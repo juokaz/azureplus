@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
     
 use WebSpecies\Bundle\CloudBundle\Entity\App;
+use WebSpecies\Bundle\CloudBundle\Entity\Log;
 
 class ProcessCommand extends ContainerAwareCommand
 {
@@ -58,7 +59,10 @@ class ProcessCommand extends ContainerAwareCommand
         foreach ($apps->getAppsToFinish() as $app) {
             $output->writeln(sprintf('<comment>Checking if app "%s" is deployed</comment>', $app->getName()));
             if ($this->client->isDeployed($app)) {
+                // set status
                 $app->setStatus(App::STATUS_LIVE);
+                // add log
+                $app->addLogMessage('Live!', Log::CAT_SETUP);
                 $output->writeln(sprintf('<info>App "%s" is deployed</info>', $app->getName()));
             }
         }
@@ -86,5 +90,8 @@ class ProcessCommand extends ContainerAwareCommand
                 $output->writeln(sprintf('<comment>App "%s" is up to date</comment>', $app->getName()));
             }
         }
+
+        // save log messages
+        $em->flush();
     }
 }

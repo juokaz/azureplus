@@ -3,6 +3,7 @@
 namespace WebSpecies\Bundle\CloudBundle\Service;
 
 use WebSpecies\Bundle\CloudBundle\Entity\App;
+use WebSpecies\Bundle\CloudBundle\Entity\Log;
 use WebSpecies\Bundle\CloudBundle\Entity\Database as DatabaseEntity;
 use WebSpecies\Bundle\CloudBundle\Service\Internal\Storage;
 use WebSpecies\Bundle\CloudBundle\Service\Internal\Azure;
@@ -45,6 +46,9 @@ class Apps
 
         // set url
         $app->setUrl($this->azure->getUrl($app->getName()));
+
+        // add log
+        $app->addLogMessage('Created', Log::CAT_SETUP);
 
         // update app status
         $app->setStatus(App::STATUS_CREATING);
@@ -91,6 +95,9 @@ class Apps
 
         // create database
         $this->addDatabase($app);
+
+        // add log
+        $app->addLogMessage('Initialized', Log::CAT_SETUP);
 
         // update app status
         $app->setStatus(App::STATUS_CREATED);
@@ -151,6 +158,10 @@ class Apps
         $database->setUser($user);
         $database->setPassword($password);
 
+        // add to app
         $app->addDatabase($database);
+
+        // add log
+        $app->addLogMessage(sprintf('Added database "%s"', $name), Log::CAT_SETUP);
     }
 }

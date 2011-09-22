@@ -3,6 +3,7 @@
 namespace WebSpecies\Bundle\CloudBundle\Service;
 
 use WebSpecies\Bundle\CloudBundle\Entity\App;
+use WebSpecies\Bundle\CloudBundle\Entity\Log;
 use WebSpecies\Bundle\CloudBundle\Service\Internal\Storage;
 use WebSpecies\Bundle\CloudBundle\Service\Source\Git;
 use Symfony\Component\HttpKernel\Util\Filesystem;
@@ -127,6 +128,10 @@ class Deploy
 
         if ($this->git->checkout($app, $folder)) {
             $this->deploy($app, $folder);
+
+            // add log
+            $app->addLogMessage(sprintf('Deployed Git commit "%s"', $this->git->getCurrentCommitName($app, $folder)), Log::CAT_DEPLOY);
+
             return true;
         } else {
             return false;
@@ -170,7 +175,12 @@ class Deploy
         // No need for this anymore
         unlink($temp_file);
 
+        // Deploy
         $this->deploy($app, $folder);
+
+        // add log
+        $app->addLogMessage('Deployed from direct upload', Log::CAT_DEPLOY);
+
         return true;
     }
 

@@ -44,6 +44,22 @@ class Git implements SourceInterface
     }
 
     /**
+     * Get current commit name
+     *
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @param string $location
+     * @return string
+     */
+    public function getCurrentCommitName(App $app, $location)
+    {
+        // -n1 is to get one last commit
+        // %s format returns title of it
+        $command = 'log -n1 --pretty="%s"';
+
+        return trim($this->runCommand($location, $command));
+    }
+
+    /**
      * Get git current version
      *
      * @param string $location
