@@ -25,7 +25,9 @@
           <h3><a href="{{ path('CloudBundle_homepage') }}">Azure+</a></h3>
           {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
             <ul>
+                <li><a href="{{ path('CloudBundle_homepage') }}">Home</a></li>
                 <li><a href="{{ path('CloudBundle_manage') }}">Apps</a></li>
+                <li><a href="{{ path('CloudBundle_todo') }}">ToDo</a></li>
             </ul>
             <ul class="nav secondary-nav">
               <li class="menu">

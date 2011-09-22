@@ -10,4 +10,9 @@ class DefaultController extends Controller
     {
         return $this->render('CloudBundle:Default:index.html.twig');
     }
+    
+    public function todoAction()
+    {
+        return $this->render('CloudBundle:Default:todo.html.twig');
+    }
 }

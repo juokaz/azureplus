@@ -2,6 +2,10 @@ CloudBundle_homepage:
     pattern:  /
     defaults: { _controller: CloudBundle:Default:index }
 
+CloudBundle_todo:
+    pattern:  /todo
+    defaults: { _controller: CloudBundle:Default:todo }
+
 CloudBundle_deploy:
     pattern:  /apps/{name}
     defaults: { _controller: CloudBundle:Deploy:deploy }
