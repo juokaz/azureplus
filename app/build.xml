@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<project name="WebSpecies Cloud" default="empty" basedir=".">
+
+        <description>Cloud.WebSpecies.co.uk</description>
+
+        <property file="config.properties"/>
+
+        <target name="empty">
+            <echo>Please choose what to deploy: all, nginx, website</echo>
+        </target>
+
+        <target name="all" depends="nginx, website, vendor, cache-warmup">
+        </target>
+
+        <target name="website" depends="sshconfig, copy">
+            <scp todir="${deploy.username}@${deploy.host}:${deploy.url}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${passphrase}">
+                <fileset dir="${temp.dir}/">
+                    <exclude name="vendor/" />
+                </fileset>
+            </scp>
+            <sshexec host="${deploy.host}" username="${deploy.username}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${passphrase}" command="chmod +x ${deploy.url}/app/console"/>
+        </target>
+
+        <target name="nginx" depends="sshconfig, replace">
+            <scp file="${temp.dir}/nginx" remoteTofile="${deploy.username}@${deploy.host}:${deploy.nginx}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${passphrase}" />
+            <sshexec host="${deploy.host}" username="${deploy.username}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${passphrase}" command="sudo /etc/init.d/nginx reload"/>
+        </target>
+
+        <target name="vendor" depends="sshconfig, copy">
+            <scp todir="${deploy.username}@${deploy.host}:${deploy.url}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${passphrase}">
+                <fileset dir="${temp.dir}/">
+                    <include name="vendor/" />
+                </fileset>
+            </scp>
+        </target>
+
+        <target name="sshconfig">
+            <input message="Please enter private key username:" addproperty="passphrase">
+                <handler classname="org.apache.tools.ant.input.SecureInputHandler" />
+            </input>
+        </target>
+
+        <target name="cache-warmup" depends="sshconfig">
+            <sshexec host="${deploy.host}" username="${deploy.username}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${passphrase}"
+                command="mkdir -p ${deploy.url}/app/cache; mkdir -p ${deploy.url}/app/logs"/>
+            <sshexec host="${deploy.host}" username="${deploy.username}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${passphrase}"
+                command="cd ${deploy.url}/app; ./console cache:clear --env=prod; ./console cache:warm --env=prod"/>
+            <sshexec host="${deploy.host}" username="${deploy.username}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${passphrase}"
+                command="chmod -R 777 ${deploy.url}/app/cache; chmod -R 777 ${deploy.url}/app/logs"/>
+        </target>
+
+        <target name="copy">
+            <delete dir="${temp.dir}" />
+            <mkdir dir="${temp.dir}" />
+            <copy todir="${temp.dir}/">
+                <fileset dir=".">
+                    <exclude name="bin/" />
+                    <exclude name="app/cache/**/*" />
+                    <exclude name="app/logs/**/*" />
+                    <exclude name="app/config/parameters.ini" />
+                    <exclude name="${temp.dir}/" />
+                    <exclude name="build.xml" />
+                    <exclude name="config.properties" />
+                    <exclude name="README.md" />
+                    <exclude name="nginx" />
+                    <exclude name="**/.git/**/*" />
+                </fileset>
+            </copy>
+        </target>
+
+        <target name="replace">
+            <mkdir dir="${temp.dir}" />
+            <copy todir="${temp.dir}/" file="nginx" />
+            <replace file="${temp.dir}/nginx" token="@domain@" value="${config.domain}"/>
+            <replace file="${temp.dir}/nginx" token="@folder@" value="${deploy.url}"/>
+            <replace file="${temp.dir}/nginx" token="@script@" value="${config.script}"/>
+        </target>
+</project>

@@ -3,21 +3,25 @@
 namespace WebSpecies\Bundle\CloudBundle\Service;
 
 use WebSpecies\Bundle\CloudBundle\Entity\App;
+use WebSpecies\Bundle\CloudBundle\Entity\Database as DatabaseEntity;
 use WebSpecies\Bundle\CloudBundle\Service\Internal\Storage;
 use WebSpecies\Bundle\CloudBundle\Service\Internal\Azure;
+use WebSpecies\Bundle\CloudBundle\Service\Internal\Database;
 
 class Apps
 {
     private $storage;
     private $azure;
+    private $database;
     private $base_collection;
     private $base_file;
     private $app_file;
     
-    public function __construct(Storage $storage, Azure $azure, $base_collection, $base_file, $app_file, $configuration_template)
+    public function __construct(Storage $storage, Azure $azure, Database $database, $base_collection, $base_file, $app_file, $configuration_template)
     {
         $this->storage = $storage;
         $this->azure = $azure;
+        $this->database = $database;
         $this->base_collection = $base_collection;
         $this->base_file = $base_file;
         $this->app_file = $app_file;
@@ -85,6 +89,9 @@ class Apps
         // create deployment
         $this->azure->createDeployment($app->getName(), $package, $conf);
 
+        // create database
+        $this->addDatabase($app);
+
         // update app status
         $app->setStatus(App::STATUS_CREATED);
 
@@ -105,6 +112,12 @@ class Apps
         // Delete app container
         $this->storage->deleteContainer($app->getContainer());
 
+        // Delete database server
+        /** @var $db \WebSpecies\Bundle\CloudBundle\Entity\Database */
+        foreach ($app->getDatabases() as $db) {
+            $this->database->dropDatabase($db->getServer(), $db->getName());
+        }
+
         return true;
     }
 
@@ -117,5 +130,27 @@ class Apps
     public function isDeployed(App $app)
     {
         return $this->azure->isDeployed($app->getName());
+    }
+
+    /**
+     * Create a new database
+     *
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @return \WebSpecies\Bundle\CloudBundle\Entity\App
+     */
+    private function addDatabase(App $app)
+    {
+        $server = 'srka3ubxla';
+        $user = 'azure';
+        $password = '/scabsabasbsacblc1';
+        $name = $app->getName();
+
+        $name = $this->database->createDatabase($server, $name, $user, $password);
+
+        $database = new DatabaseEntity($app, $server, $name);
+        $database->setUser($user);
+        $database->setPassword($password);
+
+        $app->addDatabase($database);
     }
 }

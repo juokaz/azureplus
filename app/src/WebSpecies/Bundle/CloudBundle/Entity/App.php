@@ -3,6 +3,7 @@
 namespace WebSpecies\Bundle\CloudBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
     
 /**
  * @ORM\Entity
@@ -59,6 +60,11 @@ class App
      * @ORM\JoinColumn(name="source_id", referencedColumnName="id")
      */
     private $source;
+
+    /**
+     * @ORM\OneToMany(targetEntity="WebSpecies\Bundle\CloudBundle\Entity\Database", mappedBy="app", cascade={"all"})
+     */
+    private $databases;
     
     public function __construct(User $user, $name)
     {
@@ -67,6 +73,7 @@ class App
         $this->status = self::STATUS_NEW;
         $this->configuration = new Configuration();
         $this->source = new Source();
+        $this->databases = new ArrayCollection();
 
         // @todo make this better
         $this->api_key = sha1($name . uniqid());
@@ -132,6 +139,16 @@ class App
         return $this->source;
     }
 
+    public function addDatabase(Database $db)
+    {
+        $this->databases[] = $db;
+    }
+
+    public function getDatabases()
+    {
+        return $this->databases;
+    }
+    
     public function getKey()
     {
         return $this->api_key;
