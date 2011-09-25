@@ -4,11 +4,13 @@
 
 {% block content %}
 <div class="page-header">
-    <h2><a href="{{ path('CloudBundle_manage') }}">&larr; MyApps</a> <span class="divider">/</span> {{ entity.getUrl }}</h2>
+    <h2><a href="{{ path('CloudBundle_manage') }}">&larr; My Apps</a> <span class="divider">/</span> {{ entity.getUrl }}</h2>
 </div>
         
 <div class="row">
   <div class="span9">
+      <p><a href="{{ entity.getUrl }}" class="btn primary" target="_blank">Visit</a> Your app is live, take a look!</p>
+
       <h3>Deployments</h3>
       {% if entity.isAutoDeployable %}
       <p>Your app is auto-updated from the GIT repository, no further actions needed! It usually takes about one to two minutes for new commits to be deployed.</p>
