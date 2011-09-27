@@ -8,12 +8,12 @@ class Packager
 {
     private $web_config;
 
-    private $php;
+    private $php_folder;
     
-    public function __construct($web_config, $php)
+    public function __construct($web_config, $php_folder)
     {
         $this->web_config = $web_config;
-        $this->php = $php;
+        $this->php_folder = $php_folder;
     }
 
     public function createPackage(App $app, $file, $folder)
@@ -97,11 +97,13 @@ class Packager
      */
     private function getPhpConfig(App $app)
     {
-        if (!file_exists($this->php[$app->getConfiguration()->getPhpVersion()])) {
+        $name = $this->php_folder . DIRECTORY_SEPARATOR . $app->getConfiguration()->getPhpVersion() . '.ini';
+
+        if (!file_exists($name)) {
             throw new \InvalidArgumentException('Unrecognized PHP version. No php.ini template available');
         }
 
-        $template = file_get_contents($this->php[$app->getConfiguration()->getPhpVersion()]);
+        $template = file_get_contents($name);
 
         return $template;
     }

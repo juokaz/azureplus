@@ -17,8 +17,7 @@ parameters:
 
     cloud_app_file: app.zip
     cloud_web_config: %kernel.root_dir%/../src/WebSpecies/Bundle/CloudBundle/Resources/data/web.config
-    cloud_php_52: %kernel.root_dir%/../src/WebSpecies/Bundle/CloudBundle/Resources/data/php/php52.ini
-    cloud_php_53: %kernel.root_dir%/../src/WebSpecies/Bundle/CloudBundle/Resources/data/php/php53.ini
+    cloud_php_config: %kernel.root_dir%/../src/WebSpecies/Bundle/CloudBundle/Resources/data/php/
 
     base_collection: base
     base_file: base.cspkg
@@ -68,7 +67,7 @@ services:
 
     cloud.service.packager:
         class: %cloud.service.packager.class%
-        arguments: [%cloud_web_config%, {php53: %cloud_php_52%, php52: %cloud_php_53%}]
+        arguments: [%cloud_web_config%, %cloud_php_config%]
 
     cloud.service.source.git:
         public: false
