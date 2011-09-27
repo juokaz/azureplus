@@ -4,8 +4,6 @@
 $file = $_SERVER['argv'][1];
 // where to store
 $target = $_SERVER['argv'][2];
-// php.ini location
-$ini_file = $target . DIRECTORY_SEPARATOR . 'php.ini';
 
 // download php zip archive
 $source = file_get_contents($file);
@@ -25,6 +23,3 @@ $zip->close();
 
 // No need for this anymore
 unlink($temp_file);
-
-// Create actual php.ini
-move($target . DIRECTORY_SEPARATOR . 'php.ini-production', $ini_file);
