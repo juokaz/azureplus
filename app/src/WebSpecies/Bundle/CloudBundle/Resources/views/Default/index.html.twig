@@ -2,14 +2,16 @@
 
 {% block content %}
 <div class="page-header">
-    <h1>Azure+</h1>
+    <h1>Azure+ <small>PHP Platform as a service (PaaS)</small></h1>
 </div>
 
 <div class="row">
-  <div class="span6">
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam at nulla metus. Aliquam sit amet augue felis, eu vulputate leo. Aenean dolor mi, sagittis vitae blandit et, lacinia quis massa. Mauris mattis est non tortor cursus dictum. Sed vitae ipsum sapien. Etiam non turpis leo, et consectetur nunc. Duis vel quam sed magna feugiat semper. Maecenas tristique ultrices eros sit amet dignissim. Duis vitae tincidunt mi. Praesent pellentesque congue velit, sit amet viverra felis facilisis euismod. Vivamus aliquet velit eu libero vestibulum nec euismod lorem sollicitudin. Praesent id tortor odio, ac gravida sem. Aenean vehicula convallis nibh sed tincidunt. Mauris.</p>
+  <div class="span7">
+    <p><a href="http://en.wikipedia.org/wiki/Azure_Services_Platform" target="_blank">Azure</a> done right, this time for PHP applications. We know it's a Microsoft cloud service, but...</p>
+    <p>This is a platform as a service, so you won't even notice that it is running on top of Windows. You can focus on building your app and we'll make sure it works and scales.</p>
+    <p>If you have tried to deploy anything to Azure you'll know that it takes 15 or more minutes, which is unacceptable! Deploy code in seconds, not minutes. Azure+ can pull the code from your Git or SVN repository, but if you want you can push code directly. That's one of the things our API can handle, there is plenty more.</p>
   </div>
-  <div class="span8">
+  <div class="span7">
     <ul class="media-grid">
         <li>
             <a href="{{ path('CloudBundle_manage') }}">
@@ -17,8 +19,6 @@
             </a>
         </li>
     </ul>
-
-    <a href="{{ path('CloudBundle_new_app') }}" class="btn large primary">Deploy an app!</a>
   </div>
 </div>
 {% endblock %}

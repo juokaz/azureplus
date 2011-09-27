@@ -23,12 +23,12 @@
       <div class="fill">
         <div class="container">
           <h3><a href="{{ path('CloudBundle_homepage') }}">Azure+</a></h3>
-          {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
             <ul>
                 <li><a href="{{ path('CloudBundle_homepage') }}">Home</a></li>
                 <li><a href="{{ path('CloudBundle_manage') }}">Apps</a></li>
                 <li><a href="{{ path('CloudBundle_todo') }}">ToDo</a></li>
             </ul>
+          {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
             <ul class="nav secondary-nav">
               <li class="menu">
                 <a href="#" class="menu">{{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}</a>
@@ -58,7 +58,7 @@
       </div>
 
       <footer>
-        <p><img src="{{ asset('bundles/cloud/images/webspecies.png') }}" alt="Web Species" /> &copy; Web Species Ltd. 2011</p>
+        <p><img src="{{ asset('bundles/cloud/images/webspecies.png') }}" alt="Web Species" /> &copy; <a href="http://webspecies.co.uk/">Web Species Ltd</a> 2011</p>
       </footer>
 
     </div> <!-- /container -->

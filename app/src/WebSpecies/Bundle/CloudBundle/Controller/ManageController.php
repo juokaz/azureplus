@@ -52,7 +52,7 @@ class ManageController extends Controller
     {
         $app = $this->getAppsManager()->getApp($name);
 
-        if (!$app || $app->getUser()->getId() != $this->getUser()->getId()) {
+        if (!$app || $app->getUser()->getId() != $this->getUser()->getId() || !$app->isLive()) {
             throw $this->createNotFoundException('App not found');
         }
 
@@ -84,7 +84,7 @@ class ManageController extends Controller
     {
         $app = $this->getAppsManager()->getApp($name);
         
-        if (!$app || $app->getUser()->getId() != $this->getUser()->getId()) {
+        if (!$app || $app->getUser()->getId() != $this->getUser()->getId() || !$app->isLive()) {
             throw $this->createNotFoundException('App not found');
         }
 
@@ -97,7 +97,7 @@ class ManageController extends Controller
     {
         $app = $this->getAppsManager()->getApp($name);
 
-        if (!$app || $app->getUser()->getId() != $this->getUser()->getId()) {
+        if (!$app || $app->getUser()->getId() != $this->getUser()->getId() || !$app->isLive()) {
             throw $this->createNotFoundException('App not found');
         }
 
