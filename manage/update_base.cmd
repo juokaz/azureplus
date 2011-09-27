@@ -4,11 +4,11 @@ REM php setup
 echo Downloading PHP 5.2
 rd /s /q "..\hostingapp\Deployment\php\v5.2"
 php download.php http://windows.php.net/downloads/releases/php-5.3.8-nts-Win32-VC9-x86.zip ..\hostingapp\Deployment\php\v5.2
-copy "..\hostingapp\Deployment\php\v5.2\php.ini-production" "..\hostingapp\Deployment\php\v5.2\php.ini"
+copy "..\hostingapp\Deployment\php\v5.2\php.ini-production" "..\hostingapp\Deployment\php\v5.2\php.ini" > nul
 echo Downloading PHP 5.3
 rd /s /q "..\hostingapp\Deployment\php\v5.3"
 php download.php http://windows.php.net/downloads/releases/php-5.2.17-nts-Win32-VC6-x86.zip ..\hostingapp\Deployment\php\v5.3
-copy "..\hostingapp\Deployment\php\v5.3\php.ini-recommended" "..\hostingapp\Deployment\php\v5.3\php.ini"
+copy "..\hostingapp\Deployment\php\v5.3\php.ini-recommended" "..\hostingapp\Deployment\php\v5.3\php.ini" > nul
 
 REM Packaging app base
 echo Creating Azure package
