@@ -85,6 +85,9 @@ class Packager
 
         $template = str_replace('%PHP_PATH%', $app->getConfiguration()->getPhpRoot(), $template);
 
+        // Error mode, Detailed shows all errors of ISS while DetailedLocalOnly hides them 
+        $template = str_replace('%ERROR_MODE%', $app->getConfiguration()->isProduction() ? 'DetailedLocalOnly' : 'Detailed', $template);
+
         return $template;
     }
 
