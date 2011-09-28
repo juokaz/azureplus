@@ -84,7 +84,7 @@ class Packager
 
         $template = str_replace('%INDEX_FILE%', $index, $template);
 
-        $template = str_replace('%PHP_PATH%', $app->getConfiguration()->getPhpRoot(), $template);
+        $template = str_replace('%PHP_PATH%', $this->getPhpRoot($app), $template);
 
         // Error mode, Detailed shows all errors of ISS while DetailedLocalOnly hides them 
         $template = str_replace('%ERROR_MODE%', $app->getConfiguration()->isProduction() ? 'DetailedLocalOnly' : 'Detailed', $template);
@@ -149,6 +149,69 @@ class Packager
     }
 
     /**
+     * Get a timezone representing the app location
+     *
+     * @throws \InvalidArgumentException
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @return string
+     */
+    private function getTimezone(App $app)
+    {
+        $location = $app->getConfiguration()->getLocation();
+
+        switch ($location) {
+            case Configuration::LOCATION_NORTH_CENTRAL_US:
+                return 'America/Chicago';
+                break;
+            case Configuration::LOCATION_SOUTH_CENTRAL_US:
+                return 'America/Chicago';
+                break;
+            case Configuration::LOCATION_NORTH_EUROPE:
+                return 'Europe/Amsterdam';
+                break;
+            case Configuration::LOCATION_WEST_EUROPE:
+                return 'Europe/Dublin';
+                break;
+            case Configuration::LOCATION_EAST_ASIA:
+                return 'Asia/Hong_Kong';
+                break;
+            case Configuration::LOCATION_SOUTHEAST_ASIA:
+                return 'Asia/Singapore';
+                break;
+        }
+
+        throw new \InvalidArgumentException(sprintf('Location "%s" cannot be matched to a timezone', $location));
+    }
+
+    /**
+     * Get PHP root 
+     *
+     * @throws \RuntimeException
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @return string
+     */
+    private function getPhpRoot(App $app)
+    {
+        $version = $app->getConfiguration()->getPhpVersion();
+
+        if (!$version) {
+            throw new \RuntimeException('PHP version is not set');
+        }
+
+        // @todo E: disk might change
+        $root = 'E:\approot\php\%s\php-cgi.exe';
+
+        switch ($version) {
+            case Configuration::PHP_52:
+                    return sprintf($root, 'v5.2');
+                break;
+            case Configuration::PHP_53:
+                    return sprintf($root, 'v5.3');
+                break;
+        }
+    }
+
+    /**
      * Get array as ini file
      *
      * @param array $assoc_arr
@@ -188,40 +251,5 @@ class Packager
         }
      
         return $content;
-    }
-
-    /**
-     * Get a timezone representing the app location
-     *
-     * @throws \InvalidArgumentException
-     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
-     * @return string
-     */
-    private function getTimezone(App $app)
-    {
-        $location = $app->getConfiguration()->getLocation();
-
-        switch ($location) {
-            case Configuration::LOCATION_NORTH_CENTRAL_US:
-                return 'America/Chicago';
-                break;
-            case Configuration::LOCATION_SOUTH_CENTRAL_US:
-                return 'America/Chicago';
-                break;
-            case Configuration::LOCATION_NORTH_EUROPE:
-                return 'Europe/Amsterdam';
-                break;
-            case Configuration::LOCATION_WEST_EUROPE:
-                return 'Europe/Dublin';
-                break;
-            case Configuration::LOCATION_EAST_ASIA:
-                return 'Asia/Hong_Kong';
-                break;
-            case Configuration::LOCATION_SOUTHEAST_ASIA:
-                return 'Asia/Singapore';
-                break;
-        }
-
-        throw new \InvalidArgumentException(sprintf('Location "%s" cannot be matched to a timezone', $location));
     }
 }
