@@ -6,11 +6,15 @@
 <div class="page-header">
     <h2><a href="{{ path('CloudBundle_manage') }}">&larr; My Apps</a> <span class="divider">/</span> {{ entity.getUrl }}</h2>
 </div>
-        
+
+<p>Your app is live, <a href="{{ entity.getUrl }}" target="_blank">take a look</a>!</p>
+
+<p>If you are having problems trying to get your app up and running try switching to <em>Development</em> mode (which you can do in the Edit form below). <em>Production</em> mode hides all the errors from end-users, while <em>Development</em> mode allows to quickly see what errors PHP or web server is throwing.</p>
+
+<hr>
+
 <div class="row">
   <div class="span9">
-      <p><a href="{{ entity.getUrl }}" class="btn primary" target="_blank">Visit</a> Your app is live, take a look!</p>
-
       <h3>Deployments</h3>
       {% if entity.isAutoDeployable %}
       <p>Your app is auto-updated from the GIT repository, no further actions needed! It usually takes about one to two minutes for new commits to be deployed.</p>

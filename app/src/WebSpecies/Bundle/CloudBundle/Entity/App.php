@@ -152,7 +152,7 @@ class App
     }
 
     public function getDatabases()
-    {
+    {return array(new Database($this, 'aa', 'aa'));
         return $this->databases;
     }
 
