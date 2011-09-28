@@ -87,7 +87,7 @@ class Packager
         $template = str_replace('%PHP_PATH%', $this->getPhpRoot($app), $template);
 
         // Error mode, Detailed shows all errors of ISS while DetailedLocalOnly hides them 
-        $template = str_replace('%ERROR_MODE%', $app->getConfiguration()->isProduction() ? 'DetailedLocalOnly' : 'Detailed', $template);
+        $template = str_replace('%ERROR_MODE%', $app->isProduction() ? 'DetailedLocalOnly' : 'Detailed', $template);
 
         return $template;
     }
@@ -121,7 +121,7 @@ class Packager
             'max_execution_time' => '300',
             'date.timezone' => $this->getTimezone($app),
             'extension_dir' => 'ext',
-            'display_errors' => $app->getConfiguration()->isProduction() ? 'Off' : 'On'
+            'display_errors' => $app->isProduction() ? 'Off' : 'On'
         ));
 
         // add options to php.ini file

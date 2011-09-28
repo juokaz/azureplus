@@ -82,7 +82,7 @@ class AppType extends AbstractType
         $model->setAppRoot($app->getConfiguration()->getAppRoot());
         $model->setPhpVersion($app->getConfiguration()->getPhpVersion());
         $model->setLocation($app->getConfiguration()->getLocation());
-        $model->setProduction($app->getConfiguration()->isProduction());
+        $model->setProduction($app->getConfiguration()->getProduction());
         
         $model->setGitRepository($app->getSource()->getGitRepository());
 

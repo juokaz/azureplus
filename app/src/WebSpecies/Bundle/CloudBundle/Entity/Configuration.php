@@ -88,7 +88,7 @@ class Configuration
         $this->production = $production;
     }
 
-    public function isProduction()
+    public function getProduction()
     {
         return $this->production;
     }

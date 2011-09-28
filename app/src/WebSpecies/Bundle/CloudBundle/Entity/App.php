@@ -194,4 +194,9 @@ class App
     {
         return $this->status == self::STATUS_LIVE;
     }
+
+    public function isProduction()
+    {
+        return $this->getConfiguration()->getProduction();
+    }
 }
