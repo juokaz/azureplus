@@ -3,6 +3,7 @@
 namespace WebSpecies\Bundle\CloudBundle\Service\Internal;
 
 use WebSpecies\Bundle\CloudBundle\Entity\App;
+use WebSpecies\Bundle\CloudBundle\Entity\Configuration;
     
 class Packager
 {
@@ -118,7 +119,7 @@ class Packager
             'fastcgi.impersonate' => '1',
             'fastcgi.logging' => '0',
             'max_execution_time' => '300',
-            'date.timezone' => 'America/Los_Angeles',
+            'date.timezone' => $this->getTimezone($app),
             'extension_dir' => 'ext',
             'display_errors' => $app->getConfiguration()->isProduction() ? 'Off' : 'On'
         ));
@@ -180,5 +181,40 @@ class Packager
         }
      
         return $content;
+    }
+
+    /**
+     * Get a timezone representing the app location
+     *
+     * @throws \InvalidArgumentException
+     * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
+     * @return string
+     */
+    private function getTimezone(App $app)
+    {
+        $location = $app->getConfiguration()->getLocation();
+
+        switch ($location) {
+            case Configuration::LOCATION_NORTH_CENTRAL_US:
+                return 'America/Chicago';
+                break;
+            case Configuration::LOCATION_SOUTH_CENTRAL_US:
+                return 'America/Chicago';
+                break;
+            case Configuration::LOCATION_NORTH_EUROPE:
+                return 'Europe/Amsterdam';
+                break;
+            case Configuration::LOCATION_WEST_EUROPE:
+                return 'Europe/Dublin';
+                break;
+            case Configuration::LOCATION_EAST_ASIA:
+                return 'Asia/Hong_Kong';
+                break;
+            case Configuration::LOCATION_SOUTHEAST_ASIA:
+                return 'Asia/Singapore';
+                break;
+        }
+
+        throw new \InvalidArgumentException(sprintf('Location "%s" cannot be matched to a timezone', $location));
     }
 }
