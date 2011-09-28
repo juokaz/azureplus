@@ -108,6 +108,77 @@ class Packager
 
         $template = file_get_contents($name);
 
+        // options for PHP
+        $options = array('Azureplus' => array(
+            'error_log' => 'D:\Windows\temp\php53_errors.log',
+            'upload_tmp_dir' => 'D:\Windows\temp',
+            'session.save_path' => 'D:\Windows\temp',
+            'cgi.force_redirect' => '0',
+            'cgi.fix_pathinfo' => '1',
+            'fastcgi.impersonate' => '1',
+            'fastcgi.logging' => '0',
+            'max_execution_time' => '300',
+            'date.timezone' => 'America/Los_Angeles',
+            'extension_dir' => 'ext',
+            'display_errors' => $app->getConfiguration()->isProduction() ? 'Off' : 'On'
+        ));
+
+        $template .= "\n" . $this->getIniFile($options, true);
+
+        // Add some default extensions
+        $template .= '
+            [ExtensionList]
+            extension=php_mysql.dll
+            extension=php_mysqli.dll
+            extension=php_mbstring.dll
+            extension=php_gd2.dll
+            extension=php_gettext.dll
+            extension=php_curl.dll
+            extension=php_exif.dll
+            extension=php_xmlrpc.dll
+            extension=php_openssl.dll
+            extension=php_soap.dll
+            extension=php_pdo_mysql.dll
+            extension=php_pdo_sqlite.dll
+            extension=php_imap.dll
+            extension=php_tidy.dll
+            extension=php_curl.dll';
+
         return $template;
+    }
+
+    private function getIniFile($assoc_arr, $has_sections = false)
+    {
+        $content = "";
+        if ($has_sections) {
+            foreach ($assoc_arr as $key=>$elem) {
+                $content .= "[".$key."]\n";
+                foreach ($elem as $key2=>$elem2) {
+                    if(is_array($elem2))
+                    {
+                        for($i=0;$i<count($elem2);$i++)
+                        {
+                            $content .= $key2."[] = \"".$elem2[$i]."\"\n";
+                        }
+                    }
+                    else if($elem2=="") $content .= $key2." = \n";
+                    else $content .= $key2." = \"".$elem2."\"\n";
+                }
+            }
+        } else {
+            foreach ($assoc_arr as $key=>$elem) {
+                if(is_array($elem))
+                {
+                    for($i=0;$i<count($elem);$i++)
+                    {
+                        $content .= $key."[] = \"".$elem[$i]."\"\n";
+                    }
+                }
+                else if($elem=="") $content .= $key." = \n";
+                else $content .= $key." = \"".$elem."\"\n";
+            }
+        }
+     
+        return $content;
     }
 }
