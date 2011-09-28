@@ -18,16 +18,25 @@ rd /s /q "C:\temp"
 md "C:\temp"
 php download.php http://downloads.sourceforge.net/project/wincache/wincache-1.1.0/wincache-1.1.0-5.2-nts-vc6-x86.exe C:\temp\wincache.exe
 C:\temp\wincache.exe /c /q /t:C:\temp
-copy "C:\temp\php_wincache.dll" "..\hostingapp\Deployment\php\v5.2\ext\php_wincache.dll" > nil
+copy "C:\temp\php_wincache.dll" "..\hostingapp\Deployment\php\v5.2\ext\php_wincache.dll" > nul
 
 echo Adding WinCache extension for PHP 5.3
 rd /s /q "C:\temp"
 md "C:\temp"
 php download.php http://downloads.sourceforge.net/project/wincache/wincache-1.1.0/wincache-1.1.0-5.3-nts-vc9-x86.exe C:\temp\wincache.exe
 C:\temp\wincache.exe /c /q /t:C:\temp
-copy "C:\temp\php_wincache.dll" "..\hostingapp\Deployment\php\v5.3\ext\php_wincache.dll" > nil
-rd /s /q "C:\temp"
+copy "C:\temp\php_wincache.dll" "..\hostingapp\Deployment\php\v5.3\ext\php_wincache.dll" > nul
 
+REM sqlsrv extension
+echo Adding SqlSrv extension
+rd /s /q "C:\temp"
+md "C:\temp"
+php download.php "http://download.microsoft.com/download/C/D/B/CDB0A3BB-600E-42ED-8D5E-E4630C905371/SQLSRV20.EXE" C:\temp\sqlsrv.exe
+C:\temp\sqlsrv.exe /c /q /t:C:\temp
+copy "C:\temp\php_sqlsrv_52_nts_vc6.dll" "..\hostingapp\Deployment\php\v5.2\ext\php_sqlsrv.dll"
+copy "C:\temp\php_sqlsrv_53_nts_vc9.dll" "..\hostingapp\Deployment\php\v5.3\ext\php_sqlsrv.dll"
+copy "C:\temp\php_pdo_sqlsrv_52_nts_vc6.dll" "..\hostingapp\Deployment\php\v5.2\ext\php_pdo_sqlsrv.dll"
+copy "C:\temp\php_pdo_sqlsrv_53_nts_vc9.dll" "..\hostingapp\Deployment\php\v5.3\ext\php_pdo_sqlsrv.dll"
 
 REM Packaging app base
 echo Creating Azure package

@@ -2,9 +2,16 @@
 <ServiceConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" serviceName="Azurep" osFamily="2" osVersion="*" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration">
   <Role name="Deployment">
     <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBmQYJKoZIhvcNAQcDoIIBijCCAYYCAQAxggFKMIIBRgIBADAuMBoxGDAWBgNVBAMTD1dJTi03TDFQOEVWSjJTTAIQZK6h/G0vtLtCZVyddeQYSDANBgkqhkiG9w0BAQEFAASCAQAKIrXnUCRwizf41p/jGfDPnqKTF9SPW55PqNWPOX5a3H9Pth4G0nRuXZ5m/ZKuo9H0QTUP0qIHp31e+YJ2xoLXQRq6KBC34sbrdL5VqaxnaDutDv3BHDgJoRsrJxEyfxpG56ovaV5M0wHWQrVNmRNUQ9FNEik8csLap9gv7YxC2uHt9Hx+DaUWBeg9WBEsD28QpPuyLr0pRrYhJ+HCUMBa5n0SIfCnIq6s0L6ivQOpVoG8HN31BvEzWQ/xMR3kFsl73Z5emwTXc3ZpdYAswb2OOHHXSkWFmxUoxRLxanDZCZIysNivVtiYUhXuB+UWohywVmxl7y5C7nwEvFJQMXj2MDMGCSqGSIb3DQEHATAUBggqhkiG9w0DBwQIKl9GuU/OZZiAEF3J0doKwA90I4oXuhgW1LI=" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2011-10-28T00:00:00.0000000" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="juozas" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="true" />
       <Setting name="APP_URL" value="%APP_URL%" />
     </ConfigurationSettings>
     <Instances count="1" />
-    <Certificates />
+    <Certificates>
+        <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="9D405D3358C926BD31661B2CA2517723EC4167C2" thumbprintAlgorithm="sha1" />
+    </Certificates>
   </Role>
 </ServiceConfiguration>
