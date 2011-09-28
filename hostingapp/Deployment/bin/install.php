@@ -1,5 +1,6 @@
 <?php
 
+$roleroot = realpath(getcwd() . '/../../');
 $args = $_SERVER['argv'];
 
 if (count($args) != 4) {
@@ -39,6 +40,11 @@ if (sha1($current) != sha1($new)) {
 	
 	$zip->extractTo($folder);
 	$zip->close();
+	
+	// update web.config to include real path
+	$config = file_get_contents($folder . '/web.config');
+	$config = str_replace('%ROLEROOT', $roleroot, $config);
+	file_put_contents($folder . '/web.config', $config);
 
 	// update current file
 	copy($temp_file, $existing);

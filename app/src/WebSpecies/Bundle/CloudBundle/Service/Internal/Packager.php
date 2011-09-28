@@ -198,8 +198,7 @@ class Packager
             throw new \RuntimeException('PHP version is not set');
         }
 
-        // @todo E: disk might change
-        $root = 'E:\approot\php\%s\php-cgi.exe';
+        $root = '%%ROLEROOT%%\approot\php\%s\php-cgi.exe';
 
         switch ($version) {
             case Configuration::PHP_52:
