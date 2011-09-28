@@ -1,6 +1,6 @@
 <?php
 
-$roleroot = realpath(getcwd() . '/../../');
+$roleroot = rtrim(realpath(getcwd() . '/../../'), DIRECTORY_SEPARATOR);
 $args = $_SERVER['argv'];
 
 if (count($args) != 4) {
@@ -43,7 +43,7 @@ if (sha1($current) != sha1($new)) {
 	
 	// update web.config to include real path
 	$config = file_get_contents($folder . '/web.config');
-	$config = str_replace('%ROLEROOT', $roleroot, $config);
+	$config = str_replace('%ROLEROOT%', $roleroot, $config);
 	file_put_contents($folder . '/web.config', $config);
 
 	// update current file
