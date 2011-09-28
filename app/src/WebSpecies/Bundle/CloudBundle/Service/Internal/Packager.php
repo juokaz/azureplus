@@ -148,7 +148,14 @@ class Packager
         return $template;
     }
 
-    private function getIniFile($assoc_arr, $has_sections = false)
+    /**
+     * Get array as ini file
+     *
+     * @param array $assoc_arr
+     * @param bool $has_sections
+     * @return string
+     */
+    private function getIniFile(array $assoc_arr, $has_sections = false)
     {
         $content = "";
         if ($has_sections) {
