@@ -124,26 +124,8 @@ class Packager
             'display_errors' => $app->getConfiguration()->isProduction() ? 'Off' : 'On'
         ));
 
+        // add options to php.ini file
         $template .= "\n" . $this->getIniFile($options, true);
-
-        // Add some default extensions
-        $template .= '
-            [ExtensionList]
-            extension=php_mysql.dll
-            extension=php_mysqli.dll
-            extension=php_mbstring.dll
-            extension=php_gd2.dll
-            extension=php_gettext.dll
-            extension=php_curl.dll
-            extension=php_exif.dll
-            extension=php_xmlrpc.dll
-            extension=php_openssl.dll
-            extension=php_soap.dll
-            extension=php_pdo_mysql.dll
-            extension=php_pdo_sqlite.dll
-            extension=php_imap.dll
-            extension=php_tidy.dll
-            extension=php_curl.dll';
 
         return $template;
     }
