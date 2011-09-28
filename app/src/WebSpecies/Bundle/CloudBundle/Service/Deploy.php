@@ -50,13 +50,17 @@ class Deploy
      *
      * @throws \Exception|\InvalidArgumentException|\RuntimeException
      * @param \WebSpecies\Bundle\CloudBundle\Entity\App $app
-     * @param string $folder
+     * @param string|null $folder
      * @return string
      */
-    public function deploy(App $app, $folder)
+    public function deploy(App $app, $folder = null)
     {
         if (!$app->isLive()) {
             throw new \InvalidArgumentException('App cannot be deployed, because it\'s not live yet');
+        }
+
+        if (!$folder) {
+            $folder = $this->getAppFolder($app);
         }
         
         $container = $app->getContainer();

@@ -29,6 +29,8 @@ class App
      */
     private $location;
 
+    private $production;
+
     public function setName($name)
     {
         $this->name = $name;
@@ -77,5 +79,15 @@ class App
     public function getLocation()
     {
         return $this->location;
+    }
+
+    public function setProduction($production)
+    {
+        $this->production = $production;
+    }
+
+    public function getProduction()
+    {
+        return $this->production;
     }
 }

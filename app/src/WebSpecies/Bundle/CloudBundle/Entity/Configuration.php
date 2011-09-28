@@ -34,6 +34,11 @@ class Configuration
     private $id;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $production = false;
+
+    /**
      * @ORM\Column(type="string", length=100)
      */
     private $php_version = self::PHP_53;
@@ -76,6 +81,16 @@ class Configuration
     public function getLocation()
     {
         return $this->location;
+    }
+
+    public function setProduction($production)
+    {
+        $this->production = $production;
+    }
+
+    public function isProduction()
+    {
+        return $this->production;
     }
 
     /**

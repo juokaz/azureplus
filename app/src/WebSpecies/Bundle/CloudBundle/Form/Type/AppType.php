@@ -33,6 +33,14 @@ class AppType extends AbstractType
                     Configuration::LOCATION_SOUTHEAST_ASIA => 'Southeast Asia - Singapore',
                 )
             ));
+        } else {
+            $builder->add('production', 'choice', array(
+                'label' => 'Mode',
+                'choices' => array(
+                    true => 'Production',
+                    false => 'Development',
+                )
+            ));
         }
 
         $builder->add('php_version', 'choice', array(
@@ -55,6 +63,8 @@ class AppType extends AbstractType
         if (!$this->edit) {
             $app->setName($model->getName());
             $app->getConfiguration()->setLocation($model->getLocation());
+        } else {
+            $app->getConfiguration()->setProduction($model->getProduction());
         }
 
         $app->getConfiguration()->setAppRoot($model->getAppRoot());
@@ -72,7 +82,8 @@ class AppType extends AbstractType
         $model->setAppRoot($app->getConfiguration()->getAppRoot());
         $model->setPhpVersion($app->getConfiguration()->getPhpVersion());
         $model->setLocation($app->getConfiguration()->getLocation());
-
+        $model->setProduction($app->getConfiguration()->isProduction());
+        
         $model->setGitRepository($app->getSource()->getGitRepository());
 
         return $model;
