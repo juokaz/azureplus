@@ -2,7 +2,7 @@
 ECHO Starting PHP Installation >> log.txt
 
 REM Clear existing FastCGI mappers
-%windir%\system32\inetsrv\appcmd clear config /section:system.webServer/fastCGI 
+%windir%\system32\inetsrv\appcmd clear config /section:system.webServer/fastCGI >> log.txt 2>>err.txt
 
 REM PHP 5.2 settings
 ECHO Setting PHP 5.2 Configuration >> log.txt
