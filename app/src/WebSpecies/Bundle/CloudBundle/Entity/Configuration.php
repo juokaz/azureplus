@@ -34,6 +34,11 @@ class Configuration
     private $id;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $production = false;
+
+    /**
      * @ORM\Column(type="string", length=100)
      */
     private $php_version = self::PHP_53;
@@ -78,6 +83,16 @@ class Configuration
         return $this->location;
     }
 
+    public function setProduction($production)
+    {
+        $this->production = $production;
+    }
+
+    public function isProduction()
+    {
+        return $this->production;
+    }
+
     /**
      * @return string
      */
@@ -108,23 +123,5 @@ class Configuration
         }
 
         return substr($this->app_root, 0, $split);
-    }
-
-    public function getPhpRoot()
-    {
-        if (!$this->php_version) {
-            throw new \RuntimeException('PHP version is not set');
-        }
-
-        $root = 'D:\Program Files (x86)\PHP\%s\php-cgi.exe';
-
-        switch ($this->php_version) {
-            case self::PHP_52:
-                    return sprintf($root, 'v5.2');
-                break;
-            case self::PHP_53:
-                    return sprintf($root, 'v5.3');
-                break;
-        }
     }
 }

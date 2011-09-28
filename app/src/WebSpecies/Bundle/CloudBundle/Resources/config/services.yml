@@ -11,11 +11,13 @@ parameters:
     cloud.service.storage.class: WebSpecies\Bundle\CloudBundle\Service\Internal\Storage
     cloud.service.azure.class: WebSpecies\Bundle\CloudBundle\Service\Internal\Azure
     cloud.service.database.class: WebSpecies\Bundle\CloudBundle\Service\Internal\Database
+    cloud.service.packager.class: WebSpecies\Bundle\CloudBundle\Service\Internal\Packager
 
     deploy_template: %kernel.root_dir%/../src/WebSpecies/Bundle/CloudBundle/Resources/data/deploy.php
 
     cloud_app_file: app.zip
     cloud_web_config: %kernel.root_dir%/../src/WebSpecies/Bundle/CloudBundle/Resources/data/web.config
+    cloud_php_config: %kernel.root_dir%/../src/WebSpecies/Bundle/CloudBundle/Resources/data/php/
 
     base_collection: base
     base_file: base.cspkg
@@ -38,7 +40,7 @@ parameters:
 services:
     cloud.service.deploy:
         class: %cloud.service.deploy.class%
-        arguments: [@cloud.service.storage, %cloud_app_file%, @filesystem, %kernel.cache_dir%, @cloud.service.source.git, %cloud_web_config%, %deploy_template%]
+        arguments: [@cloud.service.storage, %cloud_app_file%, @cloud.service.packager, @filesystem, %kernel.cache_dir%, @cloud.service.source.git, %deploy_template%]
         
     cloud.service.storage:
         public: false
@@ -62,6 +64,10 @@ services:
     cloud.service.manager:
         class: %cloud.service.manager.class%
         arguments: [@cloud.service.apps, @cloud.manager.app, @cloud.manager.user]
+
+    cloud.service.packager:
+        class: %cloud.service.packager.class%
+        arguments: [%cloud_web_config%, %cloud_php_config%]
 
     cloud.service.source.git:
         public: false

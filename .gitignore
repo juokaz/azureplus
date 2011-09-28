@@ -1,4 +1,5 @@
 hostingapp/Deployment/Websites/Sample/*
 hostingapp/ServiceConfiguration.cscfg
+hostingapp/Deployment/php
 log.txt
 *.cspkg
