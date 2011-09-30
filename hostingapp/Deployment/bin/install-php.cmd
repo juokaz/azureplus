@@ -30,3 +30,5 @@ ECHO Setting PHP 5.3 Configuration >> log.txt
 %windir%\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi /"[fullPath='%%RoleRoot%%\approot\php\v5.3\php-cgi.exe']".monitorChangesTo:"%RoleRoot%\sitesroot\0\php.ini" /commit:apphost  >> log.txt 2>>err.txt
 
 ECHO Completed PHP Installation >> log.txt
+
+EXIT /B 0
