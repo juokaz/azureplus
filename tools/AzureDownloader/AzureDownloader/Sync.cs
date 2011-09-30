@@ -20,7 +20,6 @@ namespace AzureDownloader
         private Thread syncingThread;
 
         private String currentEtag;
-        private String roleroot;
 
         public Sync(EventLog log, String url, String directory, int interval)
         {
@@ -28,7 +27,6 @@ namespace AzureDownloader
             this.unpackDirectory = directory;
             this.interval = interval;
             this.log = log;
-            this.roleroot = Environment.GetEnvironmentVariable("RoleRoot");
         }
 
         public void Start()
@@ -88,11 +86,6 @@ namespace AzureDownloader
                         }
                     }
                 }
-
-                // replace ROLEROOT placeholder in web.config, used for php.exe path
-                string web_config = File.ReadAllText(folder + "web.config");
-                web_config.Replace("%ROLEROOT%", roleroot);
-                File.WriteAllText(folder + "web.config", web_config);
 
                 // sync extracted folder and website directory
                 SyncFolders(folder, unpackDirectory);
