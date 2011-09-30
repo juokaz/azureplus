@@ -50,6 +50,12 @@ class App
     private $status;
 
     /**
+     * @ORM\OneToOne(targetEntity="WebSpecies\Bundle\CloudBundle\Entity\Server")
+     * @ORM\JoinColumn(name="server_id", referencedColumnName="id", nullable=true)
+     */
+    private $server;
+
+    /**
      * @ORM\OneToOne(targetEntity="WebSpecies\Bundle\CloudBundle\Entity\Configuration", cascade={"all"})
      * @ORM\JoinColumn(name="config_id", referencedColumnName="id")
      */
