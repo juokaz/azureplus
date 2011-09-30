@@ -1,4 +1,9 @@
 @echo off
+ECHO Adding RoleRoot to environment variables >> log.txt
+
+REM use powershell to add to values
+powershell -command [Environment]::SetEnvironmentVariable('RoleRoot', '%RoleRoot%', 'Machine')
+
 ECHO Starting PHP Installation >> log.txt
 
 REM Clear existing FastCGI mappers
