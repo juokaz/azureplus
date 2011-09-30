@@ -90,6 +90,9 @@ namespace AzureDownloader
                 SyncFolders(folder, unpackDirectory);
 
                 currentEtag = Etag;
+
+                // delete temporary folder
+                Directory.Delete(folder, true);
             }
         }
 
