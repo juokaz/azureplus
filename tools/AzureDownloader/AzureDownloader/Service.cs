@@ -41,6 +41,7 @@ namespace AzureDownloader
             var virtualRoot = applicationRoot.VirtualDirectories.Where(v => v.Path == "/").Single();
 
             String folder = virtualRoot.PhysicalPath;
+           
             String source = "Logger";
             String log = "Azure";
 

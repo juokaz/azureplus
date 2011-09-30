@@ -51,22 +51,23 @@ namespace AzureDownloader
 
         public void SyncAll()
         {
-            log.WriteEntry("Checking");
-
             WebRequest req = HttpWebRequest.Create(url);
             req.Method = "HEAD";
 
             String Etag;
-            using (HttpWebResponse resp = (HttpWebResponse)req.GetResponse())
+            try
             {
-                // probably resource doesn't exist yet
-                if (resp.StatusCode != HttpStatusCode.OK) {
-                    log.WriteEntry("No file to download");
-                    return;
+                using (WebResponse resp = req.GetResponse())
+                {
+                    // get package etag
+                    Etag = resp.Headers.Get("ETag");
                 }
-
-                // get package etag
-                Etag = resp.Headers.Get("ETag");
+            }
+            catch (Exception e)
+            {
+                // probably blob doesn't exist yet
+                log.WriteEntry(e.Message, EventLogEntryType.Error);
+                return;
             }
 
             if (currentEtag != Etag)
@@ -76,17 +77,25 @@ namespace AzureDownloader
 
                 WebRequest req2 = WebRequest.Create(url);
 
-                using (WebResponse resp = req2.GetResponse())
+                try
                 {
-                    byte[] data = ReadFully(resp.GetResponseStream());
-
-                    using (ZipFile zip1 = ZipFile.Read(new MemoryStream(data)))
+                    using (WebResponse resp = req2.GetResponse())
                     {
-                        foreach (ZipEntry e in zip1)
+                        byte[] data = ReadFully(resp.GetResponseStream());
+
+                        using (ZipFile zip1 = ZipFile.Read(new MemoryStream(data)))
                         {
-                            e.Extract(folder, ExtractExistingFileAction.OverwriteSilently);
+                            foreach (ZipEntry e in zip1)
+                            {
+                                e.Extract(folder, ExtractExistingFileAction.OverwriteSilently);
+                            }
                         }
                     }
+                }
+                catch (Exception e)
+                {
+                    log.WriteEntry(e.Message, EventLogEntryType.Error);
+                    return;
                 }
 
                 // sync extracted folder and website directory
