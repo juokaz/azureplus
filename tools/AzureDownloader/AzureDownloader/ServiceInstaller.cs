@@ -25,8 +25,17 @@ namespace AzureDownloader
             //must be the same as what was set in Program's constructor
             serviceInstaller.ServiceName = "Azure Downloader";
 
+            // auto start the service
+            this.AfterInstall += new InstallEventHandler(ServiceInstaller_AfterInstall);
+
             this.Installers.Add(processInstaller);
             this.Installers.Add(serviceInstaller);
+        }
+
+        void ServiceInstaller_AfterInstall(object sender, InstallEventArgs e)
+        {
+            ServiceController sc = new ServiceController("Azure Downloader");
+            sc.Start();
         }
     }
 }
