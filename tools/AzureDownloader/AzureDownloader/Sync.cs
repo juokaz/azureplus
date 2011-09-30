@@ -5,6 +5,7 @@ using System.Text;
 using Ionic.Zip;
 using System.IO;
 using System.Net;
+using System.Threading;
 
 namespace AzureDownloader
 {
@@ -12,23 +13,50 @@ namespace AzureDownloader
     {
         private String url;
         private String unpackDirectory;
+        private int interval;
+
+        private Thread syncingThread;
 
         private String currentEtag;
 
-        public Sync(String url, String directory)
+        public Sync(String url, String directory, int interval)
         {
             this.url = url;
             this.unpackDirectory = directory;
+            this.interval = interval;
         }
 
-        public void Run()
+        public void Start()
         {
+            syncingThread = new Thread(new ThreadStart(() =>
+            {
+                while (true)
+                {
+                    SyncAll();
+                    Thread.Sleep(interval);
+                }
+            }));
+            syncingThread.Start();
+        }
+
+        public void Stop()
+        {
+            syncingThread.Abort();
+        }
+
+        public void SyncAll()
+        {
+            Console.WriteLine("Checking");
+
             WebRequest req = HttpWebRequest.Create(url);
             req.Method = "HEAD";
-            WebResponse resp = req.GetResponse();
 
-            // get package etag
-            String Etag = resp.Headers.Get("ETag");
+            String Etag;
+            using (WebResponse resp = req.GetResponse())
+            {
+                // get package etag
+                Etag = resp.Headers.Get("ETag");
+            }
 
             if (currentEtag != Etag)
             {
@@ -36,19 +64,23 @@ namespace AzureDownloader
                 String folder = GetTempFolder();
 
                 WebRequest req2 = WebRequest.Create(url);
-                WebResponse resp2 = req2.GetResponse();
 
-                byte[] data = ReadFully(resp2.GetResponseStream());
-
-                using (ZipFile zip1 = ZipFile.Read(new MemoryStream(data)))
+                using (WebResponse resp = req2.GetResponse())
                 {
-                    foreach (ZipEntry e in zip1)
+                    byte[] data = ReadFully(resp.GetResponseStream());
+
+                    using (ZipFile zip1 = ZipFile.Read(new MemoryStream(data)))
                     {
-                        e.Extract(folder, ExtractExistingFileAction.OverwriteSilently);
+                        foreach (ZipEntry e in zip1)
+                        {
+                            e.Extract(folder, ExtractExistingFileAction.OverwriteSilently);
+                        }
                     }
                 }
 
                 SyncFolders(folder, unpackDirectory);
+
+                currentEtag = Etag;
             }
         }
 
