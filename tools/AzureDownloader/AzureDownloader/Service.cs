@@ -31,15 +31,22 @@ namespace AzureDownloader
                 throw new Exception("This is not running on Windows Azure");
             }
 
+            // url to fetch and how often
             String url = RoleEnvironment.GetConfigurationSettingValue("APP_URL");
             int interval = Convert.ToInt32(RoleEnvironment.GetConfigurationSettingValue("APP_INTERVAL"));
 
+            // site configured in IIS on Azure, should be only one
             var serverManager = new ServerManager();
-            var site = serverManager.Sites.ToArray()[0];
+            var site = serverManager.Sites.First();
 
+            // this is needed so IIS could access ENV properties like RoleRoot
+            var applicationPool = serverManager.ApplicationPools[site.Applications.First().ApplicationPoolName];
+            applicationPool.ProcessModel.LoadUserProfile = true;
+            serverManager.CommitChanges();
+
+            // application folder
             var applicationRoot = site.Applications.Where(a => a.Path == "/").Single();
             var virtualRoot = applicationRoot.VirtualDirectories.Where(v => v.Path == "/").Single();
-
             String folder = virtualRoot.PhysicalPath;
            
             String source = "Logger";
