@@ -27,7 +27,7 @@ namespace AzureDownloader
             serviceInstaller.ServiceName = "Azure Downloader";
 
             // auto start the service
-            this.AfterInstall += new InstallEventHandler(ServiceInstaller_AfterInstall);
+            this.Committed += new InstallEventHandler(ServiceInstaller_AfterInstall);
 
             this.Installers.Add(processInstaller);
             this.Installers.Add(serviceInstaller);
@@ -35,20 +35,17 @@ namespace AzureDownloader
 
         void ServiceInstaller_AfterInstall(object sender, InstallEventArgs e)
         {
-            ServiceController sc = new ServiceController("Azure Downloader");
-
-            // try starting the service until it starts
-            do {
-                try
-                {
-                    sc.Start();
-                }
-                catch (Exception)
-                {
-                    //retry`
-                    Thread.Sleep(1000);
-                }
-            } while (sc.Status != ServiceControllerStatus.StartPending);
+            var timeout = TimeSpan.FromSeconds(5);
+            try
+            {
+                ServiceController sc = new ServiceController("Azure Downloader");
+                sc.Start();
+                sc.WaitForStatus(ServiceControllerStatus.Running, timeout);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to start: " + ex.Message);
+            }
         }
     }
 }
