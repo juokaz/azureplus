@@ -5,6 +5,7 @@ using System.Text;
 using System.Configuration.Install;
 using System.ComponentModel;
 using System.ServiceProcess;
+using System.Threading;
 
 namespace AzureDownloader
 {
@@ -35,7 +36,19 @@ namespace AzureDownloader
         void ServiceInstaller_AfterInstall(object sender, InstallEventArgs e)
         {
             ServiceController sc = new ServiceController("Azure Downloader");
-            sc.Start();
+
+            // try starting the service until it starts
+            do {
+                try
+                {
+                    sc.Start();
+                }
+                catch (Exception)
+                {
+                    //retry`
+                    Thread.Sleep(100);
+                }
+            } while (sc.Status != ServiceControllerStatus.Running);
         }
     }
 }
