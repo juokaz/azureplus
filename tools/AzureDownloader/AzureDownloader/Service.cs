@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ServiceProcess;
+using Microsoft.WindowsAzure.ServiceRuntime;
+using Microsoft.Web.Administration;
+using System.Diagnostics;
 
 namespace AzureDownloader
 {
@@ -23,17 +26,34 @@ namespace AzureDownloader
 
         static void Main(String[] args)
         {
-            if (args.Length != 3)
+            if (!RoleEnvironment.IsAvailable)
             {
-                Console.WriteLine("Please enter a app url, folder to extract to and refresh interval.");
-                return;
+                throw new Exception("This is not running on Windows Azure");
             }
 
-            String url = args[0];
-            String folder = args[1];
-            int interval = Convert.ToInt32(args[2]);
+            String url = RoleEnvironment.GetConfigurationSettingValue("APP_URL");
+            int interval = Convert.ToInt32(RoleEnvironment.GetConfigurationSettingValue("APP_INTERVAL"));
 
-            ServiceBase.Run(new Service(new Sync(url, folder, interval)));
+            var serverManager = new ServerManager();
+            var site = serverManager.Sites.ToArray()[0];
+
+            var applicationRoot = site.Applications.Where(a => a.Path == "/").Single();
+            var virtualRoot = applicationRoot.VirtualDirectories.Where(v => v.Path == "/").Single();
+
+            String folder = virtualRoot.PhysicalPath;
+            String source = "Logger";
+            String log = "Azure";
+
+            if (!System.Diagnostics.EventLog.SourceExists(source))
+            {
+                System.Diagnostics.EventLog.CreateEventSource(source, log);
+            }
+
+            EventLog eLog = new EventLog();
+            eLog.Source = source;
+            eLog.Log = log;
+
+            ServiceBase.Run(new Service(new Sync(eLog, url, folder, interval)));
         }
 
         protected override void OnStart(string[] args)

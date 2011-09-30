@@ -18,6 +18,7 @@
 		</Sites>
 		<ConfigurationSettings>
 			<Setting name="APP_URL" />
+			<Setting name="APP_INTERVAL" />
 		</ConfigurationSettings>
 	</WebRole>
 </ServiceDefinition>

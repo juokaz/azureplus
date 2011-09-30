@@ -6,6 +6,7 @@ using Ionic.Zip;
 using System.IO;
 using System.Net;
 using System.Threading;
+using System.Diagnostics;
 
 namespace AzureDownloader
 {
@@ -14,16 +15,18 @@ namespace AzureDownloader
         private String url;
         private String unpackDirectory;
         private int interval;
+        private EventLog log;
 
         private Thread syncingThread;
 
         private String currentEtag;
 
-        public Sync(String url, String directory, int interval)
+        public Sync(EventLog log, String url, String directory, int interval)
         {
             this.url = url;
             this.unpackDirectory = directory;
             this.interval = interval;
+            this.log = log;
         }
 
         public void Start()
@@ -46,21 +49,27 @@ namespace AzureDownloader
 
         public void SyncAll()
         {
-            Console.WriteLine("Checking");
+            log.WriteEntry("Checking");
 
             WebRequest req = HttpWebRequest.Create(url);
             req.Method = "HEAD";
 
             String Etag;
-            using (WebResponse resp = req.GetResponse())
+            using (HttpWebResponse resp = (HttpWebResponse)req.GetResponse())
             {
+                // probably resource doesn't exist yet
+                if (resp.StatusCode != HttpStatusCode.OK) {
+                    log.WriteEntry("No file to download");
+                    return;
+                }
+
                 // get package etag
                 Etag = resp.Headers.Get("ETag");
             }
 
             if (currentEtag != Etag)
             {
-                Console.WriteLine("New etag: " + Etag);
+                log.WriteEntry("New etag: " + Etag);
                 String folder = GetTempFolder();
 
                 WebRequest req2 = WebRequest.Create(url);

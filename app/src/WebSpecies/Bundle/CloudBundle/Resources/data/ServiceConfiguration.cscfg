@@ -3,6 +3,7 @@
   <Role name="Deployment">
     <ConfigurationSettings>
       <Setting name="APP_URL" value="%APP_URL%" />
+      <Setting name="APP_INTERVAL" value="5000" />
     </ConfigurationSettings>
     <Instances count="1" />
     <Certificates />
