@@ -46,9 +46,9 @@ namespace AzureDownloader
                 catch (Exception)
                 {
                     //retry`
-                    Thread.Sleep(100);
+                    Thread.Sleep(1000);
                 }
-            } while (sc.Status != ServiceControllerStatus.Running);
+            } while (sc.Status != ServiceControllerStatus.StartPending);
         }
     }
 }

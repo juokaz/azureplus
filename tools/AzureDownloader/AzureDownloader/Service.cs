@@ -30,7 +30,6 @@ namespace AzureDownloader
             {
                 throw new Exception("This is not running on Windows Azure");
             }
-
             // url to fetch and how often
             String url = RoleEnvironment.GetConfigurationSettingValue("APP_URL");
             int interval = Convert.ToInt32(RoleEnvironment.GetConfigurationSettingValue("APP_INTERVAL"));
@@ -61,20 +60,19 @@ namespace AzureDownloader
             eLog.Source = source;
             eLog.Log = log;
 
-            ServiceBase.Run(new Service(new Sync(eLog, url, folder, interval)));
+            var sync = new Sync(eLog, url, folder, interval);
+            var service = new Service(sync);
+
+            ServiceBase.Run(service);
         }
 
         protected override void OnStart(string[] args)
         {
-            base.OnStart(args);
-
             sync.Start();
         }
 
         protected override void OnStop()
         {
-            base.OnStop();
-
             sync.Stop();
         }
     }
