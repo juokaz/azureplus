@@ -4,6 +4,9 @@ ECHO Adding RoleRoot to environment variables >> log.txt
 REM use powershell to add to values
 powershell -command [Environment]::SetEnvironmentVariable('RoleRoot', '%RoleRoot%', 'Machine')
 
+REM this is needed so IIS could access ENV properties like RoleRoot
+%windir%\system32\inetsrv\appcmd set config -section:applicationPools -applicationPoolDefaults.processModel.loadUserProfile:true>> log.txt 2>>err.txt
+
 ECHO Starting PHP Installation >> log.txt
 
 REM Clear existing FastCGI mappers

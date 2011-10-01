@@ -36,17 +36,6 @@ namespace AzureDownloader
                 throw new Exception("This is not running on Windows Azure");
             }
 
-            // site configured in IIS on Azure, should be only one
-            var serverManager = new ServerManager();
-            var site = serverManager.Sites.First();
-
-            // this is needed so IIS could access ENV properties like RoleRoot
-            var applicationPool = serverManager.ApplicationPools[site.Applications.First().ApplicationPoolName];
-            applicationPool.ProcessModel.LoadUserProfile = true;
-            serverManager.CommitChanges();
-
-            eLog.WriteEntry("Enabled LoadUserProfile setting");
-
             // run the service
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[] {
