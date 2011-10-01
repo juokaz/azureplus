@@ -56,8 +56,6 @@ namespace AzureDownloader
                 var serverManager = new ServerManager();
                 var site = serverManager.Sites.First();
 
-                EventLog.WriteEntry("Enabled LoadUserProfile setting");
-
                 // application folder
                 var applicationRoot = site.Applications.Where(a => a.Path == "/").Single();
                 var virtualRoot = applicationRoot.VirtualDirectories.Where(v => v.Path == "/").Single();
