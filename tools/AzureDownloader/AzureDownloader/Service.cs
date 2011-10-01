@@ -6,19 +6,19 @@ using System.ServiceProcess;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.Web.Administration;
 using System.Diagnostics;
+using System.Threading;
 
 namespace AzureDownloader
 {
     class Service : ServiceBase
     {
-        Sync sync;
+        private Thread syncingThread;
+        public static String name = "Azure Downloader";
 
-        public Service(Sync sync)
+        public Service()
         {
-            this.sync = sync;
-
-            this.ServiceName = "Azure Downloader";
-            this.EventLog.Log = "Azure";
+            this.ServiceName = Service.name;
+            this.EventLog.Log = "Application";
 
             this.CanShutdown = true;
             this.CanStop = true;
@@ -35,9 +35,6 @@ namespace AzureDownloader
                 eLog.WriteEntry("Service cannot be started, because it's not running on Azure", EventLogEntryType.Error); 
                 throw new Exception("This is not running on Windows Azure");
             }
-            // url to fetch and how often
-            String url = RoleEnvironment.GetConfigurationSettingValue("APP_URL");
-            int interval = Convert.ToInt32(RoleEnvironment.GetConfigurationSettingValue("APP_INTERVAL"));
 
             // site configured in IIS on Azure, should be only one
             var serverManager = new ServerManager();
@@ -48,39 +45,57 @@ namespace AzureDownloader
             applicationPool.ProcessModel.LoadUserProfile = true;
             serverManager.CommitChanges();
 
-            eLog.WriteEntry("Enabled LoadUserProfile setting"); 
+            eLog.WriteEntry("Enabled LoadUserProfile setting");
 
-            // application folder
-            var applicationRoot = site.Applications.Where(a => a.Path == "/").Single();
-            var virtualRoot = applicationRoot.VirtualDirectories.Where(v => v.Path == "/").Single();
-            String folder = virtualRoot.PhysicalPath;
-
-            eLog.WriteEntry("Sync with URL \"" + url + "\", directory \"" + folder + "\" and interval \"" + interval + "\"");
-
-            var sync = new Sync(eLog, url, folder, interval);
-            var service = new Service(sync);
-
-            ServiceBase.Run(service);
+            // run the service
+            ServiceBase[] ServicesToRun;
+            ServicesToRun = new ServiceBase[] {
+                new Service()
+            };
+            ServiceBase.Run(ServicesToRun);
         }
 
         protected override void OnStart(string[] args)
         {
-            this.EventLog.WriteEntry("Starting");
-            sync.Start();
-            this.EventLog.WriteEntry("Started");
+            syncingThread = new Thread(new ThreadStart(() =>
+            {
+                // url to fetch and how often
+                String url = RoleEnvironment.GetConfigurationSettingValue("APP_URL");
+                int interval = Convert.ToInt32(RoleEnvironment.GetConfigurationSettingValue("APP_INTERVAL"));
+
+                // site configured in IIS on Azure, should be only one
+                var serverManager = new ServerManager();
+                var site = serverManager.Sites.First();
+
+                EventLog.WriteEntry("Enabled LoadUserProfile setting");
+
+                // application folder
+                var applicationRoot = site.Applications.Where(a => a.Path == "/").Single();
+                var virtualRoot = applicationRoot.VirtualDirectories.Where(v => v.Path == "/").Single();
+                String folder = virtualRoot.PhysicalPath;
+
+                EventLog.WriteEntry("Sync with URL \"" + url + "\", directory \"" + folder + "\" and interval \"" + interval + "\"");
+
+                var sync = new Sync(EventLog, url, folder, interval);
+
+                while (true)
+                {
+                    sync.SyncAll();
+                    Thread.Sleep(interval);
+                }
+            }));
+            syncingThread.Start();
         }
 
         protected override void OnStop()
         {
-            this.EventLog.WriteEntry("Stopping");
-            sync.Stop();
-            this.EventLog.WriteEntry("Stopped");
+            syncingThread.Abort();
         }
 
         private static EventLog SetupLog()
         {
-            String source = "Azure Downloader";
-            String log = "Azure";
+            String source = Service.name;
+            String log = "Application";
 
             if (!System.Diagnostics.EventLog.SourceExists(source))
             {

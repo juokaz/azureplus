@@ -20,11 +20,11 @@ namespace AzureDownloader
             //set the privileges
             processInstaller.Account = ServiceAccount.LocalSystem;
 
-            serviceInstaller.DisplayName = "Azure Downloader";
+            serviceInstaller.DisplayName = Service.name;
             serviceInstaller.StartType = ServiceStartMode.Automatic;
 
             //must be the same as what was set in Program's constructor
-            serviceInstaller.ServiceName = "Azure Downloader";
+            serviceInstaller.ServiceName = Service.name;
 
             this.Installers.Add(processInstaller);
             this.Installers.Add(serviceInstaller);
