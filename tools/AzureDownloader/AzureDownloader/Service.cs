@@ -71,7 +71,7 @@ namespace AzureDownloader
                 }
                 catch (Exception e)
                 {
-                    EventLog.WriteEntry("Configuration failed: " + e.Message, EventLogEntryType.Error);
+                    EventLog.WriteEntry("Configuration failed: " + e.ToString(), EventLogEntryType.Error);
                     throw e;
                 }
 
