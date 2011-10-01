@@ -26,8 +26,11 @@ namespace AzureDownloader
 
         static void Main(String[] args)
         {
+            var eLog = SetupLog();
+
             if (!RoleEnvironment.IsAvailable)
             {
+                eLog.WriteEntry("Service cannot be started, because it's not running on Azure", EventLogEntryType.Error); 
                 throw new Exception("This is not running on Windows Azure");
             }
             // url to fetch and how often
@@ -47,18 +50,6 @@ namespace AzureDownloader
             var applicationRoot = site.Applications.Where(a => a.Path == "/").Single();
             var virtualRoot = applicationRoot.VirtualDirectories.Where(v => v.Path == "/").Single();
             String folder = virtualRoot.PhysicalPath;
-           
-            String source = "Logger";
-            String log = "Azure";
-
-            if (!System.Diagnostics.EventLog.SourceExists(source))
-            {
-                System.Diagnostics.EventLog.CreateEventSource(source, log);
-            }
-
-            EventLog eLog = new EventLog();
-            eLog.Source = source;
-            eLog.Log = log;
 
             var sync = new Sync(eLog, url, folder, interval);
             var service = new Service(sync);
@@ -74,6 +65,23 @@ namespace AzureDownloader
         protected override void OnStop()
         {
             sync.Stop();
+        }
+
+        private static EventLog SetupLog()
+        {
+            String source = "Logger";
+            String log = "Azure";
+
+            if (!System.Diagnostics.EventLog.SourceExists(source))
+            {
+                System.Diagnostics.EventLog.CreateEventSource(source, log);
+            }
+
+            EventLog eLog = new EventLog();
+            eLog.Source = source;
+            eLog.Log = log;
+
+            return eLog;
         }
     }
 }
