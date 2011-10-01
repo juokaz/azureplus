@@ -48,6 +48,8 @@ namespace AzureDownloader
         {
             syncingThread = new Thread(new ThreadStart(() =>
             {
+                EventLog.WriteEntry("Configuring the Sync process");
+
                 // url to fetch and how often
                 String url = RoleEnvironment.GetConfigurationSettingValue("APP_URL");
                 int interval = Convert.ToInt32(RoleEnvironment.GetConfigurationSettingValue("APP_INTERVAL"));
@@ -61,7 +63,7 @@ namespace AzureDownloader
                 var virtualRoot = applicationRoot.VirtualDirectories.Where(v => v.Path == "/").Single();
                 String folder = virtualRoot.PhysicalPath;
 
-                EventLog.WriteEntry("Sync with URL \"" + url + "\", directory \"" + folder + "\" and interval \"" + interval + "\"");
+                EventLog.WriteEntry("Syncing with URL \"" + url + "\", directory \"" + folder + "\" and interval \"" + interval + "\"");
 
                 var sync = new Sync(EventLog, url, folder, interval);
 
