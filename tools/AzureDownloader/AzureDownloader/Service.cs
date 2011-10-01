@@ -76,7 +76,7 @@ namespace AzureDownloader
                         else
                         {
                             EventLog.WriteEntry("No sites in IIS, waiting", EventLogEntryType.Warning);
-                            Thread.Sleep(100);
+                            Thread.Sleep(500);
                         }
                     }
 
