@@ -18,7 +18,7 @@ namespace AzureDownloader
             this.sync = sync;
 
             this.ServiceName = "Azure Downloader";
-            this.EventLog.Log = "Application";
+            this.EventLog.Log = "Azure";
 
             this.CanShutdown = true;
             this.CanStop = true;
@@ -27,6 +27,8 @@ namespace AzureDownloader
         static void Main(String[] args)
         {
             var eLog = SetupLog();
+
+            eLog.WriteEntry("Starting Service setup"); 
 
             if (!RoleEnvironment.IsAvailable)
             {
@@ -46,10 +48,14 @@ namespace AzureDownloader
             applicationPool.ProcessModel.LoadUserProfile = true;
             serverManager.CommitChanges();
 
+            eLog.WriteEntry("Enabled LoadUserProfile setting"); 
+
             // application folder
             var applicationRoot = site.Applications.Where(a => a.Path == "/").Single();
             var virtualRoot = applicationRoot.VirtualDirectories.Where(v => v.Path == "/").Single();
             String folder = virtualRoot.PhysicalPath;
+
+            eLog.WriteEntry("Sync with URL \"" + url + "\", directory \"" + folder + "\" and interval \"" + interval + "\"");
 
             var sync = new Sync(eLog, url, folder, interval);
             var service = new Service(sync);
@@ -59,17 +65,21 @@ namespace AzureDownloader
 
         protected override void OnStart(string[] args)
         {
+            this.EventLog.WriteEntry("Starting");
             sync.Start();
+            this.EventLog.WriteEntry("Started");
         }
 
         protected override void OnStop()
         {
+            this.EventLog.WriteEntry("Stopping");
             sync.Stop();
+            this.EventLog.WriteEntry("Stopped");
         }
 
         private static EventLog SetupLog()
         {
-            String source = "Logger";
+            String source = "Azure Downloader";
             String log = "Azure";
 
             if (!System.Diagnostics.EventLog.SourceExists(source))

@@ -27,8 +27,6 @@ namespace AzureDownloader
             this.unpackDirectory = directory;
             this.interval = interval;
             this.log = log;
-
-            log.WriteEntry("Create Sync handler with URL \"" + url + "\", directory \"" + directory + "\" and interval \"" + interval + "\"");
         }
 
         public void Start()
