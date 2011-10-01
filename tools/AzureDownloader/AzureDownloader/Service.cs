@@ -50,18 +50,30 @@ namespace AzureDownloader
             {
                 EventLog.WriteEntry("Configuring the Sync process");
 
-                // url to fetch and how often
-                String url = RoleEnvironment.GetConfigurationSettingValue("APP_URL");
-                int interval = Convert.ToInt32(RoleEnvironment.GetConfigurationSettingValue("APP_INTERVAL"));
+                // values required for Sync service
+                String url, folder;
+                int interval;
 
-                // site configured in IIS on Azure, should be only one
-                var serverManager = new ServerManager();
-                var site = serverManager.Sites.First();
+                try
+                {
+                    // url to fetch and how often
+                    url = RoleEnvironment.GetConfigurationSettingValue("APP_URL");
+                    interval = Convert.ToInt32(RoleEnvironment.GetConfigurationSettingValue("APP_INTERVAL"));
 
-                // application folder
-                var applicationRoot = site.Applications.Where(a => a.Path == "/").Single();
-                var virtualRoot = applicationRoot.VirtualDirectories.Where(v => v.Path == "/").Single();
-                String folder = virtualRoot.PhysicalPath;
+                    // site configured in IIS on Azure, should be only one
+                    var serverManager = new ServerManager();
+                    var site = serverManager.Sites.First();
+
+                    // application folder
+                    var applicationRoot = site.Applications.Where(a => a.Path == "/").Single();
+                    var virtualRoot = applicationRoot.VirtualDirectories.Where(v => v.Path == "/").Single();
+                    folder = virtualRoot.PhysicalPath;
+                }
+                catch (Exception e)
+                {
+                    EventLog.WriteEntry("Configuration failed: " + e.Message, EventLogEntryType.Error);
+                    throw e;
+                }
 
                 EventLog.WriteEntry("Syncing with URL \"" + url + "\", directory \"" + folder + "\" and interval \"" + interval + "\"");
 
