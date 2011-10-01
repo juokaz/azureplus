@@ -61,8 +61,24 @@ namespace AzureDownloader
                     interval = Convert.ToInt32(RoleEnvironment.GetConfigurationSettingValue("APP_INTERVAL"));
 
                     // site configured in IIS on Azure, should be only one
-                    var serverManager = new ServerManager();
-                    var site = serverManager.Sites.First();
+
+                    Site site = null;
+
+                    // keep tryign to get sites list and fetch a site
+                    while (site == null)
+                    {
+                        var serverManager = new ServerManager();
+
+                        if (serverManager.Sites.ToList().Count > 0)
+                        {
+                            site = serverManager.Sites.First();
+                        }
+                        else
+                        {
+                            EventLog.WriteEntry("No sites in IIS, waiting", EventLogEntryType.Warning);
+                            Thread.Sleep(100);
+                        }
+                    }
 
                     // application folder
                     var applicationRoot = site.Applications.Where(a => a.Path == "/").Single();
