@@ -6,18 +6,18 @@ using System.ServiceProcess;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.Web.Administration;
 using System.Diagnostics;
+using System.Threading;
 
 namespace AzureDownloader
 {
     class Service : ServiceBase
     {
-        Sync sync;
+        private Thread syncingThread;
+        public static String name = "Azure Downloader";
 
-        public Service(Sync sync)
+        public Service()
         {
-            this.sync = sync;
-
-            this.ServiceName = "Azure Downloader";
+            this.ServiceName = Service.name;
             this.EventLog.Log = "Application";
 
             this.CanShutdown = true;
@@ -26,30 +26,93 @@ namespace AzureDownloader
 
         static void Main(String[] args)
         {
+            var eLog = SetupLog();
+
+            eLog.WriteEntry("Starting Service setup"); 
+
             if (!RoleEnvironment.IsAvailable)
             {
+                eLog.WriteEntry("Service cannot be started, because it's not running on Azure", EventLogEntryType.Error); 
                 throw new Exception("This is not running on Windows Azure");
             }
-            // url to fetch and how often
-            String url = RoleEnvironment.GetConfigurationSettingValue("APP_URL");
-            int interval = Convert.ToInt32(RoleEnvironment.GetConfigurationSettingValue("APP_INTERVAL"));
 
-            // site configured in IIS on Azure, should be only one
-            var serverManager = new ServerManager();
-            var site = serverManager.Sites.First();
+            // run the service
+            ServiceBase[] ServicesToRun;
+            ServicesToRun = new ServiceBase[] {
+                new Service()
+            };
+            ServiceBase.Run(ServicesToRun);
+        }
 
-            // this is needed so IIS could access ENV properties like RoleRoot
-            var applicationPool = serverManager.ApplicationPools[site.Applications.First().ApplicationPoolName];
-            applicationPool.ProcessModel.LoadUserProfile = true;
-            serverManager.CommitChanges();
+        protected override void OnStart(string[] args)
+        {
+            syncingThread = new Thread(new ThreadStart(() =>
+            {
+                EventLog.WriteEntry("Configuring the Sync process");
 
-            // application folder
-            var applicationRoot = site.Applications.Where(a => a.Path == "/").Single();
-            var virtualRoot = applicationRoot.VirtualDirectories.Where(v => v.Path == "/").Single();
-            String folder = virtualRoot.PhysicalPath;
-           
-            String source = "Logger";
-            String log = "Azure";
+                // values required for Sync service
+                String url, folder;
+                int interval;
+
+                try
+                {
+                    // url to fetch and how often
+                    url = RoleEnvironment.GetConfigurationSettingValue("APP_URL");
+                    interval = Convert.ToInt32(RoleEnvironment.GetConfigurationSettingValue("APP_INTERVAL"));
+
+                    // site configured in IIS on Azure, should be only one
+
+                    Site site = null;
+
+                    // keep tryign to get sites list and fetch a site
+                    while (site == null)
+                    {
+                        var serverManager = new ServerManager();
+
+                        if (serverManager.Sites.ToList().Count > 0)
+                        {
+                            site = serverManager.Sites.First();
+                        }
+                        else
+                        {
+                            EventLog.WriteEntry("No sites in IIS, waiting", EventLogEntryType.Warning);
+                            Thread.Sleep(500);
+                        }
+                    }
+
+                    // application folder
+                    var applicationRoot = site.Applications.Where(a => a.Path == "/").Single();
+                    var virtualRoot = applicationRoot.VirtualDirectories.Where(v => v.Path == "/").Single();
+                    folder = virtualRoot.PhysicalPath;
+                }
+                catch (Exception e)
+                {
+                    EventLog.WriteEntry("Configuration failed: " + e.ToString(), EventLogEntryType.Error);
+                    throw e;
+                }
+
+                EventLog.WriteEntry("Syncing with URL \"" + url + "\", directory \"" + folder + "\" and interval \"" + interval + "\"");
+
+                var sync = new Sync(EventLog, url, folder, interval);
+
+                while (true)
+                {
+                    sync.SyncAll();
+                    Thread.Sleep(interval);
+                }
+            }));
+            syncingThread.Start();
+        }
+
+        protected override void OnStop()
+        {
+            syncingThread.Abort();
+        }
+
+        private static EventLog SetupLog()
+        {
+            String source = Service.name;
+            String log = "Application";
 
             if (!System.Diagnostics.EventLog.SourceExists(source))
             {
@@ -60,20 +123,7 @@ namespace AzureDownloader
             eLog.Source = source;
             eLog.Log = log;
 
-            var sync = new Sync(eLog, url, folder, interval);
-            var service = new Service(sync);
-
-            ServiceBase.Run(service);
-        }
-
-        protected override void OnStart(string[] args)
-        {
-            sync.Start();
-        }
-
-        protected override void OnStop()
-        {
-            sync.Stop();
+            return eLog;
         }
     }
 }

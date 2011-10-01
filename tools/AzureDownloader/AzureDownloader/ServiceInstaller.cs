@@ -20,32 +20,14 @@ namespace AzureDownloader
             //set the privileges
             processInstaller.Account = ServiceAccount.LocalSystem;
 
-            serviceInstaller.DisplayName = "Azure Downloader";
+            serviceInstaller.DisplayName = Service.name;
             serviceInstaller.StartType = ServiceStartMode.Automatic;
 
             //must be the same as what was set in Program's constructor
-            serviceInstaller.ServiceName = "Azure Downloader";
-
-            // auto start the service
-            this.Committed += new InstallEventHandler(ServiceInstaller_AfterInstall);
+            serviceInstaller.ServiceName = Service.name;
 
             this.Installers.Add(processInstaller);
             this.Installers.Add(serviceInstaller);
-        }
-
-        void ServiceInstaller_AfterInstall(object sender, InstallEventArgs e)
-        {
-            var timeout = TimeSpan.FromSeconds(5);
-            try
-            {
-                ServiceController sc = new ServiceController("Azure Downloader");
-                sc.Start();
-                sc.WaitForStatus(ServiceControllerStatus.Running, timeout);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Failed to start: " + ex.Message);
-            }
         }
     }
 }

@@ -17,8 +17,6 @@ namespace AzureDownloader
         private int interval;
         private EventLog log;
 
-        private Thread syncingThread;
-
         private String currentEtag;
 
         public Sync(EventLog log, String url, String directory, int interval)
@@ -27,26 +25,6 @@ namespace AzureDownloader
             this.unpackDirectory = directory;
             this.interval = interval;
             this.log = log;
-
-            log.WriteEntry("Create Sync handler with URL \"" + url + "\", directory \"" + directory + "\" and interval \"" + interval + "\"");
-        }
-
-        public void Start()
-        {
-            syncingThread = new Thread(new ThreadStart(() =>
-            {
-                while (true)
-                {
-                    SyncAll();
-                    Thread.Sleep(interval);
-                }
-            }));
-            syncingThread.Start();
-        }
-
-        public void Stop()
-        {
-            syncingThread.Abort();
         }
 
         public void SyncAll()
