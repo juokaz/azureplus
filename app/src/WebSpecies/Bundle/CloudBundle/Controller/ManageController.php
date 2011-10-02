@@ -66,8 +66,12 @@ class ManageController extends Controller
 
             if ($form->isValid()) {
                 $app = $type->getApp($app_model, $app);
-                $this->getAppsManager()->saveApp($app);
+
+                // Deploy an app, because settings might have changed
                 $this->getDeploy()->deploy($app);
+
+                // Save app to the database
+                $this->getAppsManager()->saveApp($app);
 
                 $this->container->get('session')->setFlash('success', sprintf('App "%s" updated', $app->getName()));
                 return $this->redirect($this->generateUrl('CloudBundle_view_app', array('name' => $app->getName())));

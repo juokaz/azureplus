@@ -65,6 +65,11 @@ class Deploy
 
         // git repository has changed
         if ($app->getSource()->isGitRepositoryChanged()) {
+            if ($app->getSource()->getGitRepository()) {
+                $app->addLogMessage(sprintf('Changed to Git repository "%s"', $app->getSource()->getGitRepository()), Log::CAT_DEPLOY);
+            } else {
+                $app->addLogMessage('Changed to direct deploy', Log::CAT_DEPLOY);
+            }
             $this->delete($app);
             return false;
         }
