@@ -51,7 +51,7 @@ namespace AzureDownloader
                 EventLog.WriteEntry("Configuring the Sync process");
 
                 // values required for Sync service
-                String url, folder;
+                String url, folder = null;
                 int interval;
 
                 try
@@ -61,17 +61,25 @@ namespace AzureDownloader
                     interval = Convert.ToInt32(RoleEnvironment.GetConfigurationSettingValue("APP_INTERVAL"));
 
                     // site configured in IIS on Azure, should be only one
-
-                    Site site = null;
-
                     // keep tryign to get sites list and fetch a site
-                    while (site == null)
+                    while (folder == null)
                     {
                         var serverManager = new ServerManager();
 
                         if (serverManager.Sites.ToList().Count > 0)
                         {
-                            site = serverManager.Sites.First();
+                            Site site = serverManager.Sites.First();
+
+                            // application folder
+                            var applicationRoot = site.Applications.Where(a => a.Path == "/").Single();
+                            var virtualRoot = applicationRoot.VirtualDirectories.Where(v => v.Path == "/").Single();
+
+                            // Wait for Web Role site to be setup
+                            // Initial %SystemDrive%\inetpub\wwwroot is retrieved
+                            if (virtualRoot.PhysicalPath.Contains("sitesroot"))
+                            {
+                                folder = virtualRoot.PhysicalPath;
+                            }
                         }
                         else
                         {
@@ -79,11 +87,6 @@ namespace AzureDownloader
                             Thread.Sleep(500);
                         }
                     }
-
-                    // application folder
-                    var applicationRoot = site.Applications.Where(a => a.Path == "/").Single();
-                    var virtualRoot = applicationRoot.VirtualDirectories.Where(v => v.Path == "/").Single();
-                    folder = virtualRoot.PhysicalPath;
                 }
                 catch (Exception e)
                 {
