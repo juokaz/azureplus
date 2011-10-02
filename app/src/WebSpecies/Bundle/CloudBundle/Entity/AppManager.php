@@ -22,6 +22,10 @@ class AppManager
      */
     public function saveApp(App $app)
     {
+        if ($this->em->contains($app) && $app->getConfiguration()->getChanges()) {
+            $app->addLogMessage($this->getChangesMessage($app), Log::CAT_GENERAL);
+        }
+
         $this->em->persist($app);
         $this->em->flush();
     }
@@ -106,5 +110,37 @@ class AppManager
         $query->setParameter('status', App::STATUS_LIVE);
 
         return $query->getResult();
+    }
+
+    /**
+     * Get changes message
+     *
+     * @throws \InvalidArgumentException
+     * @param App $app
+     * @return string
+     */
+    private function getChangesMessage(App $app)
+    {
+        $changes = $app->getConfiguration()->getChanges();
+        $messages = array();
+
+        foreach ($changes as $change) {
+            switch ($change) {
+                case 'php_version':
+                    $messages[] = sprintf('PHP version to "%s"', $app->getConfiguration()->getPHPVersion());
+                    break;
+                case 'app_root':
+                    $messages[] = sprintf('App root to "%s"', $app->getConfiguration()->getAppRoot());
+                    break;
+                case 'mode':
+                    $messages[] = sprintf('Mode to "%s"', $app->getConfiguration()->getProduction() ? 'production' : 'development');
+                    break;
+                default:
+                    throw new \InvalidArgumentException('Change type ' . $change . ' unrecognized');
+                    break;
+            }
+        }
+
+        return sprintf('Changed %s.', implode(', ', $messages));
     }
 }
