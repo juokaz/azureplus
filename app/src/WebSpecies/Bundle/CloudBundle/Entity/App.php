@@ -141,6 +141,9 @@ class App
         return $this->configuration;
     }
 
+    /**
+     * @return \WebSpecies\Bundle\CloudBundle\Entity\Source
+     */
     public function getSource()
     {
         return $this->source;

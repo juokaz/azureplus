@@ -62,6 +62,12 @@ class Deploy
         if (!$folder) {
             $folder = $this->getAppFolder($app);
         }
+
+        // git repository has changed
+        if ($app->getSource()->isGitRepositoryChanged()) {
+            $this->delete($app);
+            return false;
+        }
         
         $container = $app->getContainer();
 		$folder = rtrim($folder, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
