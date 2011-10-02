@@ -53,8 +53,14 @@ class Configuration
      */
     private $location = self::LOCATION_WEST_EUROPE;
 
+    private $changes = array();
+
     public function setPhpVersion($php_version)
     {
+        if ($this->php_version != $php_version) {
+            $this->changes[] = 'php_version';
+        }
+        
         $this->php_version = $php_version;
     }
 
@@ -65,6 +71,10 @@ class Configuration
 
     public function setAppRoot($app_root)
     {
+        if ($this->app_root != $app_root) {
+            $this->changes[] = 'app_root';
+        }
+
         $this->app_root = rtrim(ltrim($app_root, '/'), '/');
     }
 
@@ -85,12 +95,21 @@ class Configuration
 
     public function setProduction($production)
     {
+        if ($this->production != $production) {
+            $this->changes[] = 'mode';
+        }
+
         $this->production = $production;
     }
 
     public function getProduction()
     {
         return $this->production;
+    }
+
+    public function getChanges()
+    {
+        return $this->changes;
     }
 
     /**
