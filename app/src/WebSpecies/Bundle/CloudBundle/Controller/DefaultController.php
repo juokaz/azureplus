@@ -15,4 +15,9 @@ class DefaultController extends Controller
     {
         return $this->render('CloudBundle:Default:todo.html.twig');
     }
+
+    public function featuresAction()
+    {
+        return $this->render('CloudBundle:Default:features.html.twig');
+    }
 }
