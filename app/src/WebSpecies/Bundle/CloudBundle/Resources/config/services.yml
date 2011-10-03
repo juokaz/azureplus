@@ -40,7 +40,7 @@ parameters:
 services:
     cloud.service.deploy:
         class: %cloud.service.deploy.class%
-        arguments: [@cloud.service.storage, %cloud_app_file%, @cloud.service.packager, @filesystem, %kernel.cache_dir%, @cloud.service.source.git, %deploy_template%]
+        arguments: [@cloud.service.storage, %cloud_app_file%, @cloud.service.packager, @filesystem, %kernel.root_dir%, @cloud.service.source.git, %deploy_template%]
         
     cloud.service.storage:
         public: false
