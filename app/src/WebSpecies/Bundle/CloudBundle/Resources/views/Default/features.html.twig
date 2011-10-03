@@ -5,4 +5,8 @@
     <h2>Features</h2>
 </div>
 
+<h3>Application root</h3>
+
+<p>You can specify where your public files are by setting app root to <code>public/</code> for example, which will make the <em>public</em> folder the only publicly accessible folder. Furthermore, by setting it to <code>public/index.php</code> all requests not matching an existing filename will be routed through the index.php file. In both cases if you try to load <em>http://example.cloudapp.net/styles.css</em> it's going to be looked for at <code>public/styles.css</code>.</p>
+
 {% endblock %}
