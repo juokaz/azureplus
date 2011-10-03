@@ -38,7 +38,7 @@ class Packager
 
             // check for ignored files and folders
             foreach (array('.git', 'web.config', 'php.ini') as $pattern) {
-                if (strpos($name_, $pattern) !== false) {
+                if (strpos(strtolower($name_), $pattern) !== false) {
                     continue 2;
                 }
             }
