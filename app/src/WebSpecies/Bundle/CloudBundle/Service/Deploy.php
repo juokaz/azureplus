@@ -20,7 +20,7 @@ class Deploy
      */
     private $filesystem;
 
-    private $temp_folder;
+    private $base_folder;
 
     /**
      * @var \WebSpecies\Bundle\CloudBundle\Service\Source\Git
@@ -34,11 +34,11 @@ class Deploy
 
     private $deploy_template;
     
-    public function __construct(Storage $client, $app_file, Packager $packager, $filesystem, $temp_folder, $git, $deploy_template)
+    public function __construct(Storage $client, $app_file, Packager $packager, Filesystem $filesystem, $base_folder, $git, $deploy_template)
     {
         $this->client = $client;
         $this->app_file = $app_file;
-        $this->temp_folder = $temp_folder;
+        $this->base_folder = $base_folder;
         $this->filesystem = $filesystem;
         $this->git = $git;
         $this->deploy_template = $deploy_template;
@@ -78,7 +78,7 @@ class Deploy
 		$folder = rtrim($folder, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 
         // temporary store an archive
-		$temp_file = tempnam($this->temp_folder, 'Azure');
+		$temp_file = tempnam($this->base_folder, 'Azure');
 
         // create package to deploy
         $this->packager->createPackage($app, $temp_file, $folder);
@@ -206,6 +206,6 @@ class Deploy
      */
     private function getAppFolder(App $app)
     {
-        return $this->temp_folder . DIRECTORY_SEPARATOR . 'apps' . DIRECTORY_SEPARATOR . $app->getName();
+        return $this->base_folder . DIRECTORY_SEPARATOR . 'apps' . DIRECTORY_SEPARATOR . $app->getName();
     }
 }
