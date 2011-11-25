@@ -8,17 +8,18 @@
 <div class="row">
   <div class="span7">
     <p><a href="http://en.wikipedia.org/wiki/Azure_Services_Platform" target="_blank">Azure</a> done right, this time for PHP applications. We know it's a Microsoft cloud service, but...</p>
-    <p>This is a platform as a service, so you won't even notice that it is running on top of Windows. You can focus on building your app and we'll make sure it works and scales.</p>
+    <p>This is a platform as a service, so you won't even notice that it is running on top of Windows. You can focus on building your app and we'll make sure it works and scales. Best bit - you can deploy from anywhere, no need to actually use Windows.</p>
     <p>If you have tried to deploy anything to Azure you'll know that it takes 15 or more minutes, which is unacceptable! Deploy code in seconds, not minutes. Azure+ can pull the code from your Git or SVN repository, but if you want you can push code directly. That's one of the things our API can handle, there is plenty more.</p>
   </div>
   <div class="span7">
     <ul class="media-grid">
         <li>
-            <a href="{{ path('CloudBundle_manage') }}">
+            <a href="{{ path('CloudBundle_manage') }}" style="margin-bottom: 0px;">
                 <img class="thumbnail" src="{{ asset('bundles/cloud/images/deploying.png') }}" alt="">
             </a>
         </li>
     </ul>
+    <em>Original from <a href="http://xkcd.com/303/">http://xkcd.com/303/</a></em>
   </div>
 </div>
 {% endblock %}

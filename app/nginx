@@ -1,4 +1,7 @@
 server {
+    # allow big packages
+    client_max_body_size 128M;
+        
     # port to listen on. Can also be set to an IP:PORT
 	listen   80;
 

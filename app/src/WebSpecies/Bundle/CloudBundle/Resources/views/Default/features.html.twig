@@ -1,0 +1,61 @@
+{% extends '::base.html.twig' %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Features</h2>
+</div>
+
+<h3>Deploy</h3>
+
+<p>There are multiple ways how you can deploy code to Azure+ and you can switch between them at any time.</p>
+
+<h4>Pulling code from a repository</h4>
+
+<p>You can configure a Git repository we are going to pull code from every minute or so. Once we find new commits they are going to be automatically deployed to the cloud.</p>
+
+<h4>Push code directly</h4>
+
+<p>If you want, you can also push code directly to the cloud by either using the script we provide (you will see it in the app page) or just by pushing directly to our API. It's probably the fastest way to test things out and allows you to update live instance in seconds. What is more, you can integrate that with your build scripts.</p>
+
+<h3>Rapid development</h3>
+
+<p>Cloud deployments are going to be updated in <strong>less than 5 seconds</strong> from the time new code is pushed out. Furthemore, you can change PHP version, running mode, app root and deployment source at any time and those are going to be reflected in your app just as fast.</p>
+
+<h3>Geo location</h3>
+
+<p>Your app can be deployed to one of the six datacenters: 
+<ul>
+    <li>North Central US - Chicago, Illinois</li>
+    <li>South Central US - San Antonio, Texas</li>
+    <li>North Europe - Amsterdam, Netherlands</li>
+    <li>West Europe - Dublin, Ireland</li>
+    <li>East Asia - Honk Kong</li>
+    <li>Southeast Asia - Singapore</li>
+</ul></p>
+
+<h3>PHP version</h3>
+
+<p>Choose from either PHP 5.3 (recommended) or PHP 5.2.</p>
+
+<h3>Production vs development</h3>
+
+<p>There are two modes you can use for your app: production and development. Production mode disables error reporting for both PHP and web server, while development leaves them turned on so you could more easily debug why yoru application is not working.</p>
+
+<h3>Application root</h3>
+
+<p>You can specify where your public files are by setting app root to <code>public/</code> for example, which will make the <em>public</em> folder the only publicly accessible folder. Furthermore, by setting it to <code>public/index.php</code> all requests not matching an existing filename will be routed through the index.php file. In both cases if you try to load <em>http://example.cloudapp.net/styles.css</em> it's going to be looked for at <code>public/styles.css</code>.</p>
+
+<p>Here are some examples for some popular web frameworks:
+<ul>
+    <li>Zend Framework  - public/index.php</li>
+    <li>Symfony2 - web/app.php</li>
+    <li>Lithium - app/index.php</li>
+    <li>Code Igniter - index.php</li>
+</ul>
+</p>
+
+<h3>Logging</h3>
+
+<p>All actions with your app are logged, so you can easily see when and what was changed or when the latest deployment was pushed.</p>
+
+{% endblock %}

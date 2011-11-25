@@ -83,11 +83,8 @@ class ProcessCommand extends ContainerAwareCommand
         $em->flush();
 
         foreach ($apps->getAppsWithGitPath() as $app) {
-            $output->writeln(sprintf('<comment>Updating the app "%s"</comment>', $app->getName()));
             if ($this->deploy->deployCheckout($app)) {
                 $output->writeln(sprintf('<info>Updated the app "%s"</info>', $app->getName()));
-            } else {
-                $output->writeln(sprintf('<comment>App "%s" is up to date</comment>', $app->getName()));
             }
         }
 

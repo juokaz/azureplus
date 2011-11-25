@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>{% block title %}Azure+{% endblock %}</title>
+    <title>{% block title %}Azure+ - PHP Cloud Platform running on top of Windows Azure{% endblock %}</title>
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -25,8 +25,10 @@
           <h3><a href="{{ path('CloudBundle_homepage') }}">Azure+</a></h3>
             <ul>
                 <li><a href="{{ path('CloudBundle_homepage') }}">Home</a></li>
-                <li><a href="{{ path('CloudBundle_manage') }}">Apps</a></li>
+                <li><a href="{{ path('CloudBundle_features') }}">Features</a></li>
+                <li><a href="{{ path('CloudBundle_howitworks') }}">How It Works</a></li>
                 <li><a href="{{ path('CloudBundle_todo') }}">ToDo</a></li>
+                <li><a href="{{ path('CloudBundle_manage') }}">Apps</a></li>
             </ul>
           {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
             <ul class="nav secondary-nav">
